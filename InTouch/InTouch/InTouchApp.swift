@@ -9,9 +9,14 @@ import SwiftUI
 
 @main
 struct InTouchApp: App {
+
+    init() {
+        AppAppearance.configure()
+    }
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            RootTabView()
         }
     }
 }
