@@ -1,0 +1,14 @@
+schemaVersion: 1
+enabledWorkflows:
+  - simulator
+  - ui-automation
+debug: false
+sentryDisabled: false
+setupPreferences:
+  platforms:
+    - iOS
+sessionDefaults:
+  projectPath: InTouch/InTouch.xcodeproj
+  scheme: InTouch
+  simulatorId: C25047B3-8F18-486D-908C-9239FF4C7713
+  simulatorName: iPhone 17
