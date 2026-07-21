@@ -45,12 +45,29 @@ competes with the content.
 
 ## Typography
 
-- **Display / stamps / dates:** a condensed grotesque or a typewriter mono. Real passport
-  stamps are always mechanical type — letterspaced, slightly imperfect, often rotated a few
-  degrees. Never centred perfectly.
-- **Body:** a quiet serif or neutral sans at comfortable reading size.
-- **Never** a rounded friendly geometric sans. That is every other app.
-- All type tokens live in `Core/DesignSystem/Typography.swift`.
+Two faces, chosen to do opposite jobs.
+
+- **Display — Josefin Sans.** Everything the interface says: mastheads, navigation, labels,
+  body. A cold, geometric, Bauhaus sans — deliberate. Bundled into the app (`Resources/Fonts`,
+  three weights: Regular / SemiBold / Bold) under the **SIL Open Font License 1.1** (free for
+  commercial use; `OFL.txt` ships alongside the fonts). It has a small x-height, so body and
+  label sizes are bumped a little to compensate.
+- **Stamps, dates, timestamps — Courier.** Ships with iOS. Real passport stamps are struck by
+  a machine, not set in a designed typeface; Courier is what makes a stamp, a date or a
+  timestamp read as an *artifact* rather than a graphic. Letterspaced, slightly imperfect,
+  rotated a few degrees, never centred perfectly.
+- **The distinction that matters:** a **cold** geometric face (Josefin Sans, Jost*, Futura) is
+  correct for this brand. A **warm, rounded** geometric sans — Poppins, Circular, Nunito — is
+  not; that friendliness is every other app. The line isn't "no geometric sans," it's "no warm
+  one."
+- The display face is a **single constant** at the top of `Typography.swift` that every UI
+  style derives from, so trialling another cold face later is a one-line change. A third face
+  (a handwriting hand) appears only inside *collage content* — never in the chrome.
+- **`lowercaseChrome`** (a bool in `Typography`, default `true`) renders navigation labels and
+  mastheads in lowercase — Herbert Bayer argued capitals were redundant and the Bauhaus
+  alphabet had none. One flag, flip it to see it both ways.
+- All type tokens live in `Core/DesignSystem/Typography.swift`. It is the only file allowed a
+  raw font size.
 
 ## The stamp
 
@@ -63,6 +80,27 @@ The signature component. Everything else can be plain if this is right.
 - Ink colour by type: `ink` for people, `live` for events, `night` for a first-ever city.
 - Lands with a press-down animation: scale from 1.15 → 1.0, quick, with a sharp haptic
   (`UIImpactFeedbackGenerator(style: .rigid)`). One thump, not a buzz.
+
+## The collage
+
+A profile is not a contact card — it is a **collage the person assembles themselves**: layered
+photos, cut-out stickers, torn scraps of handwriting, tape, all overlapping and rotated. Events
+and groups get their own collage too, set by a host or a member.
+
+- **Loud content inside quiet order.** The collage is meant to be chaotic and personal; the app
+  around it stays calm — framed on a paper page, chrome in Josefin and ink. This is the same
+  rule the feed already follows ("photos carry the colour, the interface stays in the eight
+  tokens"). The user's chaos sits inside the app's order, and the contrast is the point.
+- **Relative coordinates, always.** Every item stores its position as `0…1` fractions of the
+  collage bounds and its size as a fraction of the collage width — never absolute points. A
+  collage laid out in points would drift the instant it opened on a different-sized phone;
+  fractions make it compose identically on every device. This is enforced in the model
+  (`Core/Models/Collage.swift`) and non-negotiable.
+- **Read-only for now.** `Core/Components/CollageView.swift` renders a collage; the editor is a
+  later phase. Cut-outs are clipped to the frame so they can bleed off the edge like a real
+  pasted photo overhanging the page.
+- Phase-0.5 stand-ins: photos are the existing generated colour blocks, stickers are simple
+  palette shapes and badges, text is a handwriting hand. Real JPGs drop into `MockData` later.
 
 ## The handshake ritual
 

@@ -83,9 +83,23 @@ rewrite.
 
 ## 4. Features
 
+**Information architecture.** Five tabs, all standard: **Friends · Groups · Connect · Events ·
+Passport**. Connect is an ordinary tab (selecting it opens the dark handshake screen and stays
+selected — a scan leads somewhere, so staying put is right), not a special centre button.
+Passport is one tab with three lenses — **Stamps · Map · Calendar**. A profile avatar sits
+top-right of every main masthead and opens Profile → Settings.
+
+**Profiles are collages.** A profile is not a contact card: it is a collage the person
+assembles — layered photos, stickers, torn text, tape (see DESIGN.md § The collage). Events and
+groups have their own collage too, set by a host or member. The rendering exists now; the
+**editor is deferred** to a later phase. Coordinates are stored relative (0–1) so a collage
+composes identically on any device.
+
 ### 4.1 Friends
-Chronological feed of posts from confirmed connections. No algorithm, ever. No likes count
-shown publicly (decide later); reactions are fine. Photos + one-line captions only.
+Chronological feed of posts from confirmed connections. No algorithm, ever. Photos + one-line
+captions only. Reactions show **who** reacted and **never a count** — a public like count is a
+popularity scoreboard, exactly the mechanic this product positions against. You can see that
+three specific friends reacted; you can never see "37 likes."
 
 ### 4.2 Groups
 A named set of people who are already connected. Shared feed / album. Any member can add
@@ -112,7 +126,11 @@ someone they're connected to. Effectively a private shared album with a name.
 - The passport page is the shareable artifact — export as an image.
 
 ### 4.5 Profile & settings
-Handle, display name, avatar, friend count, stamp count. Block list. Account deletion.
+The person's **collage is the hero**, filling most of the screen; handle, display name, friend
+count and stamp count sit beneath it. On your own profile: an edit-collage entry (editor is a
+later phase) and a gear to Settings. Settings carries Account, Privacy, **Blocked users**,
+Notifications, About, Sign out — Blocked users and reporting exist from day one because they're
+an App Store requirement (§ 6). Block list. Account deletion.
 
 ---
 

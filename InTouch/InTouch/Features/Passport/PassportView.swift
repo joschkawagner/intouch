@@ -2,65 +2,61 @@
 //  PassportView.swift
 //  InTouch
 //
-//  The passport page: a grid of stamps on printed guides.
+//  The passport tab, now one screen with three lenses on the same collection:
+//  Stamps (the grid), Map (later), Calendar (your history as a list).
 //
-//  Phase 0 shows all three ink colours side by side so the component can be
-//  judged. Tap a stamp to replay its landing — press-down plus a rigid haptic
-//  (silent in the simulator, felt on a real device).
-//
-//  The world map and the share export arrive in Phase 5.
+//  The masthead and lens picker are a fixed header; only the lens content scrolls
+//  beneath them, so the picker never scrolls away. The world map and share export
+//  arrive in Phase 5.
 //
 
 import SwiftUI
 
+/// The three ways to read the passport.
+enum PassportLens: String, CaseIterable {
+    case stamps, map, calendar
+
+    var title: String {
+        switch self {
+        case .stamps: "Stamps"
+        case .map: "Map"
+        case .calendar: "Calendar"
+        }
+    }
+}
+
 struct PassportView: View {
+
+    @State private var lens: PassportLens = .stamps
 
     private let stamps = MockData.stamps
 
-    private let columns = [
-        GridItem(.flexible(), spacing: 0),
-        GridItem(.flexible(), spacing: 0),
-    ]
-
-    private var cityCount: Int {
-        Set(stamps.map(\.city)).count
-    }
+    private var cityCount: Int { Set(stamps.map(\.city)).count }
 
     var body: some View {
-        ScrollView {
-            LazyVStack(spacing: 0) {
-                MastheadView(
-                    title: "Passport",
-                    detail: "\(stamps.count) stamps · \(cityCount) cities"
+        VStack(spacing: 0) {
+            MastheadView(
+                title: "Passport",
+                detail: "\(stamps.count) stamps · \(cityCount) cities"
+            )
+
+            PassportLensPicker(selection: $lens)
+                .padding(.bottom, 10)
+
+            switch lens {
+            case .stamps:
+                PassportStampsView()
+            case .map:
+                EmptyStateView(
+                    title: "The map comes later",
+                    message: "Every city you've stamped will surface here as a pin on a printed atlas. MapKit lands in a later phase.",
+                    ghostLabel: "Map",
+                    footnote: "PINS ARE STAMPS"
                 )
-
-                LazyVGrid(columns: columns, spacing: 14) {
-                    ForEach(stamps) { stamp in
-                        StampView(
-                            id: stamp.id,
-                            city: stamp.city,
-                            date: stamp.date,
-                            kind: stamp.kind,
-                            diameter: 150,
-                            landsOnTap: true
-                        )
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 6)
-                    }
-                }
-                .padding(.horizontal, 12)
-                .padding(.top, 10)
-                .background(PrintedGuides())
-
-                Text("EVERY STAMP COST AN EVENING")
-                    .font(Typography.label)
-                    .tracking(Typography.stampTracking)
-                    .foregroundStyle(Color.muted)
-                    .padding(.top, 28)
-                    .padding(.bottom, 40)
+            case .calendar:
+                PassportCalendarView()
             }
         }
-        .scrollIndicators(.hidden)
         .paperBackground()
     }
 }

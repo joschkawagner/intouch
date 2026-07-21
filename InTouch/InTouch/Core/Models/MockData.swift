@@ -10,6 +10,7 @@
 //
 
 import Foundation
+import CoreGraphics
 
 enum MockData {
 
@@ -41,6 +42,122 @@ enum MockData {
                  city: "Zürich", date: date(2026, 7, 17, hour: 8, minute: 5), tone: .field),
         FeedPost(id: "post-04", author: "Juno", caption: "The roof was technically closed.",
                  city: "Lisbon", date: date(2026, 7, 15, hour: 21, minute: 30), tone: .amber),
+    ]
+
+    // MARK: - Collages
+    //
+    // Hand-placed scraps. Every position is a 0…1 fraction of the collage bounds and
+    // every scale a fraction of its width, so these compose identically on any phone
+    // (see Collage.swift). When real JPGs land, the `.photo(tone)` cases become image
+    // references and the compiler points here. This is the one place collage fixtures
+    // live — drop replacements in to judge the real thing.
+
+    static let currentUserCollage = Collage(
+        ownerId: "user-me",
+        aspectRatio: 0.82,
+        background: .paper,
+        items: [
+            CollageItem(id: "me-tape",   content: .tape,                position: CGPoint(x: 0.34, y: 0.07), rotation: -8, scale: 0.34, zIndex: 4),
+            CollageItem(id: "me-badge",  content: .sticker(.badge("ZÜRICH")), position: CGPoint(x: 0.68, y: 0.15), rotation: 6, scale: 0.42, zIndex: 5),
+            CollageItem(id: "me-p1",     content: .photo(.dusk),        position: CGPoint(x: 0.33, y: 0.31), rotation: -6, scale: 0.5,  zIndex: 1),
+            CollageItem(id: "me-p2",     content: .photo(.harbour),     position: CGPoint(x: 0.66, y: 0.5),  rotation: 7,  scale: 0.46, zIndex: 2),
+            CollageItem(id: "me-star",   content: .sticker(.star),      position: CGPoint(x: 0.14, y: 0.52), rotation: 0,  scale: 0.12, zIndex: 6),
+            CollageItem(id: "me-p3",     content: .photo(.field),       position: CGPoint(x: 0.42, y: 0.71), rotation: -3, scale: 0.52, zIndex: 3),
+            CollageItem(id: "me-ring",   content: .sticker(.ring),      position: CGPoint(x: 0.81, y: 0.8),  rotation: 0,  scale: 0.26, zIndex: 5),
+            CollageItem(id: "me-text",   content: .text("you had\nto be there"), position: CGPoint(x: 0.29, y: 0.92), rotation: -4, scale: 0.08, zIndex: 6),
+        ]
+    )
+
+    static let scannedPersonCollage = Collage(
+        ownerId: "user-emil",
+        aspectRatio: 0.82,
+        background: .aged,
+        items: [
+            CollageItem(id: "em-p1",    content: .photo(.amber),    position: CGPoint(x: 0.3,  y: 0.28), rotation: 5,  scale: 0.5,  zIndex: 1),
+            CollageItem(id: "em-p2",    content: .photo(.dusk),     position: CGPoint(x: 0.65, y: 0.44), rotation: -7, scale: 0.48, zIndex: 2),
+            CollageItem(id: "em-heart", content: .sticker(.heart),  position: CGPoint(x: 0.8,  y: 0.2),  rotation: 0,  scale: 0.14, zIndex: 5),
+            CollageItem(id: "em-p3",    content: .photo(.field),    position: CGPoint(x: 0.38, y: 0.66), rotation: 3,  scale: 0.5,  zIndex: 3),
+            CollageItem(id: "em-tape",  content: .tape,             position: CGPoint(x: 0.7,  y: 0.7),  rotation: 10, scale: 0.3,  zIndex: 4),
+            CollageItem(id: "em-badge", content: .sticker(.badge("EMIL")), position: CGPoint(x: 0.34, y: 0.86), rotation: -5, scale: 0.44, zIndex: 6),
+            CollageItem(id: "em-text",  content: .text("berlin\n2 a.m."),  position: CGPoint(x: 0.72, y: 0.88), rotation: 6, scale: 0.07, zIndex: 6),
+        ]
+    )
+
+    static let eventCollage = Collage(
+        ownerId: "event-rooftop",
+        aspectRatio: 1.4,
+        background: .night,
+        items: [
+            CollageItem(id: "ev-tape",  content: .tape,             position: CGPoint(x: 0.4,  y: 0.1),  rotation: 4,  scale: 0.2,  zIndex: 4),
+            CollageItem(id: "ev-badge", content: .sticker(.badge("LIVE")),  position: CGPoint(x: 0.16, y: 0.22), rotation: -8, scale: 0.24, zIndex: 5),
+            CollageItem(id: "ev-p1",    content: .photo(.harbour),  position: CGPoint(x: 0.28, y: 0.55), rotation: -4, scale: 0.32, zIndex: 1),
+            CollageItem(id: "ev-p2",    content: .photo(.dusk),     position: CGPoint(x: 0.52, y: 0.48), rotation: 5,  scale: 0.3,  zIndex: 2),
+            CollageItem(id: "ev-p3",    content: .photo(.amber),    position: CGPoint(x: 0.74, y: 0.58), rotation: -6, scale: 0.3,  zIndex: 3),
+            CollageItem(id: "ev-text",  content: .text("the roof\nis open"), position: CGPoint(x: 0.62, y: 0.2), rotation: 3, scale: 0.06, zIndex: 6),
+            CollageItem(id: "ev-star",  content: .sticker(.star),   position: CGPoint(x: 0.88, y: 0.26), rotation: 0,  scale: 0.08, zIndex: 6),
+        ]
+    )
+
+    /// Groups get a collage too (set by a member). Unused on screen this phase —
+    /// the Groups tab is still an empty state — but kept so the fixture is ready.
+    static let groupCollage = Collage(
+        ownerId: "group-lake-crew",
+        aspectRatio: 1.2,
+        background: .paper,
+        items: [
+            CollageItem(id: "gr-p1",    content: .photo(.field),    position: CGPoint(x: 0.3,  y: 0.45), rotation: -5, scale: 0.34, zIndex: 1),
+            CollageItem(id: "gr-p2",    content: .photo(.harbour),  position: CGPoint(x: 0.6,  y: 0.5),  rotation: 6,  scale: 0.32, zIndex: 2),
+            CollageItem(id: "gr-badge", content: .sticker(.badge("LAKE CREW")), position: CGPoint(x: 0.55, y: 0.16), rotation: -3, scale: 0.4, zIndex: 5),
+            CollageItem(id: "gr-ring",  content: .sticker(.ring),   position: CGPoint(x: 0.83, y: 0.74), rotation: 0,  scale: 0.2,  zIndex: 4),
+        ]
+    )
+
+    // MARK: - Profiles & the scanned strangers
+
+    static let currentUser = UserProfile(
+        id: "user-me",
+        displayName: "Joschka Wagner",
+        handle: "@joschka",
+        friendCount: 12,
+        stampCount: stamps.count,
+        collage: currentUserCollage
+    )
+
+    /// What a simulated "scan a person" lands on.
+    static let scannedPerson = UserProfile(
+        id: "user-emil",
+        displayName: "Emil Roth",
+        handle: "@emil",
+        friendCount: 8,
+        stampCount: 5,
+        collage: scannedPersonCollage
+    )
+
+    /// What a simulated "scan an event" lands on.
+    static let scannedEvent = EventInfo(
+        id: "event-rooftop",
+        name: "Rooftop Sessions",
+        venue: "Kanzlei Rooftop",
+        city: "Zürich",
+        date: date(2026, 7, 15, hour: 22),
+        collage: eventCollage
+    )
+
+    // MARK: - Calendar timeline
+    //
+    // Connections, events and group-creations in one history. The Calendar lens
+    // sorts newest-first; order here is just for readability.
+
+    static let timeline: [TimelineEntry] = [
+        TimelineEntry(id: "tl-01", date: date(2026, 7, 20, hour: 18), kind: .groupCreated, title: "Started “Lake Crew”", city: "Zürich"),
+        TimelineEntry(id: "tl-02", date: date(2026, 7, 19, hour: 23), kind: .connection, title: "Met Nora", city: "Zürich"),
+        TimelineEntry(id: "tl-03", date: date(2026, 7, 15, hour: 22), kind: .event, title: "Rooftop Sessions", city: "Zürich"),
+        TimelineEntry(id: "tl-04", date: date(2026, 7, 4,  hour: 21), kind: .event, title: "Milan Design Week", city: "Milan"),
+        TimelineEntry(id: "tl-05", date: date(2026, 6, 28, hour: 20), kind: .connection, title: "Met Juno", city: "Lisbon"),
+        TimelineEntry(id: "tl-06", date: date(2026, 6, 18, hour: 12), kind: .groupCreated, title: "Started “Berlin 2026”", city: "Berlin"),
+        TimelineEntry(id: "tl-07", date: date(2026, 5, 27, hour: 2),  kind: .connection, title: "Met Emil", city: "Berlin"),
+        TimelineEntry(id: "tl-08", date: date(2026, 4, 27, hour: 23), kind: .event, title: "Berlin Warehouse", city: "Berlin"),
+        TimelineEntry(id: "tl-09", date: date(2026, 4, 2,  hour: 19), kind: .connection, title: "Met Ada", city: "Zürich"),
     ]
 
     // MARK: - Helpers

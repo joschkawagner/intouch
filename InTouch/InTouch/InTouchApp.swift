@@ -11,6 +11,7 @@ import SwiftUI
 struct InTouchApp: App {
 
     init() {
+        FontAudit.log()
         AppAppearance.configure()
     }
 

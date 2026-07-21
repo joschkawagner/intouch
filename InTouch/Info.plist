@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Info.plist — InTouch
+
+  Deliberately partial. GENERATE_INFOPLIST_FILE stays YES, so Xcode still
+  synthesises the standard scene / launch / orientation keys and merges them on
+  top of this file at build time. The only reason this file exists is UIAppFonts:
+  a custom bundled-font array can't be expressed as a build setting, so it lives
+  here and nowhere else. See docs/DECISIONS.md.
+
+  The three filenames below are the bundled Josefin Sans weights (Resources/Fonts).
+  Bundle resources flatten to the app root, so bare filenames resolve.
+-->
+<plist version="1.0">
+<dict>
+	<key>UIAppFonts</key>
+	<array>
+		<string>JosefinSans-Regular.ttf</string>
+		<string>JosefinSans-SemiBold.ttf</string>
+		<string>JosefinSans-Bold.ttf</string>
+	</array>
+</dict>
+</plist>
