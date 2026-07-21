@@ -16,11 +16,14 @@ import UIKit
 enum FontAudit {
 
     /// PostScript names we expect to be able to instantiate. Kept in sync with
-    /// Typography's display face and the Info.plist UIAppFonts array.
+    /// Typography. The three Josefin weights are bundled (Info.plist UIAppFonts);
+    /// the collage hand ships with iOS, so it isn't in UIAppFonts but a renamed or
+    /// dropped system font would still fall back silently — so the audit checks it too.
     static let expected = [
         "JosefinSans-Regular",
         "JosefinSans-SemiBold",
         "JosefinSans-Bold",
+        "BradleyHandITCTT-Bold",   // Typography.collage — system font, not bundled
     ]
 
     static func log() {

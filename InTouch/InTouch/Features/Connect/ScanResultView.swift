@@ -76,7 +76,7 @@ struct ScanResultView: View {
                     .shadow(color: Color.text.opacity(0.18), radius: 12, x: 0, y: 6)
 
                 VStack(spacing: 4) {
-                    Text(Typography.chrome(result.title))
+                    Text(result.title)                   // a person or event name — never chrome()
                         .font(Typography.masthead)
                         .foregroundStyle(Color.ink)
                     Text(result.subtitle)

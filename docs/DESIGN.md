@@ -66,6 +66,9 @@ Two faces, chosen to do opposite jobs.
 - **`lowercaseChrome`** (a bool in `Typography`, default `true`) renders navigation labels and
   mastheads in lowercase — Herbert Bayer argued capitals were redundant and the Bauhaus
   alphabet had none. One flag, flip it to see it both ways.
+- **`chrome()` is for chrome, never for content.** `Typography.chrome()` applies the lowercase
+  rule and belongs only on interface labels — tab titles, mastheads, settings rows, button
+  labels. It must never transform text a user wrote or a person's or event's name.
 - All type tokens live in `Core/DesignSystem/Typography.swift`. It is the only file allowed a
   raw font size.
 

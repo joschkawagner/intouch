@@ -71,7 +71,7 @@ struct ProfileView: View {
 
     private var identity: some View {
         VStack(spacing: 6) {
-            Text(Typography.chrome(profile.displayName))
+            Text(profile.displayName)                   // a person's name — never chrome()
                 .font(Typography.masthead)
                 .foregroundStyle(Color.ink)
 
