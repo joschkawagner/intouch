@@ -16,7 +16,7 @@ struct PassportLensPicker: View {
 
     var body: some View {
         HStack(spacing: 0) {
-            ForEach(PassportLens.allCases, id: \.self) { lens in
+            ForEach(PassportLens.allCases.filter { $0 != .stamps }, id: \.self) { lens in
                 let selected = lens == selection
                 Button {
                     withAnimation(.easeOut(duration: 0.15)) { selection = lens }

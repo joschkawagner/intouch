@@ -27,7 +27,7 @@ enum PassportLens: String, CaseIterable {
 
 struct PassportView: View {
 
-    @State private var lens: PassportLens = .stamps
+    @State private var lens: PassportLens = .map
 
     private let cities = MockData.cities
     private let entries = MockData.entries
