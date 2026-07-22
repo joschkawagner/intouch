@@ -7,8 +7,8 @@
 //  users** and reporting are mandatory for any app with user content (docs/PRD.md
 //  § 6), so they ship even before they do anything.
 //
-//  Custom rows on paper rather than a system List, to keep the type in Josefin and
-//  the surface in the palette instead of inheriting UIKit's grouped-list chrome.
+//  Custom rows on paper rather than a system List, to keep the type in the display
+//  face and the surface in the palette instead of inheriting UIKit's grouped-list chrome.
 //
 
 import SwiftUI

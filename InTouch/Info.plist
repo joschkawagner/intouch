@@ -9,16 +9,19 @@
   a custom bundled-font array can't be expressed as a build setting, so it lives
   here and nowhere else. See docs/DECISIONS.md.
 
-  The three filenames below are the bundled Josefin Sans weights (Resources/Fonts).
-  Bundle resources flatten to the app root, so bare filenames resolve.
+  The filenames below are the bundled fonts (Resources/Fonts). Bundle resources
+  flatten to the app root, so bare filenames resolve.
+
+  These three are Jost — the shipping display face. Stamps use Courier and collage
+  text uses Bradley Hand, both of which ship with iOS and so are never bundled here.
 -->
 <plist version="1.0">
 <dict>
 	<key>UIAppFonts</key>
 	<array>
-		<string>JosefinSans-Regular.ttf</string>
-		<string>JosefinSans-SemiBold.ttf</string>
-		<string>JosefinSans-Bold.ttf</string>
+		<string>Jost-Regular.ttf</string>
+		<string>Jost-SemiBold.ttf</string>
+		<string>Jost-Bold.ttf</string>
 	</array>
 </dict>
 </plist>

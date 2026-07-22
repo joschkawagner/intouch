@@ -10,7 +10,7 @@
 //  Connect screen and stays selected: a scan leads somewhere, so staying put is
 //  correct. Connect is wrapped in its own NavigationStack so a simulated scan can
 //  push its result while the tab bar stays visible. The tab bar itself is styled in
-//  Josefin + palette by AppAppearance.
+//  Jost + palette by AppAppearance.
 //
 
 import SwiftUI

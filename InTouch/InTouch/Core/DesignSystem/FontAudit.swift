@@ -16,20 +16,26 @@ import UIKit
 enum FontAudit {
 
     /// PostScript names we expect to be able to instantiate. Kept in sync with
-    /// Typography. The three Josefin weights are bundled (Info.plist UIAppFonts);
-    /// the collage hand ships with iOS, so it isn't in UIAppFonts but a renamed or
-    /// dropped system font would still fall back silently — so the audit checks it too.
+    /// Typography. The three Jost weights are bundled (Info.plist UIAppFonts); Courier
+    /// and the collage hand ship with iOS, so they aren't in UIAppFonts, but a renamed
+    /// or dropped system font would still fall back silently — so the audit checks them too.
     static let expected = [
-        "JosefinSans-Regular",
-        "JosefinSans-SemiBold",
-        "JosefinSans-Bold",
+        "Jost-Regular",
+        "Jost-SemiBold",
+        "Jost-Bold",
+        "Courier",                 // Typography stamp fonts — system font, not bundled
+        "Courier-Bold",
         "BradleyHandITCTT-Bold",   // Typography.collage — system font, not bundled
     ]
+
+    /// Family-name stems we dump the full member list for, to read real PostScript names.
+    private static let inspectFamilies = ["Jost"]
 
     static func log() {
         #if DEBUG
         print("── FontAudit ─────────────────────────────────────────────")
-        for family in UIFont.familyNames.sorted() where family.contains("Josefin") {
+        for family in UIFont.familyNames.sorted()
+        where inspectFamilies.contains(where: family.contains) {
             print("family:", family)
             for name in UIFont.fontNames(forFamilyName: family).sorted() {
                 print("   •", name)

@@ -4,7 +4,7 @@
 //
 //  The type system. Two faces, on purpose (see docs/DESIGN.md § Typography):
 //
-//    • Display  → Josefin Sans, bundled (Resources/Fonts, OFL). Cold, geometric,
+//    • Display  → Jost, bundled (Resources/Fonts, OFL). Cold, geometric,
 //      Bauhaus. Everything the interface says — mastheads, nav, labels, body.
 //    • Stamps   → Courier, ships with iOS. Real passport stamps are struck by a
 //      machine, not set in a designed typeface; Courier is what makes a stamp,
@@ -14,7 +14,7 @@
 //
 //  The display face is declared as a SINGLE constant (`displayFace`) that every
 //  UI style derives from, so trialling another cold geometric face later —
-//  Jost*, Futura — is a one-line change. The PostScript names are confirmed at
+//  Futura, say — is a one-line change. The PostScript names are confirmed at
 //  runtime by FontAudit, not assumed.
 //
 //  Stamp fonts stay UIFont-first with the SwiftUI Font derived from them, because
@@ -34,7 +34,7 @@ enum Typography {
     /// `\(displayFace)-Regular/-SemiBold/-Bold`, confirmed by FontAudit at launch.
     /// Swap this (and, if the new face names its weights differently, the
     /// `Weight.suffix` values) to trial another face.
-    static let displayFace = "JosefinSans"
+    static let displayFace = "Jost"
 
     enum Weight {
         case regular, semiBold, bold
@@ -94,14 +94,14 @@ enum Typography {
         lowercaseChrome ? string.lowercased() : string
     }
 
-    // MARK: - Screen furniture (Josefin Sans)
+    // MARK: - Screen furniture (Jost)
 
     /// Big in-page screen title.
     static var masthead: Font { display(34, .bold, relativeTo: .largeTitle) }
 
     /// Small letterspaced detail line above a masthead, or a footnote in the voice.
-    /// Bumped from the old 11pt: Josefin's small x-height needs the extra size.
-    static var label: Font { display(13, .semiBold, relativeTo: .caption) }
+    /// Was 13pt for Josefin's small x-height; Jost carries more presence, so tightened.
+    static var label: Font { display(12, .semiBold, relativeTo: .caption) }
 
     /// Headline inside an empty state.
     static var emptyTitle: Font { display(23, .semiBold, relativeTo: .title2) }
@@ -116,10 +116,11 @@ enum Typography {
     /// The big number in a profile stat (friend / stamp count).
     static var statNumber: Font { display(26, .bold, relativeTo: .title) }
 
-    // MARK: - Reading (Josefin Sans)
+    // MARK: - Reading (Jost)
 
-    /// Body copy and captions. Bumped from 16 to compensate for the small x-height.
-    static var body: Font { display(17.5, relativeTo: .body) }
+    /// Body copy and captions. Was 17.5 to compensate for Josefin's small x-height;
+    /// Jost sits larger on the body, so tightened back toward the base 16.
+    static var body: Font { display(16.5, relativeTo: .body) }
 
     /// Secondary body copy, e.g. empty-state explanations.
     static var bodySmall: Font { display(15.5, relativeTo: .subheadline) }

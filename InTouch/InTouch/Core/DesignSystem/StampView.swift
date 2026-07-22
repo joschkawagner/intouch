@@ -49,6 +49,10 @@ struct StampView: View {
     /// Rendered size. The stamp is scaled to fit, so proportions always hold.
     var diameter: CGFloat = 150
 
+    /// Overrides the ink colour. `nil` (the default) uses `inkColor`, the muted
+    /// per-kind ink the app ships with; a caller can pass a brighter ink to override it.
+    var ink: Color? = nil
+
     /// Replays the press-down landing on tap, with a haptic.
     /// Off by default — a grid of stamps all thumping on appear would be awful.
     var landsOnTap: Bool = false
@@ -73,16 +77,19 @@ struct StampView: View {
             .onTapGesture { if landsOnTap { land() } }
     }
 
+    /// The ink actually struck: the override if given, otherwise the kind's own ink.
+    private var inkColor: Color { ink ?? kind.ink }
+
     private var stampFace: some View {
         ZStack {
             StampRing(seed: id, inset: 5)
-                .stroke(kind.ink, lineWidth: 2)
+                .stroke(inkColor, lineWidth: 2)
 
             StampRing(seed: id + ".inner", inset: 13)
-                .stroke(kind.ink.opacity(0.55), lineWidth: 0.75)
+                .stroke(inkColor.opacity(0.55), lineWidth: 0.75)
 
             ArcText(text: city.uppercased(), radius: 52)
-                .foregroundStyle(kind.ink)
+                .foregroundStyle(inkColor)
 
             VStack(spacing: 5) {
                 Text(Self.stampDateFormatter.string(from: date).uppercased())
@@ -98,7 +105,7 @@ struct StampView: View {
                     .tracking(Typography.stampTracking)
                     .opacity(0.85)
             }
-            .foregroundStyle(kind.ink)
+            .foregroundStyle(inkColor)
             .offset(y: 6)
         }
         // Real ink on absorbent paper is never fully opaque.

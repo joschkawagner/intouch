@@ -37,6 +37,28 @@ extension Color {
     static let water = Color(hex: 0x94B2C4)
 }
 
+// MARK: - Saturated stamp inks
+
+extension Color {
+
+    /// Bright, saturated inks in the register of real passport / immigration stamps —
+    /// the kind that pool at the edges and read as *alive*, not tasteful. The shipping
+    /// stamp ink (`ink`, #4E0000) is nearly black; these were the brighter alternative.
+    ///
+    /// CURRENTLY UNUSED: stamps ship muted (person → ink, event → live, first city →
+    /// night). These are kept because the brighter register may return; harmless until then.
+    ///
+    /// STRICTLY for **stamps and marks** — the struck ink of a passport stamp. Never
+    /// use them for paper, body text, or chrome; the muted eight-token palette above
+    /// owns all of that and must stay muted (see docs/DESIGN.md § Palette). Chosen by
+    /// eye in the passport-stamp register; no source chips, so treat as tunable.
+    static let stampRed    = Color(hex: 0xC4271F)   // bright cinnabar — the classic stamp red
+    static let stampTeal   = Color(hex: 0x0E7C7D)
+    static let stampViolet = Color(hex: 0x6B2E9C)
+    static let stampForest = Color(hex: 0x1E6B39)
+    static let stampCobalt = Color(hex: 0x1E4FA0)
+}
+
 extension Color {
 
     /// Builds a colour from a 24-bit RGB literal, e.g. `0xF0EDE5`.

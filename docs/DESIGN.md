@@ -47,19 +47,21 @@ competes with the content.
 
 Two faces, chosen to do opposite jobs.
 
-- **Display — Josefin Sans.** Everything the interface says: mastheads, navigation, labels,
+- **Display — Jost.** Everything the interface says: mastheads, navigation, labels,
   body. A cold, geometric, Bauhaus sans — deliberate. Bundled into the app (`Resources/Fonts`,
   three weights: Regular / SemiBold / Bold) under the **SIL Open Font License 1.1** (free for
-  commercial use; `OFL.txt` ships alongside the fonts). It has a small x-height, so body and
-  label sizes are bumped a little to compensate.
+  commercial use; `OFL-Jost.txt` ships alongside the fonts). Replaced Josefin Sans: Josefin's
+  small x-height went spindly at tab-label size (11pt), where a geometric face has to hold on
+  its own; Jost keeps the same cold-geometric character with far more presence at 11pt. Its
+  larger x-height also meant the body/label sizes Josefin needed bumped could be tightened back.
 - **Stamps, dates, timestamps — Courier.** Ships with iOS. Real passport stamps are struck by
   a machine, not set in a designed typeface; Courier is what makes a stamp, a date or a
   timestamp read as an *artifact* rather than a graphic. Letterspaced, slightly imperfect,
   rotated a few degrees, never centred perfectly.
-- **The distinction that matters:** a **cold** geometric face (Josefin Sans, Jost*, Futura) is
-  correct for this brand. A **warm, rounded** geometric sans — Poppins, Circular, Nunito — is
-  not; that friendliness is every other app. The line isn't "no geometric sans," it's "no warm
-  one."
+- **The distinction that matters:** a **cold** geometric face (Jost — chosen; Josefin Sans,
+  Futura) is correct for this brand. A **warm, rounded** geometric sans — Poppins, Circular,
+  Nunito — is not; that friendliness is every other app. The line isn't "no geometric sans,"
+  it's "no warm one."
 - The display face is a **single constant** at the top of `Typography.swift` that every UI
   style derives from, so trialling another cold face later is a one-line change. A third face
   (a handwriting hand) appears only inside *collage content* — never in the chrome.

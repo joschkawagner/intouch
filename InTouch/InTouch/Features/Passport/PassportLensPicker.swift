@@ -3,7 +3,7 @@
 //  InTouch
 //
 //  The Stamps · Map · Calendar switch. A custom control rather than a system
-//  segmented Picker, so the type stays Josefin and the ink stays in the palette
+//  segmented Picker, so the type stays in the display face and the ink stays in the palette
 //  instead of inheriting UISegmentedControl's chrome — and so the selected lens is
 //  marked the way a passport marks a page: a struck underline, not a filled pill.
 //

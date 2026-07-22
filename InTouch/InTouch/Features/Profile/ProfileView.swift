@@ -3,7 +3,7 @@
 //  InTouch
 //
 //  A profile is the person's collage, framed. The collage is loud; the chrome
-//  around it — name, handle, the two counts — is quiet Josefin and ink, the same
+//  around it — name, handle, the two counts — is quiet Jost and ink, the same
 //  loud-content-inside-quiet-order rule DESIGN.md applies to photos.
 //
 //  Reachable two ways: the masthead avatar (your own, `isCurrentUser`) and a
