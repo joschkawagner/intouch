@@ -48,6 +48,21 @@ struct SettingsView: View {
 
                 SettingsRow(icon: "rectangle.portrait.and.arrow.right", label: "Sign out", destructive: true)
                     .padding(.top, 24)
+
+                #if DEBUG
+                // Temporary: entry to the throwaway StampLab (Features/StampLab).
+                // Delete this block and that folder to remove the lab entirely.
+                Text(Typography.chrome("Developer"))
+                    .font(Typography.label).tracking(1)
+                    .foregroundStyle(Color.muted)
+                    .padding(.horizontal, 20)
+                    .padding(.top, 32)
+                    .padding(.bottom, 4)
+
+                NavigationLink { StampLabView() } label: {
+                    SettingsRow(icon: "seal", label: "Stamp Lab")
+                }
+                #endif
             }
             .padding(.bottom, 40)
         }
