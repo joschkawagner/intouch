@@ -44,11 +44,11 @@ struct CollageItem: Identifiable, Hashable {
 
     enum Kind: Hashable { case photo, sticker, text, tape }
 
-    /// The payload. `.photo` reuses the existing generated colour blocks (FeedPost
-    /// .Tone) as a stand-in until real JPGs land — swap this case for an image
-    /// reference then and the compiler will point at every render site.
+    /// The payload. `.photo` carries an asset-catalogue image name — the same real
+    /// JPGs the feed uses. (It used to hold a generated colour block; real photos
+    /// replaced those so the collage can be judged with real content.)
     enum Content: Hashable {
-        case photo(FeedPost.Tone)
+        case photo(String)
         case sticker(Sticker)
         case text(String)
         case tape

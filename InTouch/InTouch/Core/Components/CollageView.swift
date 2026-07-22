@@ -47,23 +47,21 @@ struct CollageView: View {
     private func itemView(_ item: CollageItem, width: CGFloat) -> some View {
         let w = item.scale * width
         switch item.content {
-        case .photo(let tone): photo(tone, width: w)
+        case .photo(let name): photo(name, width: w)
         case .sticker(let sticker): stickerView(sticker, id: item.id, width: w)
         case .text(let string): scrap(string, id: item.id, width: width, scale: item.scale)
         case .tape: tape(width: w)
         }
     }
 
-    /// A pasted print: duotone block, a paper edge, a soft drop shadow.
-    private func photo(_ tone: FeedPost.Tone, width: CGFloat) -> some View {
-        LinearGradient(colors: tone.colours, startPoint: .topLeading, endPoint: .bottomTrailing)
+    /// A pasted print: a real photo cropped to a portrait card, a paper edge, a soft
+    /// drop shadow. `scaledToFill` + `clipped` frames any aspect ratio into the card.
+    private func photo(_ imageName: String, width: CGFloat) -> some View {
+        Image(imageName)
+            .resizable()
+            .scaledToFill()
             .frame(width: width, height: width * 1.12)
-            .overlay {
-                Image(systemName: tone.symbol)
-                    .resizable().scaledToFit()
-                    .frame(width: width * 0.3)
-                    .foregroundStyle(Color.paper.opacity(0.4))
-            }
+            .clipped()
             .overlay(Rectangle().strokeBorder(Color.paper, lineWidth: width * 0.045))
             .shadow(color: Color.text.opacity(0.3), radius: width * 0.02, x: 0, y: width * 0.02)
     }

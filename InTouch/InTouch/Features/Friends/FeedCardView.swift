@@ -18,7 +18,7 @@ struct FeedCardView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            photo
+            PhotoCarouselView(photos: post.photos)
 
             VStack(alignment: .leading, spacing: 6) {
                 Text(post.caption)
@@ -33,22 +33,6 @@ struct FeedCardView: View {
             .padding(.horizontal, 20)
         }
         .padding(.bottom, 28)
-    }
-
-    /// Placeholder for a real photo — see FeedPost.Tone. Deletes in Phase 3.
-    private var photo: some View {
-        LinearGradient(
-            colors: post.tone.colours,
-            startPoint: .topLeading,
-            endPoint: .bottomTrailing
-        )
-        .frame(height: 300)
-        .overlay {
-            Image(systemName: post.tone.symbol)
-                .font(.system(size: 34))
-                .foregroundStyle(Color.paper.opacity(0.35))
-        }
-        .clipped()
     }
 
     private static let timestampFormatter: DateFormatter = {

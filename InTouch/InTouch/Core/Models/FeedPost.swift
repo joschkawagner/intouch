@@ -2,10 +2,14 @@
 //  FeedPost.swift
 //  InTouch
 //
-//  A post in the friends feed: one photo, one line of caption.
+//  A post in the friends feed: a caption and one or more photos.
+//
+//  Numbered sample files that share a prefix (ski-1, ski-2) are ONE multi-photo
+//  post — the app renders those as a swipeable carousel. That grouping lives in
+//  `photos` below.
 //
 
-import SwiftUI
+import Foundation
 
 struct FeedPost: Identifiable, Hashable {
     let id: String
@@ -14,34 +18,11 @@ struct FeedPost: Identifiable, Hashable {
     let city: String
     let date: Date
 
-    /// Stand-in for the photo until real uploads land in Phase 3.
-    let tone: Tone
-
-    /// A placeholder "photo" rendered as a duotone block.
+    /// Asset-catalogue image names, in display order. Always ≥ 1.
     ///
-    /// Temporary. DESIGN.md's rule is that photos carry the colour and the
-    /// interface stays in the eight tokens — these blocks only exist so the
-    /// feed has the right rhythm before there are real images. They delete
-    /// along with MockData.
-    enum Tone: Hashable {
-        case dusk, field, harbour, amber
-
-        var colours: [Color] {
-            switch self {
-            case .dusk: [.night, .ink]
-            case .field: [.live, .muted]
-            case .harbour: [.water, .night]
-            case .amber: [.aged, .muted]
-            }
-        }
-
-        var symbol: String {
-            switch self {
-            case .dusk: "moon.stars"
-            case .field: "leaf"
-            case .harbour: "water.waves"
-            case .amber: "sun.horizon"
-            }
-        }
-    }
+    /// One name renders as a plain full-bleed photo; two or more render as a paged
+    /// carousel with page dots (see `PhotoCarouselView`). This is the shape the
+    /// `post_media` table (id, storage_path, order_index) maps onto in Phase 3 —
+    /// storing an array now means carousels are not retrofitted after the backend.
+    let photos: [String]
 }
