@@ -15,14 +15,39 @@ import CoreGraphics
 enum MockData {
 
     // MARK: - Passport
+    //
+    // A city is where you have photos. `cities` drives the map pins + the city
+    // count; `entries` drives the calendar rows + the photo count. Every city has
+    // at least one entry, so both counts stay honest. Coordinates are real so the
+    // pins land where they should on a printed atlas.
 
-    static let stamps: [Stamp] = [
-        Stamp(id: "stamp-zurich-01", city: "Zürich", country: "CH", date: date(2026, 3, 14)),
-        Stamp(id: "stamp-zurich-02", city: "Zürich", country: "CH", date: date(2026, 4, 2)),
-        Stamp(id: "stamp-berlin-01", city: "Berlin", country: "DE", date: date(2026, 4, 27)),
-        Stamp(id: "stamp-lisbon-01", city: "Lisbon", country: "PT", date: date(2026, 5, 9)),
-        Stamp(id: "stamp-vienna-01", city: "Vienna", country: "AT", date: date(2026, 6, 18)),
-        Stamp(id: "stamp-milan-01", city: "Milan", country: "IT", date: date(2026, 7, 4)),
+    static let zurich = PassportCity(name: "Zürich", country: "CH", latitude: 47.3769, longitude: 8.5417)
+    static let berlin = PassportCity(name: "Berlin", country: "DE", latitude: 52.5200, longitude: 13.4050)
+    static let london = PassportCity(name: "London", country: "GB", latitude: 51.5074, longitude: -0.1278)
+    static let lisbon = PassportCity(name: "Lisbon", country: "PT", latitude: 38.7223, longitude: -9.1393)
+    static let vienna = PassportCity(name: "Vienna", country: "AT", latitude: 48.2082, longitude: 16.3738)
+    static let milan  = PassportCity(name: "Milan",  country: "IT", latitude: 45.4642, longitude: 9.1900)
+    static let oslo   = PassportCity(name: "Oslo",   country: "NO", latitude: 59.9139, longitude: 10.7522)
+
+    /// One pin per city on the map. Ordered; count is the "cities" number.
+    static let cities: [PassportCity] = [zurich, berlin, london, lisbon, vienna, milan, oslo]
+
+    /// One photo/moment per entry. Newest-first is a display concern — the
+    /// calendar lens sorts by date, so the source order here doesn't matter.
+    static let entries: [PassportEntry] = [
+        PassportEntry(id: "entry-zurich-01", city: zurich, date: date(2026, 3, 14)),
+        PassportEntry(id: "entry-zurich-02", city: zurich, date: date(2026, 4, 2)),
+        PassportEntry(id: "entry-zurich-03", city: zurich, date: date(2026, 7, 19)),
+        PassportEntry(id: "entry-berlin-01", city: berlin, date: date(2026, 4, 27)),
+        PassportEntry(id: "entry-berlin-02", city: berlin, date: date(2026, 6, 1)),
+        PassportEntry(id: "entry-london-01", city: london, date: date(2026, 5, 20)),
+        PassportEntry(id: "entry-london-02", city: london, date: date(2026, 7, 14)),
+        PassportEntry(id: "entry-lisbon-01", city: lisbon, date: date(2026, 5, 9)),
+        PassportEntry(id: "entry-vienna-01", city: vienna, date: date(2026, 6, 18)),
+        PassportEntry(id: "entry-milan-01",  city: milan,  date: date(2026, 1, 22)),
+        PassportEntry(id: "entry-milan-02",  city: milan,  date: date(2026, 7, 4)),
+        PassportEntry(id: "entry-oslo-01",   city: oslo,   date: date(2026, 2, 11)),
+        PassportEntry(id: "entry-oslo-02",   city: oslo,   date: date(2026, 7, 5)),
     ]
 
     // MARK: - Friends feed
@@ -138,7 +163,7 @@ enum MockData {
         displayName: "Joschka Wagner",
         handle: "@joschka",
         friendCount: 12,
-        stampCount: stamps.count,
+        cityCount: cities.count,
         collage: currentUserCollage
     )
 
@@ -148,7 +173,7 @@ enum MockData {
         displayName: "Emil Roth",
         handle: "@emil",
         friendCount: 8,
-        stampCount: 5,
+        cityCount: 4,
         collage: scannedPersonCollage
     )
 

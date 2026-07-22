@@ -82,7 +82,7 @@ struct ProfileView: View {
 
             HStack(spacing: 28) {
                 stat(profile.friendCount, "friends")
-                stat(profile.stampCount, "stamps")
+                stat(profile.cityCount, "cities")
             }
             .padding(.top, 10)
         }

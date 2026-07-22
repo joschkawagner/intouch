@@ -29,15 +29,14 @@ struct PassportView: View {
 
     @State private var lens: PassportLens = .stamps
 
-    private let stamps = MockData.stamps
-
-    private var cityCount: Int { Set(stamps.map(\.city)).count }
+    private let cities = MockData.cities
+    private let entries = MockData.entries
 
     var body: some View {
         VStack(spacing: 0) {
             MastheadView(
                 title: "Passport",
-                detail: "\(stamps.count) stamps · \(cityCount) cities"
+                detail: "\(cities.count) cities · \(entries.count) photos"
             )
 
             PassportLensPicker(selection: $lens)
@@ -52,19 +51,9 @@ struct PassportView: View {
                     footnote: "YOU HAD TO BE THERE"
                 )
             case .map:
-                EmptyStateView(
-                    title: "The map comes later",
-                    message: "Every city you've stamped will surface here as a pin on a printed atlas. MapKit lands in a later phase.",
-                    ghostLabel: "Map",
-                    footnote: "PINS ARE STAMPS"
-                )
+                PassportMapLens(cities: cities)
             case .calendar:
-                EmptyStateView(
-                    title: "The calendar comes later",
-                    message: "Every handshake, event and group you start will read here as a history, newest first. It arrives with the rebuilt passport.",
-                    ghostLabel: "Calendar",
-                    footnote: "EVERY ENTRY COST AN EVENING"
-                )
+                PassportCalendarLens(entries: entries)
             }
         }
         .paperBackground()

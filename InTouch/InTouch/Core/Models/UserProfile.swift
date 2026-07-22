@@ -14,7 +14,7 @@ struct UserProfile: Identifiable, Hashable {
     let displayName: String
     let handle: String
     let friendCount: Int
-    let stampCount: Int
+    let cityCount: Int
     let collage: Collage
 
     /// Up to two initials, for the avatar when there's no photo yet.
