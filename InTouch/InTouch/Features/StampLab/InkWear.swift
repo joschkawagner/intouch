@@ -39,8 +39,9 @@ struct InkWear: ViewModifier {
 
     func body(content: Content) -> some View {
         content
-            // Ink on absorbent paper is never fully opaque; heavier wear = lighter strike.
-            .opacity(0.92 - strength * 0.28)
+            // Ink on absorbent paper is never fully opaque; heavier wear = lighter
+            // strike — but kept gentle so even the worn stamps stay readable.
+            .opacity(0.9 - strength * 0.16)
             .mask { InkWearMask(seed: seed, shape: shape, inset: inset, strength: strength) }
     }
 }
@@ -60,26 +61,27 @@ private struct InkWearMask: View {
             var rng = SeededGenerator(seed: seed + ".wear")
             context.blendMode = .destinationOut     // subsequent draws *remove* alpha
 
-            // 1. Fine ink-starve speckle scattered across the face.
-            let speckles = Int(50 + 320 * strength)
+            // 1. Fine ink-starve speckle scattered across the face. Kept sparse and
+            //    small so it textures the ink without eating the city or date.
+            let speckles = Int(35 + 150 * strength)
             for _ in 0..<speckles {
                 let x = rng.next(in: 0...Double(size.width))
                 let y = rng.next(in: 0...Double(size.height))
-                let r = rng.next(in: 0.4...3.0) * (0.6 + strength)
-                context.opacity = rng.next(in: 0.25...1.0)
+                let r = rng.next(in: 0.4...2.3) * (0.6 + strength)
+                context.opacity = rng.next(in: 0.2...0.85)
                 context.fill(
                     Path(ellipseIn: CGRect(x: x - r, y: y - r, width: r * 2, height: r * 2)),
                     with: .color(.black)
                 )
             }
 
-            // 2. A few soft pressure-fade patches — larger, lighter, uneven inking.
-            let fades = Int(2 + 5 * strength)
+            // 2. A couple of soft pressure-fade patches — larger, lighter, uneven inking.
+            let fades = Int(1 + 3 * strength)
             for _ in 0..<fades {
                 let x = rng.next(in: 0...Double(size.width))
                 let y = rng.next(in: 0...Double(size.height))
-                let r = rng.next(in: 12...36) * (0.7 + strength)
-                context.opacity = rng.next(in: 0.10...0.32)
+                let r = rng.next(in: 12...32) * (0.7 + strength)
+                context.opacity = rng.next(in: 0.08...0.22)
                 context.fill(
                     Path(ellipseIn: CGRect(x: x - r, y: y - r, width: r * 2, height: r * 2)),
                     with: .color(.black)
@@ -90,12 +92,12 @@ private struct InkWearMask: View {
             //    rule, so the outline reads as skipped ink rather than a clean line.
             let border = shape.path(in: CGRect(origin: .zero, size: size)
                 .insetBy(dx: inset, dy: inset))
-            context.opacity = 0.5 + 0.5 * strength
-            let dashes: [CGFloat] = [rng.next(in: 5...10), rng.next(in: 2...5)]
+            context.opacity = 0.4 + 0.4 * strength
+            let dashes: [CGFloat] = [rng.next(in: 5...11), rng.next(in: 2...4)]
             context.stroke(
                 border,
                 with: .color(.black),
-                style: StrokeStyle(lineWidth: 2.4 + strength * 2.2, lineCap: .round,
+                style: StrokeStyle(lineWidth: 2.2 + strength * 1.6, lineCap: .round,
                                    dash: dashes, dashPhase: rng.next(in: 0...12))
             )
         }

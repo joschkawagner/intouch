@@ -63,26 +63,35 @@ struct StampLabView: View {
         .padding(.bottom, 14)
     }
 
+    private static let notes = [
+        "postage · photo card",
+        "ink-frame · photo in a scallop",
+        "landmark · worn, still readable",
+        "landmark · crisp",
+        "emblem + heavy date block",
+        "heavy date block",
+    ]
+
     private var detailRail: some View {
         VStack(alignment: .leading, spacing: 22) {
             Text(Typography.chrome("Close up"))
                 .font(Typography.label).tracking(1).foregroundStyle(Color.muted)
                 .padding(.horizontal, 20)
 
-            railItem(LabStamp.detailRail[0], note: "postage · photo card")
-            railItem(LabStamp.detailRail[1], note: "ink-frame · photo in a scallop")
-            railItem(LabStamp.detailRail[2], note: "heavy wear · faded, broken edges")
-            railItem(LabStamp.detailRail[3], note: "crisp · full detail")
+            ForEach(Array(LabStamp.detailRail.enumerated()), id: \.element.id) { index, stamp in
+                railItem(stamp, note: Self.notes[index])
+            }
         }
         .padding(.top, 30)
     }
 
     /// One close-up: a large stamp on the left, its note on the right. Laid out in a
-    /// vertical column so every close-up is reachable by the vertical scroll.
+    /// vertical column so every close-up is reachable by the vertical scroll. Height
+    /// is area-equalised by shape so the stamps read as peers, not different sizes.
     private func railItem(_ stamp: LabStamp, note: String) -> some View {
         HStack(spacing: 18) {
-            LabStampView(stamp: stamp, height: 150, landsOnTap: true)
-                .frame(width: 190, height: 168)
+            LabStampView(stamp: stamp, height: 158 / stamp.shape.aspect.squareRoot(), landsOnTap: true)
+                .frame(width: 188, height: 172)
             Text(note)
                 .font(Typography.bodySmall).foregroundStyle(Color.text)
                 .fixedSize(horizontal: false, vertical: true)
@@ -114,7 +123,10 @@ private struct ScatteredPage: View {
             pageNumbers
 
             ForEach(LabStamp.page) { placement in
-                LabStampView(stamp: placement.stamp, height: placement.scale * size.height)
+                // Area-equalise by shape: divide by √aspect so a wide rectangle and a
+                // circle cover a similar footprint — no stamp reads as the centrepiece.
+                LabStampView(stamp: placement.stamp,
+                             height: placement.scale / placement.stamp.shape.aspect.squareRoot() * size.height)
                     .position(x: placement.position.x * size.width,
                               y: placement.position.y * size.height)
                     .zIndex(placement.z)
@@ -124,6 +136,8 @@ private struct ScatteredPage: View {
         .clipped()
         .overlay(Rectangle().stroke(Color.muted.opacity(0.45), lineWidth: 1))
         .shadow(color: Color.text.opacity(0.15), radius: 10, x: 0, y: 5)
+        // The scattered page is a display artifact — no tap targets, no selection.
+        .allowsHitTesting(false)
     }
 
     /// Faint printed page numbers in the top corners, the way a passport page is
