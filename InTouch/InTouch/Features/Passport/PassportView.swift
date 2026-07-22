@@ -45,7 +45,12 @@ struct PassportView: View {
 
             switch lens {
             case .stamps:
-                PassportStampsView()
+                EmptyStateView(
+                    title: "The passport is being rebound",
+                    message: "The stamp page is coming back as a real passport booklet you leaf through. We pulled the old stamps while we build it.",
+                    ghostLabel: "Stamps",
+                    footnote: "YOU HAD TO BE THERE"
+                )
             case .map:
                 EmptyStateView(
                     title: "The map comes later",
@@ -54,7 +59,12 @@ struct PassportView: View {
                     footnote: "PINS ARE STAMPS"
                 )
             case .calendar:
-                PassportCalendarView()
+                EmptyStateView(
+                    title: "The calendar comes later",
+                    message: "Every handshake, event and group you start will read here as a history, newest first. It arrives with the rebuilt passport.",
+                    ghostLabel: "Calendar",
+                    footnote: "EVERY ENTRY COST AN EVENING"
+                )
             }
         }
         .paperBackground()

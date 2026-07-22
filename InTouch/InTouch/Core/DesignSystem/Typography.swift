@@ -17,10 +17,11 @@
 //  Futura, say — is a one-line change. The PostScript names are confirmed at
 //  runtime by FontAudit, not assumed.
 //
-//  Stamp fonts stay UIFont-first with the SwiftUI Font derived from them, because
-//  ArcText lays the city name out glyph by glyph and measuring a glyph needs a
-//  UIFont (see ArcText). Deriving one from the other means the measured font can
-//  never drift from the drawn font.
+//  The Courier "machine type" is kept UIFont-first with the SwiftUI Font derived
+//  from it, so a view that needs to measure a glyph gets exactly the drawn font.
+//  Some of these tokens are parked for the rebuilt passport booklet (see
+//  docs/DECISIONS.md — procedural stamps removed); the marks and letterspacing
+//  are used app-wide as machine type in mastheads, Connect and Profile.
 //
 
 import SwiftUI
@@ -127,18 +128,21 @@ enum Typography {
 
     // MARK: - Stamps, dates, timestamps (Courier — machine type)
 
-    // The three stamp fonts below are deliberately FIXED (no Dynamic Type). They
-    // are laid out inside StampView's fixed 160pt coordinate space — and the same
-    // mark inside EmptyStateView's fixed 118pt ghost ring — where the type is a
-    // fraction of a fixed circle. Scaling them independently of that circle would
-    // burst the layout, so leave them fixed. (The timestamp below is different: it
-    // is a free-flowing caption line, not baked into a graphic, so it does scale.)
+    // The stamp fonts below are deliberately FIXED (no Dynamic Type): they get
+    // baked into fixed-size graphics — the mark inside EmptyStateView's 118pt ghost
+    // ring, and the passport booklet when it's rebuilt — where the type is a
+    // fraction of a fixed shape. Scaling them independently would burst the layout,
+    // so leave them fixed. (The timestamp below is different: it is a free-flowing
+    // caption line, not baked into a graphic, so it does scale.)
+    //
+    // `stampCity` / `stampDate` are unused this phase — parked for the rebuilt
+    // passport (procedural stamps removed; see docs/DECISIONS.md).
 
-    /// City name arcing along the top edge of a stamp.
+    /// City name arcing along the top edge of a stamp. Parked for the passport rebuild.
     static let stampCityUIFont = courier(13, bold: true)
     static var stampCity: Font { Font(stampCityUIFont) }
 
-    /// The date across the middle of a stamp.
+    /// The date across the middle of a stamp. Parked for the passport rebuild.
     static let stampDateUIFont = courier(15, bold: true)
     static var stampDate: Font { Font(stampDateUIFont) }
 

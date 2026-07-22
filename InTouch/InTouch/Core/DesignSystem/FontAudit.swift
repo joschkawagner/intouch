@@ -23,7 +23,7 @@ enum FontAudit {
         "Jost-Regular",
         "Jost-SemiBold",
         "Jost-Bold",
-        "Courier",                 // Typography stamp fonts — system font, not bundled
+        "Courier",                 // Typography machine type (timestamps, marks) — system font, not bundled
         "Courier-Bold",
         "BradleyHandITCTT-Bold",   // Typography.collage — system font, not bundled
     ]

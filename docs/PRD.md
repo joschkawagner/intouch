@@ -125,6 +125,14 @@ someone they're connected to. Effectively a private shared album with a name.
 - No rarity tiers, points, or streaks in v1. The collection is enough.
 - The passport page is the shareable artifact — export as an image.
 
+> **Rendering status (2026-07-22).** The passport tab and its three lenses (Stamps · Map ·
+> Calendar) exist, but the passport no longer uses the old **procedurally-drawn** stamps —
+> after three lab rounds they didn't read as real, so they were removed (see
+> DECISIONS.md). The Stamps and Calendar lenses are "coming soon" placeholders for now;
+> the passport is rebuilt next phase as a **leaf-through booklet** with a real MapKit world
+> map and a calendar. The passport/profile stamp *counts* still work. This is a rendering
+> change only — the stamp *concept* above (one per city, ink by type, shareable) stands.
+
 ### 4.5 Profile & settings
 The person's **collage is the hero**, filling most of the screen; handle, display name, friend
 count and stamp count sit beneath it. On your own profile: an edit-collage entry (editor is a

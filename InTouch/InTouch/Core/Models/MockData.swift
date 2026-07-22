@@ -17,18 +17,12 @@ enum MockData {
     // MARK: - Passport
 
     static let stamps: [Stamp] = [
-        Stamp(id: "stamp-zurich-01", city: "Zürich", country: "CH",
-              date: date(2026, 3, 14), kind: .firstCity),
-        Stamp(id: "stamp-zurich-02", city: "Zürich", country: "CH",
-              date: date(2026, 4, 2), kind: .person),
-        Stamp(id: "stamp-berlin-01", city: "Berlin", country: "DE",
-              date: date(2026, 4, 27), kind: .event),
-        Stamp(id: "stamp-lisbon-01", city: "Lisbon", country: "PT",
-              date: date(2026, 5, 9), kind: .firstCity),
-        Stamp(id: "stamp-vienna-01", city: "Vienna", country: "AT",
-              date: date(2026, 6, 18), kind: .person),
-        Stamp(id: "stamp-milan-01", city: "Milan", country: "IT",
-              date: date(2026, 7, 4), kind: .event),
+        Stamp(id: "stamp-zurich-01", city: "Zürich", country: "CH", date: date(2026, 3, 14)),
+        Stamp(id: "stamp-zurich-02", city: "Zürich", country: "CH", date: date(2026, 4, 2)),
+        Stamp(id: "stamp-berlin-01", city: "Berlin", country: "DE", date: date(2026, 4, 27)),
+        Stamp(id: "stamp-lisbon-01", city: "Lisbon", country: "PT", date: date(2026, 5, 9)),
+        Stamp(id: "stamp-vienna-01", city: "Vienna", country: "AT", date: date(2026, 6, 18)),
+        Stamp(id: "stamp-milan-01", city: "Milan", country: "IT", date: date(2026, 7, 4)),
     ]
 
     // MARK: - Friends feed
@@ -167,23 +161,6 @@ enum MockData {
         date: date(2026, 7, 15, hour: 22),
         collage: eventCollage
     )
-
-    // MARK: - Calendar timeline
-    //
-    // Connections, events and group-creations in one history. The Calendar lens
-    // sorts newest-first; order here is just for readability.
-
-    static let timeline: [TimelineEntry] = [
-        TimelineEntry(id: "tl-01", date: date(2026, 7, 20, hour: 18), kind: .groupCreated, title: "Started “Lake Crew”", city: "Zürich"),
-        TimelineEntry(id: "tl-02", date: date(2026, 7, 19, hour: 23), kind: .connection, title: "Met Nora", city: "Zürich"),
-        TimelineEntry(id: "tl-03", date: date(2026, 7, 15, hour: 22), kind: .event, title: "Rooftop Sessions", city: "Zürich"),
-        TimelineEntry(id: "tl-04", date: date(2026, 7, 4,  hour: 21), kind: .event, title: "Milan Design Week", city: "Milan"),
-        TimelineEntry(id: "tl-05", date: date(2026, 6, 28, hour: 20), kind: .connection, title: "Met Juno", city: "Lisbon"),
-        TimelineEntry(id: "tl-06", date: date(2026, 6, 18, hour: 12), kind: .groupCreated, title: "Started “Berlin 2026”", city: "Berlin"),
-        TimelineEntry(id: "tl-07", date: date(2026, 5, 27, hour: 2),  kind: .connection, title: "Met Emil", city: "Berlin"),
-        TimelineEntry(id: "tl-08", date: date(2026, 4, 27, hour: 23), kind: .event, title: "Berlin Warehouse", city: "Berlin"),
-        TimelineEntry(id: "tl-09", date: date(2026, 4, 2,  hour: 19), kind: .connection, title: "Met Ada", city: "Zürich"),
-    ]
 
     // MARK: - Helpers
 
