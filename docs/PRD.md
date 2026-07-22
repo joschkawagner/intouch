@@ -1,6 +1,6 @@
 # InTouch — Product Requirements
 
-Status: v0.1, pre-build. Owner: (you). Last updated: 20 July 2026.
+Status: v0.1, pre-build. Owner: (you). Last updated: 23 July 2026.
 
 ---
 
@@ -14,12 +14,15 @@ handshake that both people physically attended.
 
 **The status mechanic.** Most apps sell exclusivity you can buy (Amex) or virtue you can
 perform (digital-detox apps). InTouch's exclusivity is *earned by presence*. A profile
-showing 43 friends and 12 city stamps is a status object because everyone knows each one
-cost a real evening. The velvet rope is your actual life.
+showing 43 friends and 12 cities is a status object because everyone knows each one
+cost a real evening. The velvet rope is your actual life. The passport itself carries this:
+its cover is tinted to the colour family of your home-country passport, and it **visibly
+wears with use** — a patina you cannot buy or fake, only earn by showing up (see
+DESIGN.md § The passport cover).
 
 **Why it spreads.** Every viral consumer app has a shareable artifact its mechanic produces
 for free — Strava's route map, Duolingo's streak, Spotify Wrapped. InTouch's artifact is the
-**passport**: a world map and a page of stamps. The passport is publicly shareable; the
+**passport**: a world map and a booklet of city pages. The passport is publicly shareable; the
 content behind it is not. The lock is the flex.
 
 ---
@@ -118,24 +121,42 @@ someone they're connected to. Effectively a private shared album with a name.
   blurred mosaic. Publicly shareable to Instagram stories. This is the growth loop.
 
 ### 4.4 Passport
-- A **stamp** for each city where you connected with someone or attended an event.
-- A **world map** with pins for every event and city.
-- Stamp ink colour encodes type: Red Inferno for people, Chive for events, Navy for a
-  first-ever city.
-- No rarity tiers, points, or streaks in v1. The collection is enough.
-- The passport page is the shareable artifact — export as an image.
 
-> **Rendering status (2026-07-22).** The passport tab and its three lenses (Stamps · Map ·
-> Calendar) exist, but the passport no longer uses the old **procedurally-drawn** stamps —
-> after three lab rounds they didn't read as real, so they were removed (see
-> DECISIONS.md). The Stamps and Calendar lenses are "coming soon" placeholders for now;
-> the passport is rebuilt next phase as a **leaf-through booklet** with a real MapKit world
-> map and a calendar. The passport/profile stamp *counts* still work. This is a rendering
-> change only — the stamp *concept* above (one per city, ink by type, shareable) stands.
+The passport is a **leaf-through booklet**, not a grid of icons. Its unit is a **city**
+(a place you have photos) and the **photos/moments** inside it.
+
+- **The passport is a booklet you own and receive.** Your own profile *is* your passport;
+  a connected person's profile *is* the passport you received from them (see § 4.5). The
+  cover is one page; opening it is a two-page spread you flip through, city by city.
+- **Each city is a page the app composes for you.** The app auto-lays each city's photos
+  into a Bauhaus/Mondrian grid — you do **not** hand-arrange it (unlike the profile collage
+  in § 4, which you assemble yourself). Empty cells become solid colour blocks, so a sparse
+  city page looks as composed as a full one (see DESIGN.md § The city page).
+- **Country-tinted, wearing cover.** One InTouch cover tinted into the colour *family* of
+  your home-country passport (~5 families cover almost everyone) — not a literal national
+  design. The cover wears visibly with use; wear is earned status (see § 1 and DESIGN.md
+  § The passport cover).
+- A **world map** with pins for every event and city, and a **calendar** of when you were
+  where. Map and calendar are two lenses on the same city collection.
+- No rarity tiers, points, or streaks in v1. The collection is enough.
+- The passport is the shareable artifact — export as an image.
+
+**Rebuild plan.** The passport is being rebuilt in four small phases, each committing
+separately, in strict order because each leans on the last:
+
+1. **P1 — remove the old stamp system.** *(done)* The procedurally-drawn stamps didn't
+   read as real after three lab rounds and were scrapped (see DECISIONS.md).
+2. **P2 — Map (pins) + Calendar (city list) on mock data.** *(done)*
+3. **P3 — the clean light passport shell + its UV/blacklight night version.** The booklet
+   itself: cover, spread, page-turn (see DESIGN.md § The passport booklet, § Light not dark).
+4. **P4 — the Bauhaus city-collage pages that live inside the shell.** Depends on P3: the
+   collage pages need the shell to exist first before they have anywhere to live.
 
 ### 4.5 Profile & settings
-The person's **collage is the hero**, filling most of the screen; handle, display name, friend
-count and stamp count sit beneath it. On your own profile: an edit-collage entry (editor is a
+**Your profile *is* your passport booklet, and a friend's profile *is* the passport you
+received from them** — "profile" and "passport" (§ 4.4) are two names for one object, not
+two screens. The person's **collage is the hero**, filling most of the screen; handle,
+display name, friend count and city count sit beneath it. On your own profile: an edit-collage entry (editor is a
 later phase) and a gear to Settings. Settings carries Account, Privacy, **Blocked users**,
 Notifications, About, Sign out — Blocked users and reporting exist from day one because they're
 an App Store requirement (§ 6). Block list. Account deletion.
@@ -216,7 +237,11 @@ feed, RLS policies.
 **Phase 4 — events.** Create event, join via code, event feed, upload window enforcement,
 recap card.
 
-**Phase 5 — passport.** Stamp grid, then MapKit world map, then share export.
+**Phase 5 — passport.** Rebuilt in four small phases, each committing separately, in order
+(each depends on the last): **P1** remove the old stamp system *(done)* → **P2** Map (pins)
++ Calendar (city list) on mock data *(done)* → **P3** the clean light passport shell + its
+UV/blacklight night version → **P4** the Bauhaus city-collage pages inside the shell (needs
+P3 first). Share export follows. See § 4.4.
 
 **Phase 6 — groups.** Should be a small extension of the feed primitive.
 

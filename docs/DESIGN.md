@@ -4,9 +4,10 @@
 
 **The app is a passport.**
 
-Not "a passport-themed app" — the object itself. Swiss passports are red, EU passports
-burgundy; the cover is `Red Inferno`. The pages are `Coconut Milk`. Stamps land in ink.
-The map colours are printed-atlas land and water. Every screen answers to that object.
+Not "a passport-themed app" — the object itself. A **booklet you leaf through**: a cover
+tinted to your home country, pages you flip city by city. Swiss passports are red, EU
+passports burgundy; the cover lives in the `ink` family. The pages are `Coconut Milk`. The
+map colours are printed-atlas land and water. Every screen answers to that object.
 
 This is what makes it feel unlike other apps: it's an **analog artifact**, warm and slightly
 aged, not a glass dashboard. Film grain, paper texture, mechanical type. Nothing rounded and
@@ -20,6 +21,14 @@ carries the analog soul; a dark shell would kill it.
 **Exception — ceremonial moments go dark navy, full-bleed:** the Connect handshake and live
 Event mode. Stepping into a dark room makes the ritual feel like a ritual. That's the whole
 lighting design: cream pages, dark cover.
+
+**Exception — the passport has a UV/blacklight night mode.** After dark, or during a live
+event, the passport itself shifts to a deep black-violet ground and its daylight elements
+**fluoresce** — cyan, magenta, violet — the way real passport pages light up under UV
+security ink. This is the one place the saturated-ink set currently parked in
+`Palette.swift` (`stampRed/Teal/Violet/Forest/Cobalt`) returns: muted by day, glowing by
+night. It's a distinct rendering of the same booklet, not a separate screen, and it deserves
+its own dedicated design-lab pass to get the glow right (see § The passport booklet).
 
 ## Palette
 
@@ -74,23 +83,68 @@ Two faces, chosen to do opposite jobs.
 - All type tokens live in `Core/DesignSystem/Typography.swift`. It is the only file allowed a
   raw font size.
 
-## The stamp
+## The stamp — retired
 
-The signature component. Everything else can be plain if this is right.
+The procedurally-drawn stamp was once the signature component. After three lab rounds it
+never read as real ink and was scrapped (see DECISIONS.md, 2026-07-22). The passport's
+signature is now the **booklet** and its **auto-composed city pages** — see § The passport
+booklet and § The city page below. The Courier machine typeface it used survives for
+dates, timestamps and marks app-wide (see Typography).
 
-- Circular or oval outline, weight ~2pt, deliberately slightly broken/uneven like real ink.
-- Rotated 3–8° off axis, randomised per stamp but **stable** (seed from the stamp id, so it
-  never jumps between renders).
-- City name arcing along the top edge, date across the middle, small mark below.
-- Ink colour by type: `ink` for people, `live` for events, `night` for a first-ever city.
-- Lands with a press-down animation: scale from 1.15 → 1.0, quick, with a sharp haptic
-  (`UIImpactFeedbackGenerator(style: .rigid)`). One thump, not a buzz.
+## The passport booklet
+
+The passport is a real booklet, not a scroll of icons. The **cover is one page**; opening it
+reveals a **two-page spread** you flip through, city by city. Your own booklet is your
+passport; a friend's is the passport you received from them (see PRD § 4.4–4.5).
+
+- **⚠ UNVERIFIED RISK — the portrait two-page-spread must be prototyped before it is built.**
+  A two-page spread is a landscape gesture; a phone held in portrait is tall and narrow, so
+  a spread could feel cramped — two half-width pages side by side, neither readable. **Do not
+  assume it works.** Prototype the spread on a real portrait phone first.
+- **Fallback if the spread feels cramped:** one page at a time with a page-turn animation —
+  the same leaf-through feel, one full-width page per turn, no side-by-side. This is the safe
+  default the spread has to beat.
+- Motion is a **page turn, not a slide** — paper folding over, mechanical, in step with the
+  rest of the app's stamp-press motion (short durations, sharp easing).
+- The whole booklet has a **UV/blacklight night rendering** (see § Light, not dark) — same
+  pages, deep black-violet ground, elements fluorescing. It gets its own design-lab pass.
+
+## The passport cover
+
+One InTouch cover, **tinted into the colour *family* of the user's home-country passport** —
+red, burgundy, blue, green, black — **not** a literal reproduction of a national passport.
+About **five tint families** cover almost everyone, so the cover reads as "from your part of
+the world" without ever copying a real government document.
+
+- The cover **wears visibly with use over time** — creases, softened corners, a patina that
+  deepens the more you travel and connect. Wear is earned; it is a status marker you cannot
+  buy or fake, only accumulate by showing up (see PRD § 1). A brand-new user's cover is
+  crisp and unmarked — the empty-passport state should feel *new*, not *broken*.
+
+## The city page — Bauhaus auto-collage
+
+Each city gets a page the **app composes automatically** — the user does not arrange it.
+
+- Photos are laid into a **Bauhaus/Mondrian grid**: rectangles of varied size, hard edges,
+  no overlap, mechanical order. This is the auto counterpart to the hand-assembled profile
+  collage (§ The collage).
+- **Empty cells become solid Bauhaus-palette colour blocks** — deliberate colour-blocking,
+  read as composition, not as missing content. A city with two photos and a city with twelve
+  both fill the page and both look *composed*. Sparse must never look empty.
+- Colour comes from the photos and the block fills; the surrounding chrome stays in the eight
+  tokens, as everywhere else.
 
 ## The collage
 
 A profile is not a contact card — it is a **collage the person assembles themselves**: layered
 photos, cut-out stickers, torn scraps of handwriting, tape, all overlapping and rotated. Events
 and groups get their own collage too, set by a host or a member.
+
+- **Hand-assembled here, auto-composed in the passport.** This collage is authored by the
+  person, item by item. The passport's per-city pages (§ The city page) are the opposite:
+  the app composes them automatically on a Bauhaus/Mondrian grid. Same visual family —
+  overlapping photos, palette colour, mechanical order — but opposite authorship. Keep the
+  two straight: *you* arrange your profile; the *app* arranges your cities.
 
 - **Loud content inside quiet order.** The collage is meant to be chaotic and personal; the app
   around it stays calm — framed on a paper page, chrome in Josefin and ink. This is the same
@@ -124,7 +178,9 @@ Motion should feel **mechanical, not bouncy** — a stamp press, not a spring. S
 
 - **Feed card:** photo full-bleed edge to edge, caption below in `text` on `paper`, small
   mechanical timestamp. No avatars cluttering the frame; a single line of attribution.
-- **Passport page:** grid of stamps on `paper`, faint printed guides in `muted`.
-- **Map:** MapKit with a muted style — `muted` land, `water` water, pins as tiny stamps.
+- **Passport page:** a city collage on `paper`, faint printed guides in `muted` (see § The
+  city page).
+- **Map:** MapKit with a muted style — `muted` land, `water` water, pins as small `ink`
+  marks ringed in `paper`, not default balloons.
 - **Empty states matter more than usual.** A new user has an empty everything. The empty
   passport should look like a *blank passport* — inviting, not broken.
