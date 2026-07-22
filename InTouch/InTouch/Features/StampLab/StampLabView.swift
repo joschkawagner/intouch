@@ -55,7 +55,7 @@ struct StampLabView: View {
                 .font(Typography.stampMark).tracking(2).foregroundStyle(Color.muted)
             Text(Typography.chrome("Stamp Lab"))
                 .font(Typography.masthead).foregroundStyle(Color.ink)
-            Text("Every stamp is a photo pinned to a city. Shape, wear and density — not colour.")
+            Text("One shared stamp per city — a landmark, a name, muted ink. No photos in the stamp.")
                 .font(Typography.bodySmall).foregroundStyle(Color.text)
         }
         .padding(.horizontal, 20)
@@ -63,13 +63,13 @@ struct StampLabView: View {
         .padding(.bottom, 14)
     }
 
+    // Parallels LabStamp.detailRail: one note per city (the library order), then the
+    // generic fallback last.
     private static let notes = [
-        "postage · photo card",
-        "ink-frame · photo in a scallop",
-        "landmark · worn, still readable",
-        "landmark · crisp",
-        "emblem + heavy date block",
-        "heavy date block",
+        "the tram", "Big Ben", "the Colosseum", "the Eiffel Tower",
+        "the Opera House", "the skyline", "a torii gate", "the Leaning Tower",
+        "a windmill", "the Golden Gate", "the Parthenon", "the Taj Mahal",
+        "generic fallback · neutral star, just the name",
     ]
 
     private var detailRail: some View {

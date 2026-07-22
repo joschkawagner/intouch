@@ -6,17 +6,20 @@
 //
 //  Text curved along a circle, at the TOP or the BOTTOM edge. The shipping
 //  Core/DesignSystem/ArcText only does the top, and it's used by the real
-//  StampView, so rather than widen it (and risk the shipping stamp) the lab keeps
-//  its own copy that also arcs the country name along the bottom — the way real
-//  round stamps read (SYDNEY over the top, AUSTRALIA under the bottom).
+//  StampView, so rather than widen it the lab keeps its own copy that also arcs
+//  the country name upright along the bottom.
 //
-//  SwiftUI has no curved text, so each glyph is placed by hand. The maths mirrors
-//  ArcText but is written with explicit trig and `.position` so the bottom case is
-//  unambiguous:
-//    • measure each glyph in the real UIFont (a SwiftUI Font can't be measured),
-//    • convert its advance to an angle: angle = width / radius,
-//    • place its centre on the circle and rotate it to sit on the curve.
-//  Top text fans into a ∩ (frown); bottom text fans into a ∪ (smile) so both read
+//  Alignment (this was drifting before): each glyph is laid out at the ZStack's
+//  centre, pushed out by `radius` with `.offset`, then swung into place with
+//  `.rotationEffect`. The trick — the same one the shipping ArcText relies on — is
+//  that `.offset` moves what's DRAWN but not the view's layout frame, and
+//  `.rotationEffect` pivots around that unmoved frame's centre. So every glyph
+//  pivots around ONE common centre at the same radius, which keeps the baseline
+//  even and the spacing consistent. (Positioning each glyph by its own frame centre,
+//  as before, drifted because a glyph's frame centre isn't its visual centre.)
+//
+//  Per-glyph angle = arc-length-to-its-centre ÷ radius, so spacing follows the real
+//  measured advance widths. Top text fans into a ∩; bottom into a ∪; both read
 //  left-to-right, upright.
 //
 
@@ -46,22 +49,17 @@ struct LabArcText: View {
 
     var body: some View {
         let widths = self.widths
-        let totalAngle = widths.reduce(0, +) / radius     // radians spanned
-        let center = radius                               // in a diameter×diameter box
+        let totalAngle = widths.reduce(0, +) / radius        // radians spanned
 
         ZStack {
             ForEach(Array(characters.enumerated()), id: \.offset) { index, character in
                 let preceding = widths[..<index].reduce(0, +)
-                let phi = (preceding + widths[index] / 2) / radius - totalAngle / 2
+                let angle = (preceding + widths[index] / 2) / radius - totalAngle / 2
 
                 Text(String(character))
                     .font(Font(uiFont))
-                    .rotationEffect(.radians(edge == .top ? phi : -phi))
-                    .position(
-                        x: center + radius * sin(phi),
-                        y: edge == .top ? center - radius * cos(phi)
-                                        : center + radius * cos(phi)
-                    )
+                    .offset(y: edge == .top ? -radius : radius)
+                    .rotationEffect(.radians(edge == .top ? angle : -angle))
             }
         }
         .frame(width: radius * 2, height: radius * 2)
@@ -70,8 +68,9 @@ struct LabArcText: View {
 
 #Preview {
     ZStack {
-        LabArcText(text: "SYDNEY", radius: 70, edge: .top)
-        LabArcText(text: "AUSTRALIA", radius: 70, edge: .bottom)
+        LabArcText(text: "SAN FRANCISCO", radius: 76, edge: .top)
+        LabArcText(text: "CALIFORNIA", radius: 76, edge: .bottom,
+                   uiFont: Typography.stampMarkUIFont)
     }
     .foregroundStyle(Color.ink)
     .frame(maxWidth: .infinity, maxHeight: .infinity)
