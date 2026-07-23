@@ -70,6 +70,17 @@ struct PassportPage<Content: View>: View {
     }
 }
 
+extension View {
+    /// Pins this view's top-left corner to (`x`, `y`) in the reference page
+    /// space, the way the design specifies field positions. Use inside a
+    /// `PassportPage`'s content (a ZStack), where every field is placed by its
+    /// design coordinate rather than stacked.
+    func referenceOrigin(x: CGFloat, y: CGFloat) -> some View {
+        frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+            .offset(x: x, y: y)
+    }
+}
+
 #Preview {
     PassportPage {
         Text(Typography.chrome("passport"))

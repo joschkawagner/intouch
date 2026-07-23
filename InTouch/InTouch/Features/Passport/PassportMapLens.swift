@@ -49,6 +49,17 @@ struct PassportMapLens: View {
                 .blendMode(.softLight)
                 .allowsHitTesting(false)
         )
+        // The design's guidance line on the map page. Uses a scaling chrome font
+        // (not the tiny fixed 9pt of the mock) because this page renders native
+        // size, not inside the reference-scaled page.
+        .overlay(alignment: .bottomLeading) {
+            Text(Typography.chrome("tap a pin to open that city"))
+                .font(Typography.label)
+                .tracking(Typography.stampTracking * 0.3)
+                .foregroundStyle(Color.ink.opacity(0.5))
+                .padding(14)
+                .allowsHitTesting(false)
+        }
     }
 
     /// A tiny ink dot ringed in paper — the pin as a struck mark, not a balloon.

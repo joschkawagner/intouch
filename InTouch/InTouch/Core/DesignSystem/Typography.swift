@@ -177,6 +177,12 @@ enum Typography {
     /// A colophon stat number (cities, photos).
     static var passportStat: Font { display(15, .bold) }
 
+    /// The holder initials struck into the identity page's photo block.
+    static var passportAvatarInitials: Font { display(30, .bold) }
+
+    /// A field's body value on a passport page (e.g. the bio line).
+    static var passportBody: Font { display(13) }
+
     /// A small letterspaced field label on a passport page ("name", "since").
     static var passportLabel: Font { display(12, .semiBold) }
 
