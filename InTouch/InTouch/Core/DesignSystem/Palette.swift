@@ -59,6 +59,27 @@ extension Color {
     static let stampCobalt = Color(hex: 0x1E4FA0)
 }
 
+// MARK: - UV / after-dark inks
+
+extension Color {
+
+    /// The passport's after-dark ground. Under UV the whole booklet drops onto
+    /// this near-black violet-ink field, and the fenced `stamp*` inks (violet /
+    /// teal / cobalt) fluoresce against it. Distinct from the muted eight tokens
+    /// (which own daylight chrome) — these exist only for the passport's UV state
+    /// (see docs/DESIGN.md § the passport booklet, the blacklight/night pass).
+    static let uvGround = Color(hex: 0x0D0714)
+
+    /// Fill for a photo / placeholder collage cell under UV. Photographs can't
+    /// fluoresce, so photo cells go dark and non-reactive on this dim violet
+    /// while the grid lines and outlined empty cells glow around them.
+    static let uvCell = Color(hex: 0x150A20)
+
+    /// Bright fluorescing violet used for hero text under UV (e.g. the colophon's
+    /// strongest hidden reveal). The glow itself is `stampViolet` shadow behind it.
+    static let uvVioletText = Color(hex: 0xF3E9FB)
+}
+
 // MARK: - Bauhaus city blocks
 
 extension Color {

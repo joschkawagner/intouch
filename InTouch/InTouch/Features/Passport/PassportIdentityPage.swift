@@ -15,36 +15,37 @@ struct PassportIdentityPage: View {
     let user: UserProfile
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            AvatarView(initials: user.initials, diameter: 96)
+        PassportPage {
+            VStack(alignment: .leading, spacing: 0) {
+                AvatarView(initials: user.initials, diameter: 96)
 
-            Text(user.displayName)
-                .font(Typography.masthead)
-                .foregroundStyle(Color.ink)
-                .padding(.top, 20)
+                Text(user.displayName)
+                    .font(Typography.masthead)
+                    .foregroundStyle(Color.ink)
+                    .padding(.top, 20)
 
-            Text(Typography.chrome(user.handle))
-                .font(Typography.label)
-                .tracking(1)
-                .foregroundStyle(Color.muted)
-                .padding(.top, 4)
+                Text(Typography.chrome(user.handle))
+                    .font(Typography.label)
+                    .tracking(1)
+                    .foregroundStyle(Color.muted)
+                    .padding(.top, 4)
 
-            Text(Self.joinedString(user.joinedDate))
-                .font(Typography.timestamp)
-                .tracking(1)
-                .foregroundStyle(Color.text)
-                .padding(.top, 16)
+                Text(Self.joinedString(user.joinedDate))
+                    .font(Typography.timestamp)
+                    .tracking(1)
+                    .foregroundStyle(Color.text)
+                    .padding(.top, 16)
 
-            Text(user.bio)
-                .font(Typography.body)
-                .foregroundStyle(Color.text)
-                .padding(.top, 12)
+                Text(user.bio)
+                    .font(Typography.body)
+                    .foregroundStyle(Color.text)
+                    .padding(.top, 12)
 
-            Spacer(minLength: 0)
+                Spacer(minLength: 0)
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+            .padding(28)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-        .padding(28)
-        .paperBackground()
     }
 
     /// e.g. "SINCE SEP 2025" — Courier, machine type, matches the passport look.

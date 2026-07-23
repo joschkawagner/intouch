@@ -158,6 +158,34 @@ enum Typography {
     /// falls back to the system face on its own if Courier is ever missing.
     static var timestamp: Font { .custom("Courier", size: 11, relativeTo: .caption2) }
 
+    // MARK: - Passport booklet (fixed sizes — baked into the scaled page)
+
+    // The passport pages are authored on a fixed 232×330 reference and scaled to
+    // fit the device page (see PassportPage), so their type is baked into a
+    // fixed-size graphic exactly like the stamp fonts above — deliberately no
+    // Dynamic Type. Sizes come straight from the design (Passport Cover
+    // Directions): scaling with the page is correct; scaling independently would
+    // burst the reference layout. City names reuse `masthead`; dates/holder-no
+    // reuse `timestamp`; letterspacing reuses `stampTracking`.
+
+    /// The "passport" wordmark on the cover.
+    static var passportWordmark: Font { display(24, .bold) }
+
+    /// A holder field value on the open identity spread (e.g. the name).
+    static var passportName: Font { display(14, .bold) }
+
+    /// A colophon stat number (cities, photos).
+    static var passportStat: Font { display(15, .bold) }
+
+    /// A small letterspaced field label on a passport page ("name", "since").
+    static var passportLabel: Font { display(12, .semiBold) }
+
+    /// Machine-type coordinate line under a city label ("47.3769°N · 8.5417°E").
+    static var passportCoord: Font { Font(courier(8, bold: false)) }
+
+    /// The vertical microprint band running up the page gutter ("INTOUCH · …").
+    static var passportMicroprint: Font { Font(courier(4, bold: false)) }
+
     // MARK: - Collage content (a hand, not chrome)
 
     /// Handwritten-style face for collage `.text` scraps. This is *content*, not

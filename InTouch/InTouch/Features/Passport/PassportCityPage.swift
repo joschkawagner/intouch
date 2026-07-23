@@ -17,36 +17,37 @@ struct PassportCityPage: View {
     let date: Date?
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            HStack(spacing: 12) {
-                Circle()
-                    .fill(Color.ink)
-                    .frame(width: 8, height: 8)
+        PassportPage {
+            VStack(alignment: .leading, spacing: 0) {
+                HStack(spacing: 12) {
+                    Circle()
+                        .fill(Color.ink)
+                        .frame(width: 8, height: 8)
 
-                Text(Typography.chrome(city.country))
-                    .font(Typography.label)
-                    .tracking(1.5)
-                    .foregroundStyle(Color.muted)
+                    Text(Typography.chrome(city.country))
+                        .font(Typography.label)
+                        .tracking(1.5)
+                        .foregroundStyle(Color.muted)
+                }
+
+                Text(city.name)                             // a place name — never chrome()
+                    .font(Typography.masthead)
+                    .foregroundStyle(Color.ink)
+                    .padding(.top, 12)
+
+                if let date {
+                    Text(Self.dateString(date))
+                        .font(Typography.timestamp)         // Courier — the date as artifact
+                        .tracking(1)
+                        .foregroundStyle(Color.muted)
+                        .padding(.top, 8)
+                }
+
+                Spacer(minLength: 0)
             }
-
-            Text(city.name)                             // a place name — never chrome()
-                .font(Typography.masthead)
-                .foregroundStyle(Color.ink)
-                .padding(.top, 12)
-
-            if let date {
-                Text(Self.dateString(date))
-                    .font(Typography.timestamp)         // Courier — the date as artifact
-                    .tracking(1)
-                    .foregroundStyle(Color.muted)
-                    .padding(.top, 8)
-            }
-
-            Spacer(minLength: 0)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+            .padding(28)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-        .padding(28)
-        .paperBackground()
     }
 
     /// e.g. "14 MAR 2026" — same format as the calendar lens.
