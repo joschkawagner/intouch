@@ -135,9 +135,15 @@ struct PassportBookView: View {
                 right: { PassportCollageView(photoCount: PassportMockPhotos.count(for: city)) }
             )
         } else {
-            // Final leaf: the colophon slot (built for real in P6) | the back cover.
+            // Final leaf: the colophon | the back cover.
             spread(
-                left: { PassportPage(security: .heavy) { Color.clear } },
+                left: {
+                    PassportColophonPage(
+                        user: MockData.currentUser,
+                        cityCount: cities.count,
+                        photoCount: totalPhotoCount
+                    )
+                },
                 right: { PassportBackCoverView() }
             )
         }
@@ -208,6 +214,12 @@ struct PassportBookView: View {
     /// The most recent moment recorded in a city (its label date), if any.
     private func latestDate(for city: PassportCity) -> Date? {
         MockData.entries.filter { $0.city == city }.map(\.date).max()
+    }
+
+    /// Total photos across all cities — the honest count for the colophon,
+    /// consistent with the per-city collages (mocked until a photo model exists).
+    private var totalPhotoCount: Int {
+        cities.reduce(0) { $0 + PassportMockPhotos.count(for: $1) }
     }
 }
 
