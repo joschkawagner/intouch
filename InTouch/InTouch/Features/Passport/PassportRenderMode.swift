@@ -32,3 +32,15 @@ extension EnvironmentValues {
         set { self[PassportRenderModeKey.self] = newValue }
     }
 }
+
+// MARK: - Fluorescing glow
+
+extension View {
+    /// A soft fluorescing halo for the text and marks that glow after dark.
+    /// Passing `.clear` disables it (daylight), so call sites can pass a colour
+    /// conditionally and read declaratively.
+    func fluoresce(_ color: Color) -> some View {
+        shadow(color: color == .clear ? .clear : color.opacity(0.8),
+               radius: color == .clear ? 0 : 4)
+    }
+}

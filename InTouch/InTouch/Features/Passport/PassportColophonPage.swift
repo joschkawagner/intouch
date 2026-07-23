@@ -24,14 +24,21 @@ struct PassportColophonPage: View {
     let cityCount: Int
     let photoCount: Int
 
+    @Environment(\.passportRenderMode) private var mode
+    private var isUV: Bool { mode.isUV }
+
     private let rowRules: [CGFloat] = [60, 100, 140, 180, 220]
 
     var body: some View {
+        // After dark, the heaviest security printing (frames, rosettes,
+        // microprint) is what fluoresces and carries the drama — the counts
+        // stay deliberately calm and secondary (they never out-shout the
+        // printing). See docs/PRD.md § Passport, "no vanity metrics".
         PassportPage(security: .heavy) {
             ZStack {
                 ForEach(rowRules, id: \.self) { y in
                     Rectangle()
-                        .fill(Color.text.opacity(0.14))
+                        .fill(isUV ? Color.paper.opacity(0.10) : Color.text.opacity(0.14))
                         .frame(width: 204, height: 1)
                         .referenceOrigin(x: 14, y: y)
                 }
@@ -60,26 +67,28 @@ struct PassportColophonPage: View {
         Text(text.uppercased())
             .font(Typography.passportLabel)
             .tracking(Typography.stampTracking)
-            .foregroundStyle(Color.text.opacity(0.5))
+            .foregroundStyle(isUV ? Color.paper.opacity(0.18) : Color.text.opacity(0.5))
             .referenceOrigin(x: 14, y: labelY)
 
         value()
             .referenceOrigin(x: 14, y: labelY + 12)
     }
 
-    /// A machine-type value (Courier) — member since, holder no.
+    /// A machine-type value (Courier) — member since, holder no. Kept quiet
+    /// after dark so the security printing stays the loudest thing on the page.
     private func stamp(_ text: String) -> some View {
         Text(text)
             .font(Typography.timestamp)
             .tracking(Typography.stampTracking)
-            .foregroundStyle(Color.text)
+            .foregroundStyle(isUV ? Color.paper.opacity(0.3) : Color.text)
     }
 
-    /// A count value (display bold) — cities, photos.
+    /// A count value (display bold) — cities, photos. A calm teal after dark
+    /// (no glow) — present, not a headline; the printing earns the drama.
     private func stat(_ text: String) -> some View {
         Text(text)
             .font(Typography.passportStat)
-            .foregroundStyle(Color.ink)
+            .foregroundStyle(isUV ? Color.stampTeal.opacity(0.75) : Color.ink)
     }
 
     private static let formatter: DateFormatter = {

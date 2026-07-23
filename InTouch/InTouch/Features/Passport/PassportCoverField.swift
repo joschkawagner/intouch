@@ -12,6 +12,9 @@
 import SwiftUI
 
 struct PassportCoverField: View {
+
+    @Environment(\.passportRenderMode) private var mode
+
     var body: some View {
         ZStack {
             Color.ink
@@ -31,6 +34,12 @@ struct PassportCoverField: View {
             CornerVignettes(color: Color.text.opacity(0.14), reach: 0.24)
 
             CoverGrain()
+
+            // After dark the oxblood pigment doesn't fluoresce — it sinks toward
+            // the night ground rather than staying a lit red panel.
+            if mode.isUV {
+                Color.uvGround.opacity(0.6)
+            }
         }
         .allowsHitTesting(false)
     }

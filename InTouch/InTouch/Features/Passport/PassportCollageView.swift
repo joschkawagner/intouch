@@ -11,6 +11,10 @@
 //  This is deliberately the *opposite* of Core/Components/CollageView, the
 //  hand-assembled profile collage — here the app composes a Mondrian grid.
 //
+//  After dark (2c·uv): photographs can't fluoresce, so photo cells go dark and
+//  non-reactive (`uvCell` with a faint teal edge) while the empty cells become
+//  transparent with a glowing stamp-ink border — the grid is what lights up.
+//
 
 import SwiftUI
 
@@ -18,53 +22,86 @@ struct PassportCollageView: View {
 
     let photoCount: Int
 
+    @Environment(\.passportRenderMode) private var mode
+    private var isUV: Bool { mode.isUV }
+
+    /// Glow colours cycled across the empty cells under UV.
+    private let emptyGlow: [Color] = [.stampCobalt, .stampViolet, .stampTeal]
+
     var body: some View {
         PassportPage {
             ZStack {
                 let cells = CollageTemplate.cells(photoCount: photoCount)
-                ForEach(Array(cells.enumerated()), id: \.offset) { _, cell in
-                    cellView(cell)
-                        .frame(width: cell.rect.width, height: cell.rect.height)
-                        .referenceOrigin(x: cell.rect.minX, y: cell.rect.minY)
+                let styled = Self.withEmptyIndices(cells)
+                ForEach(styled, id: \.offset) { item in
+                    cellView(item.cell, emptyIndex: item.emptyIndex)
+                        .frame(width: item.cell.rect.width, height: item.cell.rect.height)
+                        .referenceOrigin(x: item.cell.rect.minX, y: item.cell.rect.minY)
                 }
             }
         }
     }
 
     @ViewBuilder
-    private func cellView(_ cell: CollageCell) -> some View {
+    private func cellView(_ cell: CollageCell, emptyIndex: Int) -> some View {
         if cell.isPhoto {
-            PassportPhotoSlot()
+            PassportPhotoSlot(isUV: isUV)
+        } else if isUV {
+            // Empty cell after dark — transparent with a glowing stamp-ink border.
+            let color = emptyGlow[emptyIndex % emptyGlow.count]
+            Rectangle()
+                .strokeBorder(color, lineWidth: 1.5)
+                .shadow(color: color.opacity(0.6), radius: 4)
         } else {
-            // Empty cell — outline only, paper showing through (no solid fill).
+            // Empty cell in daylight — outline only, paper showing through.
             Rectangle()
                 .strokeBorder(Color.ink, lineWidth: 1.5)
         }
     }
+
+    /// Tags each cell with its running index and, for empty cells, the index
+    /// among empties (so their glow colours cycle).
+    private static func withEmptyIndices(_ cells: [CollageCell])
+        -> [(offset: Int, cell: CollageCell, emptyIndex: Int)] {
+        var empty = 0
+        return cells.enumerated().map { offset, cell in
+            defer { if !cell.isPhoto { empty += 1 } }
+            return (offset, cell, cell.isPhoto ? 0 : empty)
+        }
+    }
 }
 
-/// A stand-in for a photo until the photo model exists: a soft neutral field
-/// with a faint photo glyph, so a photo cell reads distinctly from an empty
-/// outline cell and from bare paper.
+/// A stand-in for a photo until the photo model exists. In daylight: a soft
+/// neutral field with a faint photo glyph. After dark: dark and non-reactive
+/// (photographs don't fluoresce) with only a faint teal edge.
 private struct PassportPhotoSlot: View {
+    let isUV: Bool
     var body: some View {
-        ZStack {
-            Color.muted.opacity(0.30)
-            Image(systemName: "photo")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 22, height: 22)
-                .foregroundStyle(Color.text.opacity(0.30))
+        if isUV {
+            Rectangle()
+                .fill(Color.uvCell)
+                .overlay(Rectangle().strokeBorder(Color.stampTeal.opacity(0.5), lineWidth: 1.5))
+        } else {
+            ZStack {
+                Color.muted.opacity(0.30)
+                Image(systemName: "photo")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 22, height: 22)
+                    .foregroundStyle(Color.text.opacity(0.30))
+            }
         }
     }
 }
 
 #Preview {
     HStack(spacing: 12) {
-        ForEach([1, 3, 6], id: \.self) { n in
-            PassportCollageView(photoCount: n)
-                .frame(width: 232, height: 330)
-        }
+        PassportCollageView(photoCount: 3)
+            .frame(width: 232, height: 330)
+            .environment(\.passportRenderMode, .daylight)
+        PassportCollageView(photoCount: 1)
+            .frame(width: 232, height: 330)
+            .environment(\.passportRenderMode, .uv)
     }
     .padding()
     .background(Color.muted)

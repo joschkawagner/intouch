@@ -38,7 +38,7 @@ struct PassportIdentityPage: View {
                 Text(user.displayName)
                     .font(Typography.passportName)
                     .foregroundStyle(isUV ? Color.stampViolet : Color.ink)
-                    .glow(isUV ? Color.stampViolet : .clear)
+                    .fluoresce(isUV ? Color.stampViolet : .clear)
                     .referenceOrigin(x: 114, y: 48)
 
                 label("handle").referenceOrigin(x: 114, y: 86)
@@ -78,9 +78,9 @@ struct PassportIdentityPage: View {
                 Text(user.initials)
                     .font(Typography.passportAvatarInitials)
                     .foregroundStyle(Color.stampViolet)
-                    .glow(Color.stampViolet)
+                    .fluoresce(Color.stampViolet)
             }
-            .glow(Color.stampViolet)
+            .fluoresce(Color.stampViolet)
         } else {
             ZStack {
                 Rectangle().fill(Color.ink)
@@ -111,7 +111,7 @@ struct PassportIdentityPage: View {
             .font(Typography.timestamp)
             .tracking(Typography.stampTracking)
             .foregroundStyle(color)
-            .glow(isUV && !dim ? Color.stampTeal : .clear)
+            .fluoresce(isUV && !dim ? Color.stampTeal : .clear)
     }
 
     private var mrzBand: some View {
@@ -121,7 +121,7 @@ struct PassportIdentityPage: View {
                 .font(Typography.passportCoord)
                 .tracking(1.5)
                 .foregroundStyle(isUV ? Color.stampTeal : Color.text.opacity(0.4))
-                .glow(isUV ? Color.stampTeal : .clear)
+                .fluoresce(isUV ? Color.stampTeal : .clear)
                 .lineLimit(1)
                 .padding(.leading, 14)
         }
@@ -144,15 +144,6 @@ struct PassportIdentityPage: View {
 
     private static func joinedString(_ date: Date) -> String {
         formatter.string(from: date).uppercased()
-    }
-}
-
-/// A soft fluorescing halo for text/shapes that glow after dark. `.clear`
-/// disables it (daylight), so call sites read declaratively.
-private extension View {
-    func glow(_ color: Color) -> some View {
-        shadow(color: color == .clear ? .clear : color.opacity(0.8),
-               radius: color == .clear ? 0 : 4)
     }
 }
 

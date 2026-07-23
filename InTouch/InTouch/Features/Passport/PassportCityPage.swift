@@ -17,37 +17,44 @@ struct PassportCityPage: View {
     /// The most recent entry date for this city, if any.
     let date: Date?
 
+    @Environment(\.passportRenderMode) private var mode
+    private var isUV: Bool { mode.isUV }
+
     var body: some View {
         PassportPage(security: .standard) {
             ZStack {
                 Text(city.name)                             // a place name — never chrome()
                     .font(Typography.masthead)
-                    .foregroundStyle(Color.ink)
+                    .foregroundStyle(isUV ? Color.stampViolet : Color.ink)
+                    .fluoresce(isUV ? Color.stampViolet : .clear)
                     .referenceOrigin(x: 14, y: 118)
 
                 Text(city.country.uppercased())             // document code — kept uppercase
                     .font(Typography.timestamp)
                     .tracking(Typography.stampTracking)
-                    .foregroundStyle(Color.text.opacity(0.6))
+                    .foregroundStyle(isUV ? Color.stampTeal : Color.text.opacity(0.6))
+                    .fluoresce(isUV ? Color.stampTeal : .clear)
                     .referenceOrigin(x: 14, y: 160)
 
                 if let date {
                     Text(Self.dateString(date))
                         .font(Typography.timestamp)         // Courier — the date as artifact
                         .tracking(Typography.stampTracking)
-                        .foregroundStyle(Color.text)
+                        .foregroundStyle(isUV ? Color.paper.opacity(0.3) : Color.text)
                         .referenceOrigin(x: 14, y: 182)
                 }
 
                 Circle()
-                    .fill(Color.ink)
+                    .fill(isUV ? Color.stampViolet : Color.ink)
                     .frame(width: 8, height: 8)
+                    .fluoresce(isUV ? Color.stampViolet : .clear)
                     .referenceOrigin(x: 14, y: 212)
 
                 Text(Self.coordString(city))
                     .font(Typography.passportCoord)
                     .tracking(1)
-                    .foregroundStyle(Color.text.opacity(0.45))
+                    .foregroundStyle(isUV ? Color.stampTeal : Color.text.opacity(0.45))
+                    .fluoresce(isUV ? Color.stampTeal : .clear)
                     .referenceOrigin(x: 14, y: 246)
             }
         }

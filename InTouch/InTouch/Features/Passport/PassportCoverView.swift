@@ -22,6 +22,9 @@ struct PassportCoverView: View {
 
     var user: UserProfile = MockData.currentUser
 
+    @Environment(\.passportRenderMode) private var mode
+    private var isUV: Bool { mode.isUV }
+
     var body: some View {
         ZStack(alignment: .topLeading) {
             PassportCoverField()
@@ -29,12 +32,12 @@ struct PassportCoverView: View {
             VStack(alignment: .leading, spacing: 6) {
                 Text(Typography.chrome("passport"))
                     .font(Typography.passportWordmark)
-                    .foregroundStyle(Color.paper)
+                    .foregroundStyle(Color.paper.opacity(isUV ? 0.55 : 1))
 
                 Text(user.displayName.uppercased())      // holder name — struck uppercase
                     .font(Typography.passportLabel)
                     .tracking(Typography.stampTracking)
-                    .foregroundStyle(Color.paper.opacity(0.7))
+                    .foregroundStyle(Color.paper.opacity(isUV ? 0.4 : 0.7))
             }
             .padding(.leading, 15)
             .padding(.top, 111)
