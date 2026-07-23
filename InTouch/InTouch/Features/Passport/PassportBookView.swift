@@ -132,7 +132,7 @@ struct PassportBookView: View {
             let city = cities[index - 1]
             spread(
                 left: { PassportCityPage(city: city, date: latestDate(for: city)) },
-                right: { PassportColourBlock(city: city) }
+                right: { PassportCollageView(photoCount: PassportMockPhotos.count(for: city)) }
             )
         } else {
             // Final leaf: the colophon slot (built for real in P6) | the back cover.

@@ -2,10 +2,11 @@
 //  PassportCityPage.swift
 //  InTouch
 //
-//  The left page of a city spread — a plain city label. Reuses the calendar
-//  lens's type roles: the place name in the display face, the date in Courier as
-//  machine type, with the same ink-dot marker (see PassportCalendarLens.row).
-//  The date is the most recent moment recorded in that city.
+//  The left page of a city spread (design 2b) — the city label, over the
+//  standard security printing: the place name as a masthead, the country code
+//  and most-recent date in Courier machine type, an ink dot, and the city's
+//  coordinates. Laid out at the 232×330 reference with each line pinned to its
+//  design coordinate.
 //
 
 import SwiftUI
@@ -18,35 +19,37 @@ struct PassportCityPage: View {
 
     var body: some View {
         PassportPage(security: .standard) {
-            VStack(alignment: .leading, spacing: 0) {
-                HStack(spacing: 12) {
-                    Circle()
-                        .fill(Color.ink)
-                        .frame(width: 8, height: 8)
-
-                    Text(Typography.chrome(city.country))
-                        .font(Typography.label)
-                        .tracking(1.5)
-                        .foregroundStyle(Color.muted)
-                }
-
+            ZStack {
                 Text(city.name)                             // a place name — never chrome()
                     .font(Typography.masthead)
                     .foregroundStyle(Color.ink)
-                    .padding(.top, 12)
+                    .referenceOrigin(x: 14, y: 118)
+
+                Text(city.country.uppercased())             // document code — kept uppercase
+                    .font(Typography.timestamp)
+                    .tracking(Typography.stampTracking)
+                    .foregroundStyle(Color.text.opacity(0.6))
+                    .referenceOrigin(x: 14, y: 160)
 
                 if let date {
                     Text(Self.dateString(date))
                         .font(Typography.timestamp)         // Courier — the date as artifact
-                        .tracking(1)
-                        .foregroundStyle(Color.muted)
-                        .padding(.top, 8)
+                        .tracking(Typography.stampTracking)
+                        .foregroundStyle(Color.text)
+                        .referenceOrigin(x: 14, y: 182)
                 }
 
-                Spacer(minLength: 0)
+                Circle()
+                    .fill(Color.ink)
+                    .frame(width: 8, height: 8)
+                    .referenceOrigin(x: 14, y: 212)
+
+                Text(Self.coordString(city))
+                    .font(Typography.passportCoord)
+                    .tracking(1)
+                    .foregroundStyle(Color.text.opacity(0.45))
+                    .referenceOrigin(x: 14, y: 246)
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-            .padding(28)
         }
     }
 
@@ -61,8 +64,18 @@ struct PassportCityPage: View {
     private static func dateString(_ date: Date) -> String {
         formatter.string(from: date).uppercased()
     }
+
+    /// e.g. "47.3769°N · 8.5417°E".
+    private static func coordString(_ city: PassportCity) -> String {
+        let ns = city.latitude >= 0 ? "N" : "S"
+        let ew = city.longitude >= 0 ? "E" : "W"
+        return String(format: "%.4f°%@ · %.4f°%@", abs(city.latitude), ns, abs(city.longitude), ew)
+    }
 }
 
 #Preview {
     PassportCityPage(city: MockData.zurich, date: MockData.entries.first?.date)
+        .frame(width: 232, height: 330)
+        .padding()
+        .background(Color.muted)
 }
