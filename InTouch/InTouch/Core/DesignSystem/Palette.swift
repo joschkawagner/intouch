@@ -59,6 +59,33 @@ extension Color {
     static let stampCobalt = Color(hex: 0x1E4FA0)
 }
 
+// MARK: - Bauhaus city blocks
+
+extension Color {
+
+    /// Solid colour blocks for the passport's per-city pages. Classic Bauhaus
+    /// register — flat, primary-leaning, unshaded — so each city reads as one
+    /// bold plane while we build the real collage in a later pass.
+    ///
+    /// A city is mapped to one of these by a stable hash of its name, so a city
+    /// always gets the same block. Chosen by eye; treat as tunable. These are
+    /// distinct from the muted eight-token palette (chrome + paper) and from the
+    /// `stamp*` inks (stamps only) — they exist solely for these full-page blocks.
+    static let bauhausRed    = Color(hex: 0xD62828)
+    static let bauhausBlue   = Color(hex: 0x1D4E89)
+    static let bauhausYellow = Color(hex: 0xE9C46A)
+    static let bauhausBlack  = Color(hex: 0x1A1A1A)
+    static let bauhausOrange = Color(hex: 0xE07A22)
+    static let bauhausTeal   = Color(hex: 0x2A9D8F)
+    static let bauhausSand   = Color(hex: 0xD8C3A5)
+
+    /// The city blocks, in a fixed order. A city name hashes into this array.
+    static let bauhausBlocks: [Color] = [
+        bauhausRed, bauhausBlue, bauhausYellow,
+        bauhausBlack, bauhausOrange, bauhausTeal, bauhausSand,
+    ]
+}
+
 extension Color {
 
     /// Builds a colour from a 24-bit RGB literal, e.g. `0xF0EDE5`.

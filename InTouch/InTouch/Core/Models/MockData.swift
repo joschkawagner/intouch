@@ -164,7 +164,9 @@ enum MockData {
         handle: "@joschka",
         friendCount: 12,
         cityCount: cities.count,
-        collage: currentUserCollage
+        collage: currentUserCollage,
+        joinedDate: date(2025, 9, 1),
+        bio: "Only counts if you were there."
     )
 
     /// What a simulated "scan a person" lands on.
@@ -174,7 +176,9 @@ enum MockData {
         handle: "@emil",
         friendCount: 8,
         cityCount: 4,
-        collage: scannedPersonCollage
+        collage: scannedPersonCollage,
+        joinedDate: date(2025, 11, 12),
+        bio: "Berlin, mostly. 2 a.m., usually."
     )
 
     /// What a simulated "scan an event" lands on.

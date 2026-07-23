@@ -17,6 +17,12 @@ struct UserProfile: Identifiable, Hashable {
     let cityCount: Int
     let collage: Collage
 
+    /// When this person joined — shown on the passport's identity page.
+    let joinedDate: Date
+
+    /// One-line self-description, shown on the passport's identity page.
+    let bio: String
+
     /// Up to two initials, for the avatar when there's no photo yet.
     var initials: String {
         let parts = displayName.split(separator: " ").prefix(2)
