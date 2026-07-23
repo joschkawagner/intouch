@@ -17,7 +17,7 @@ struct PassportCityPage: View {
     let date: Date?
 
     var body: some View {
-        PassportPage {
+        PassportPage(security: .standard) {
             VStack(alignment: .leading, spacing: 0) {
                 HStack(spacing: 12) {
                     Circle()

@@ -15,7 +15,7 @@ struct PassportIdentityPage: View {
     let user: UserProfile
 
     var body: some View {
-        PassportPage {
+        PassportPage(security: .standard) {
             VStack(alignment: .leading, spacing: 0) {
                 AvatarView(initials: user.initials, diameter: 96)
 

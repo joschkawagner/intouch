@@ -25,15 +25,28 @@
 
 import SwiftUI
 
+/// The passport's fixed authoring geometry, kept non-generic so it can be read
+/// without spelling out `PassportPage`'s content type (e.g. from the security
+/// layer). The reference page is ID-3 proportioned — 88×125mm ≈ 1:1.42.
+enum PassportMetrics {
+    static let referenceSize = CGSize(width: 232, height: 330)
+}
+
 struct PassportPage<Content: View>: View {
 
     /// The reference page the design is authored on. All page content is written
     /// in these units, then scaled to fit.
-    static var referenceSize: CGSize { CGSize(width: 232, height: 330) }
+    static var referenceSize: CGSize { PassportMetrics.referenceSize }
 
+    /// Optional security-printing level, drawn full-page beneath the content
+    /// (so its frame and microprint reach the page edges, under the padded
+    /// fields). `nil` leaves the page plain.
+    private let security: SecurityPrinting.Level?
     private let content: Content
 
-    init(@ViewBuilder content: () -> Content) {
+    init(security: SecurityPrinting.Level? = nil,
+         @ViewBuilder content: () -> Content) {
+        self.security = security
         self.content = content()
     }
 
@@ -42,10 +55,15 @@ struct PassportPage<Content: View>: View {
             let ref = Self.referenceSize
             let scale = min(geo.size.width / ref.width, geo.size.height / ref.height)
 
-            content
-                .frame(width: ref.width, height: ref.height, alignment: .topLeading)
-                .scaleEffect(scale, anchor: .center)
-                .frame(width: geo.size.width, height: geo.size.height)
+            ZStack {
+                if let security {
+                    SecurityPrinting(level: security)
+                }
+                content
+            }
+            .frame(width: ref.width, height: ref.height, alignment: .topLeading)
+            .scaleEffect(scale, anchor: .center)
+            .frame(width: geo.size.width, height: geo.size.height)
         }
         .background(Color.paper)   // the page ground; the UV phase swaps this
         .clipped()
