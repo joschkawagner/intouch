@@ -20,6 +20,9 @@ struct PassportMapLens: View {
 
     let cities: [PassportCity]
 
+    @Environment(\.passportRenderMode) private var mode
+    private var isUV: Bool { mode.isUV }
+
     /// Framed to show every pin on first appearance. Pan/zoom take over after.
     private var initialRegion: MKCoordinateRegion {
         Self.region(framing: cities)
@@ -37,17 +40,22 @@ struct PassportMapLens: View {
         // Drop Apple's points of interest so the map reads as a quiet atlas, not
         // a busy street map competing with our pins.
         .mapStyle(.standard(pointsOfInterest: .excludingAll))
-        // Pull the saturation out of Apple's bright green land / blue water so it
-        // reads as printed atlas. The ink pins are near-black, so they stay crisp
-        // through the desaturation rather than washing out.
-        .saturation(0.4)
-        // A thin paper wash then warms the muted tiles toward the app's surface.
-        // Non-interactive so it never blocks pan/zoom gestures.
+        // After dark, force MapKit's dark tiles so the atlas goes to night.
+        .environment(\.colorScheme, isUV ? .dark : .light)
+        // Pull the saturation out of Apple's bright tiles so it reads as printed
+        // atlas. Pins stay crisp through the desaturation.
+        .saturation(isUV ? 0.25 : 0.4)
+        // Daylight warms the tiles toward paper; UV sinks them into the ground
+        // colour so only the pins fluoresce. Non-interactive so gestures pass.
         .overlay(
-            Color.paper
-                .opacity(0.22)
-                .blendMode(.softLight)
-                .allowsHitTesting(false)
+            Group {
+                if isUV {
+                    Color.uvGround.opacity(0.5).blendMode(.multiply)
+                } else {
+                    Color.paper.opacity(0.22).blendMode(.softLight)
+                }
+            }
+            .allowsHitTesting(false)
         )
         // The design's guidance line on the map page. Uses a scaling chrome font
         // (not the tiny fixed 9pt of the mock) because this page renders native
@@ -56,19 +64,21 @@ struct PassportMapLens: View {
             Text(Typography.chrome("tap a pin to open that city"))
                 .font(Typography.label)
                 .tracking(Typography.stampTracking * 0.3)
-                .foregroundStyle(Color.ink.opacity(0.5))
+                .foregroundStyle(isUV ? Color.paper.opacity(0.35) : Color.ink.opacity(0.5))
                 .padding(14)
                 .allowsHitTesting(false)
         }
     }
 
-    /// A tiny ink dot ringed in paper — the pin as a struck mark, not a balloon.
+    /// A tiny dot pin — a struck mark, not a balloon. Ink ringed in paper by
+    /// day; a fluorescing violet dot after dark.
     private var cityPin: some View {
         Circle()
-            .fill(Color.ink)
+            .fill(isUV ? Color.stampViolet : Color.ink)
             .frame(width: 14, height: 14)
-            .overlay(Circle().stroke(Color.paper, lineWidth: 2.5))
-            .shadow(color: Color.text.opacity(0.35), radius: 2, x: 0, y: 1)
+            .overlay(Circle().stroke(isUV ? Color.uvGround : Color.paper, lineWidth: 2.5))
+            .shadow(color: isUV ? Color.stampViolet.opacity(0.9) : Color.text.opacity(0.35),
+                    radius: isUV ? 5 : 2, x: 0, y: isUV ? 0 : 1)
     }
 
     /// Bounding box of all cities → a centred, padded region. Falls back to a

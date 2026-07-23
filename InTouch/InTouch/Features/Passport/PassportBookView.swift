@@ -22,7 +22,10 @@ import SwiftUI
 struct PassportBookView: View {
 
     @State private var orientation = DeviceOrientationModel()
+    @State private var clock = PassportTimeOfDay()
     @State private var spreadIndex = 0
+
+    private var mode: PassportRenderMode { clock.renderMode }
 
     private let cities = MockData.cities
 
@@ -62,14 +65,15 @@ struct PassportBookView: View {
                     .allowsHitTesting(!isOpen)
             }
             .animation(.easeInOut(duration: 0.55), value: isOpen)
+            .environment(\.passportRenderMode, mode)   // day / after-dark, down to every page
         }
         // While the book is open, clear the system chrome so the spread reads as
         // a full landscape sheet (the app stays portrait-locked).
         .toolbar(isOpen ? .hidden : .visible, for: .tabBar)
         .statusBarHidden(isOpen)
         .persistentSystemOverlays(isOpen ? .hidden : .automatic)
-        .onAppear { orientation.start() }
-        .onDisappear { orientation.stop() }
+        .onAppear { orientation.start(); clock.start() }
+        .onDisappear { orientation.stop(); clock.stop() }
         .onChange(of: isOpen) { _, open in
             if !open { spreadIndex = 0 }   // closing always returns to the cover / first spread
         }
@@ -128,6 +132,8 @@ struct PassportBookView: View {
                 left: { PassportIdentityPage(user: MockData.currentUser) },
                 right: { PassportMapLens(cities: cities).paperBackground() }
             )
+            // The hidden seal + mantra straddling the spine — UV only.
+            .overlay { if mode.isUV { PassportSpineSeal() } }
         } else if index <= cities.count {
             let city = cities[index - 1]
             spread(

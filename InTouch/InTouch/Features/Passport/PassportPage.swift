@@ -44,6 +44,8 @@ struct PassportPage<Content: View>: View {
     private let security: SecurityPrinting.Level?
     private let content: Content
 
+    @Environment(\.passportRenderMode) private var mode
+
     init(security: SecurityPrinting.Level? = nil,
          @ViewBuilder content: () -> Content) {
         self.security = security
@@ -65,7 +67,7 @@ struct PassportPage<Content: View>: View {
             .scaleEffect(scale, anchor: .center)
             .frame(width: geo.size.width, height: geo.size.height)
         }
-        .background(Color.paper)   // the page ground; the UV phase swaps this
+        .background(mode.isUV ? Color.uvGround : Color.paper)   // the page ground
         .clipped()
     }
 }

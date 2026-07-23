@@ -11,10 +11,20 @@
 import SwiftUI
 
 struct PassportRestingSurface: View {
+
+    @Environment(\.passportRenderMode) private var mode
+
     var body: some View {
         ZStack {
-            Color.muted
-            CornerVignettes(color: Color.text.opacity(0.10), reach: 0.35)
+            if mode.isUV {
+                // After dark the surface is the UV ground — the whole screen
+                // drops away so the fluorescing book is all that's lit.
+                Color.uvGround
+                CornerVignettes(color: .black.opacity(0.35), reach: 0.4)
+            } else {
+                Color.muted
+                CornerVignettes(color: Color.text.opacity(0.10), reach: 0.35)
+            }
         }
     }
 }
