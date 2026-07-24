@@ -31,10 +31,25 @@ struct PassportMapLens: View {
     var body: some View {
         Map(initialPosition: .region(initialRegion)) {
             ForEach(cities) { city in
+                // Our own label under the pin instead of Apple's grey title,
+                // so it renders in the passport's register in both modes and
+                // clears the UV legibility floor.
+                // NOTE: annotation content renders inside the Map view, so the
+                // page-wide saturation + multiply wash dims it too — UV values
+                // here are deliberately over-bright so they land at the
+                // legibility floor after the wash.
                 Annotation(city.name, coordinate: city.coordinate) {
-                    cityPin
+                    VStack(spacing: 3) {
+                        cityPin
+                        Text(city.name)
+                            .font(Typography.timestamp)
+                            .foregroundStyle(isUV ? Color.uvVioletText : Color.text)
+                            .shadow(color: isUV ? Color.uvGround : Color.paper.opacity(0.8),
+                                    radius: 2)
+                            .shadow(color: isUV ? Color.uvGround : .clear, radius: 1)
+                    }
                 }
-                .annotationTitles(.visible)
+                .annotationTitles(.hidden)
             }
         }
         // Drop Apple's points of interest so the map reads as a quiet atlas, not
@@ -57,17 +72,24 @@ struct PassportMapLens: View {
             }
             .allowsHitTesting(false)
         )
+        // The page ground behind the tiles — after dark this page must sit on
+        // the same uvGround as every other page, not paper.
+        .background(isUV ? Color.uvGround : Color.paper)
     }
 
     /// A tiny dot pin — a struck mark, not a balloon. Ink ringed in paper by
-    /// day; a fluorescing violet dot after dark.
+    /// day; after dark the hot treatment: a blazing near-white violet core
+    /// inside a wide violet bloom — over-bright on purpose, because the map's
+    /// wash dims annotation content along with the tiles.
     private var cityPin: some View {
         Circle()
-            .fill(isUV ? Color.stampViolet : Color.ink)
+            .fill(isUV ? Color.uvVioletText : Color.ink)
             .frame(width: 14, height: 14)
             .overlay(Circle().stroke(isUV ? Color.uvGround : Color.paper, lineWidth: 2.5))
-            .shadow(color: isUV ? Color.stampViolet.opacity(0.9) : Color.text.opacity(0.35),
-                    radius: isUV ? 5 : 2, x: 0, y: isUV ? 0 : 1)
+            .shadow(color: isUV ? Color.stampViolet : Color.text.opacity(0.35),
+                    radius: isUV ? 1.5 : 2, x: 0, y: isUV ? 0 : 1)
+            .shadow(color: isUV ? Color.stampViolet.opacity(0.95) : .clear,
+                    radius: isUV ? 7 : 0)
     }
 
     /// Bounding box of all cities → a centred, padded region. Falls back to a

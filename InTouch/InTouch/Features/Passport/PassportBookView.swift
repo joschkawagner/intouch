@@ -135,7 +135,7 @@ struct PassportBookView: View {
         if index == 0 {
             spread(
                 left: { PassportIdentityPage(user: MockData.currentUser) },
-                right: { PassportMapLens(cities: cities).paperBackground() }
+                right: { PassportMapLens(cities: cities) }   // owns its own mode-aware ground
             )
         } else if index <= cities.count {
             let city = cities[index - 1]
