@@ -47,10 +47,10 @@ struct PassportColophonPage: View {
                     stamp(Self.monthYear(user.joinedDate))
                 }
                 field(label: "cities", labelY: 108) {
-                    stat("\(cityCount)")
+                    stamp("\(cityCount)")
                 }
                 field(label: "photos", labelY: 148) {
-                    stat("\(photoCount)")
+                    stamp("\(photoCount)")
                 }
                 field(label: "holder no.", labelY: 188) {
                     stamp(PassportHolder.formattedNumber)
@@ -74,21 +74,17 @@ struct PassportColophonPage: View {
             .referenceOrigin(x: 14, y: labelY + 12)
     }
 
-    /// A machine-type value (Courier) — member since, holder no. Kept quiet
-    /// after dark so the security printing stays the loudest thing on the page.
+    /// Every value on this page — dates, counts, holder number — in the one
+    /// machine register (Courier), one size, one colour. The colophon has no
+    /// hero (field-glow rule, see Palette.swift): a registry page where the
+    /// counts are entries like any other, and the heavy security printing is
+    /// the only drama. Emphasising a count again — by hue, weight or size —
+    /// would rebuild the scoreboard this page exists to refuse.
     private func stamp(_ text: String) -> some View {
         Text(text)
             .font(Typography.timestamp)
             .tracking(Typography.stampTracking)
             .foregroundStyle(isUV ? Color.uvFieldValue : Color.text)
-    }
-
-    /// A count value (display bold) — cities, photos. A calm teal after dark
-    /// (no glow) — present, not a headline; the printing earns the drama.
-    private func stat(_ text: String) -> some View {
-        Text(text)
-            .font(Typography.passportStat)
-            .foregroundStyle(isUV ? Color.stampTeal.opacity(0.75) : Color.ink)
     }
 
     private static let formatter: DateFormatter = {

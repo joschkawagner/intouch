@@ -12,9 +12,10 @@
 //  and letterspaced like a real document form — deliberately not the app's
 //  lowercase nav chrome. Holder number + MRZ are mocked in-feature (PassportHolder).
 //
-//  After dark (2a·uv): the routine fields dim to a faint paper white; the name,
-//  holder number and MRZ fluoresce (violet / teal with a glow); the photo block
-//  becomes a glowing violet outline instead of a solid ink fill.
+//  After dark (2a·uv): all fields render calm per the field-glow rule (see
+//  Palette.swift, UV inks) — this page's one hero is the name + photo block,
+//  fluorescing violet. The MRZ belongs to the machine/printing layer, not the
+//  field system, so it keeps its own fluorescence.
 //
 
 import SwiftUI
@@ -49,10 +50,10 @@ struct PassportIdentityPage: View {
 
                 // Since + holder number, a row beneath the photo.
                 label("since").referenceOrigin(x: 14, y: 166)
-                stamp(Self.joinedString(user.joinedDate), dim: true).referenceOrigin(x: 14, y: 178)
+                stamp(Self.joinedString(user.joinedDate)).referenceOrigin(x: 14, y: 178)
 
                 label("holder no.").referenceOrigin(x: 118, y: 166)
-                stamp(PassportHolder.formattedNumber, dim: false).referenceOrigin(x: 118, y: 178)
+                stamp(PassportHolder.formattedNumber).referenceOrigin(x: 118, y: 178)
 
                 // Bio.
                 label("bio").referenceOrigin(x: 14, y: 206)
@@ -101,17 +102,13 @@ struct PassportIdentityPage: View {
             .foregroundStyle(isUV ? Color.uvFieldLabel : Color.text.opacity(0.5))
     }
 
-    /// A machine-type value (Courier). `dim` values stay quiet after dark;
-    /// non-dim values (the holder number) fluoresce teal.
-    private func stamp(_ text: String, dim: Bool) -> some View {
-        let color: Color = isUV
-            ? (dim ? Color.uvFieldValue : Color.stampTeal)
-            : Color.text
-        return Text(text)
+    /// A machine-type value (Courier) — calm in both modes per the field-glow
+    /// rule; this page's hero is the name + photo block, nothing else glows.
+    private func stamp(_ text: String) -> some View {
+        Text(text)
             .font(Typography.timestamp)
             .tracking(Typography.stampTracking)
-            .foregroundStyle(color)
-            .fluoresce(isUV && !dim ? Color.stampTeal : .clear)
+            .foregroundStyle(isUV ? Color.uvFieldValue : Color.text)
     }
 
     private var mrzBand: some View {

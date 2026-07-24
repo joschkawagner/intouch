@@ -8,6 +8,9 @@
 //  coordinates. Laid out at the 232×330 reference with each line pinned to its
 //  design coordinate.
 //
+//  After dark: the masthead is this page's one hero glow (field-glow rule,
+//  see Palette.swift, UV inks); every other line renders calm.
+//
 
 import SwiftUI
 
@@ -32,8 +35,7 @@ struct PassportCityPage: View {
                 Text(city.country.uppercased())             // document code — kept uppercase
                     .font(Typography.timestamp)
                     .tracking(Typography.stampTracking)
-                    .foregroundStyle(isUV ? Color.stampTeal : Color.text.opacity(0.6))
-                    .fluoresce(isUV ? Color.stampTeal : .clear)
+                    .foregroundStyle(isUV ? Color.uvFieldValue : Color.text.opacity(0.6))
                     .referenceOrigin(x: 14, y: 160)
 
                 if let date {
@@ -45,16 +47,14 @@ struct PassportCityPage: View {
                 }
 
                 Circle()
-                    .fill(isUV ? Color.stampViolet : Color.ink)
+                    .fill(isUV ? Color.uvFieldValue : Color.ink)
                     .frame(width: 8, height: 8)
-                    .fluoresce(isUV ? Color.stampViolet : .clear)
                     .referenceOrigin(x: 14, y: 212)
 
                 Text(Self.coordString(city))
                     .font(Typography.passportCoord)
                     .tracking(1)
-                    .foregroundStyle(isUV ? Color.stampTeal : Color.text.opacity(0.45))
-                    .fluoresce(isUV ? Color.stampTeal : .clear)
+                    .foregroundStyle(isUV ? Color.uvFieldValue : Color.text.opacity(0.45))
                     .referenceOrigin(x: 14, y: 246)
             }
         }

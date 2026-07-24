@@ -79,6 +79,16 @@ extension Color {
     /// strongest hidden reveal). The glow itself is `stampViolet` shadow behind it.
     static let uvVioletText = Color(hex: 0xF3E9FB)
 
+    /// THE FIELD-GLOW RULE (UV). One system, no per-field exceptions:
+    /// ALL field labels render `uvFieldLabel`; ALL field values render
+    /// `uvFieldValue`; each page gets AT MOST ONE content hero that fluoresces
+    /// (a `stamp*` ink + `.fluoresce()` halo) — identity: the name + photo
+    /// block; city page: the masthead; colophon: none (the heavy security
+    /// printing is its drama). The MRZ band belongs to the machine/printing
+    /// layer, not the field system, so it fluoresces independently. The
+    /// printing layer carries the page's fluorescence; the data stays calm.
+    /// Glow is lighting, not geometry — both modes render identical elements.
+    ///
     /// Legibility floor for non-glowing text under UV. `paper` at this opacity
     /// clears ~5.3:1 contrast on `uvGround` (WCAG AA body text is 4.5:1) — the
     /// minimum a routine field may use and still read. Small struck field labels
