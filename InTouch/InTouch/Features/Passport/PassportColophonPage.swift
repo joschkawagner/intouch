@@ -27,7 +27,7 @@ struct PassportColophonPage: View {
     @Environment(\.passportRenderMode) private var mode
     private var isUV: Bool { mode.isUV }
 
-    private let rowRules: [CGFloat] = [60, 100, 140, 180, 220]
+    private let rowRules: [CGFloat] = [56, 102, 148, 194, 240]
 
     var body: some View {
         // After dark, the heaviest security printing (frames, rosettes,
@@ -46,13 +46,13 @@ struct PassportColophonPage: View {
                 field(label: "member since", labelY: 68) {
                     stamp(Self.monthYear(user.joinedDate))
                 }
-                field(label: "cities", labelY: 108) {
+                field(label: "cities", labelY: 114) {
                     stamp("\(cityCount)")
                 }
-                field(label: "photos", labelY: 148) {
+                field(label: "photos", labelY: 160) {
                     stamp("\(photoCount)")
                 }
-                field(label: "holder no.", labelY: 188) {
+                field(label: "holder no.", labelY: 206) {
                     stamp(PassportHolder.formattedNumber)
                 }
             }
@@ -71,7 +71,7 @@ struct PassportColophonPage: View {
             .referenceOrigin(x: 14, y: labelY)
 
         value()
-            .referenceOrigin(x: 14, y: labelY + 12)
+            .referenceOrigin(x: 14, y: labelY + 16)
     }
 
     /// Every value on this page — dates, counts, holder number — in the one
