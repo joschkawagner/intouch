@@ -4,7 +4,7 @@ Generated when `docs/references/` was organised and the shipping photos were mov
 Convention: **lowercase, kebab-case, no spaces**; extensions normalised
 (`.JPG`/`.JPEG`→`.jpg`, `.svg.png`/`.webp.png`→`.png`, `.gif` kept).
 
-The four folders below are **study-only inspiration** — they never ship in the app.
+The five folders below are **study-only inspiration** — they never ship in the app.
 `Example_photos/` was real content and was **moved out** to `docs/sample-photos/` (it ships).
 
 ---
@@ -50,10 +50,21 @@ Numbered prefixes are ONE multi-photo (carousel) post; the grouping is preserved
 |---|---|
 | `passport_stamps_1.jpg` … `passport_stamps_6.jpg` | `passport-stamp-1.jpg` … `passport-stamp-6.jpg` |
 
+## `uv/` (kept — inspiration)
+
+The Swiss passport (2022 redesign) under UV light — the target feel for the
+passport's after-dark rendering (qualities, never literal elements).
+
+| Before | After |
+|---|---|
+| *(converted manually from AVIF)* | `swiss-passport-uv-01.jpg` |
+| `passport_uv2.jpeg` | `swiss-passport-uv-02.jpg` |
+
 ---
 
-## `Passports/` (kept — inspiration)
+## `passports/` (kept — inspiration)
 
+Folder itself lowercased `Passports/` → `passports/` (2026-07-24).
 Continent subfolders renamed kebab-case: `North and Central America` → `north-central-america`,
 `South America` → `south-america`, and `Africa`/`Asia`/`Europe`/`Oceania` → lowercase.
 Every file renamed to `passport-<country>.<ext>`. A few filenames were cryptic and were
