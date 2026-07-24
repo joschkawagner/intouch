@@ -44,7 +44,7 @@ struct PassportIdentityPage: View {
                 label("handle").referenceOrigin(x: 114, y: 86)
                 Text(Typography.chrome(user.handle))
                     .font(Typography.passportLabel)
-                    .foregroundStyle(isUV ? Color.paper.opacity(0.3) : Color.muted)
+                    .foregroundStyle(isUV ? Color.uvFieldValue : Color.muted)
                     .referenceOrigin(x: 114, y: 98)
 
                 // Since + holder number, a row beneath the photo.
@@ -58,7 +58,7 @@ struct PassportIdentityPage: View {
                 label("bio").referenceOrigin(x: 14, y: 206)
                 Text(user.bio)
                     .font(Typography.passportBody)
-                    .foregroundStyle(isUV ? Color.paper.opacity(0.22) : Color.text)
+                    .foregroundStyle(isUV ? Color.uvFieldValue : Color.text)
                     .frame(width: 204, alignment: .leading)
                     .referenceOrigin(x: 14, y: 218)
 
@@ -98,14 +98,14 @@ struct PassportIdentityPage: View {
         Text(text.uppercased())
             .font(Typography.passportLabel)
             .tracking(Typography.stampTracking)
-            .foregroundStyle(isUV ? Color.paper.opacity(0.18) : Color.text.opacity(0.5))
+            .foregroundStyle(isUV ? Color.uvFieldLabel : Color.text.opacity(0.5))
     }
 
     /// A machine-type value (Courier). `dim` values stay quiet after dark;
     /// non-dim values (the holder number) fluoresce teal.
     private func stamp(_ text: String, dim: Bool) -> some View {
         let color: Color = isUV
-            ? (dim ? Color.paper.opacity(0.3) : Color.stampTeal)
+            ? (dim ? Color.uvFieldValue : Color.stampTeal)
             : Color.text
         return Text(text)
             .font(Typography.timestamp)

@@ -67,7 +67,7 @@ struct PassportColophonPage: View {
         Text(text.uppercased())
             .font(Typography.passportLabel)
             .tracking(Typography.stampTracking)
-            .foregroundStyle(isUV ? Color.paper.opacity(0.18) : Color.text.opacity(0.5))
+            .foregroundStyle(isUV ? Color.uvFieldLabel : Color.text.opacity(0.5))
             .referenceOrigin(x: 14, y: labelY)
 
         value()
@@ -80,7 +80,7 @@ struct PassportColophonPage: View {
         Text(text)
             .font(Typography.timestamp)
             .tracking(Typography.stampTracking)
-            .foregroundStyle(isUV ? Color.paper.opacity(0.3) : Color.text)
+            .foregroundStyle(isUV ? Color.uvFieldValue : Color.text)
     }
 
     /// A count value (display bold) — cities, photos. A calm teal after dark

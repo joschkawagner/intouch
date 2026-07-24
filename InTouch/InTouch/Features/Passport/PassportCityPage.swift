@@ -40,7 +40,7 @@ struct PassportCityPage: View {
                     Text(Self.dateString(date))
                         .font(Typography.timestamp)         // Courier — the date as artifact
                         .tracking(Typography.stampTracking)
-                        .foregroundStyle(isUV ? Color.paper.opacity(0.3) : Color.text)
+                        .foregroundStyle(isUV ? Color.uvFieldValue : Color.text)
                         .referenceOrigin(x: 14, y: 182)
                 }
 

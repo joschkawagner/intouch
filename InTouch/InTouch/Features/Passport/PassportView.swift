@@ -15,6 +15,9 @@ import SwiftUI
 struct PassportView: View {
     var body: some View {
         PassportBookView()
+        #if DEBUG
+            .overlay(alignment: .topTrailing) { DebugUVChip().padding(8) }
+        #endif
     }
 }
 

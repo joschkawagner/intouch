@@ -25,7 +25,12 @@ struct PassportBookView: View {
     @State private var clock = PassportTimeOfDay()
     @State private var spreadIndex = 0
 
-    private var mode: PassportRenderMode { clock.renderMode }
+    private var mode: PassportRenderMode {
+        #if DEBUG
+        if let forced = DebugUV.shared.forced { return forced }
+        #endif
+        return clock.renderMode
+    }
 
     private let cities = MockData.cities
 
@@ -132,8 +137,6 @@ struct PassportBookView: View {
                 left: { PassportIdentityPage(user: MockData.currentUser) },
                 right: { PassportMapLens(cities: cities).paperBackground() }
             )
-            // The hidden seal + mantra straddling the spine — UV only.
-            .overlay { if mode.isUV { PassportSpineSeal() } }
         } else if index <= cities.count {
             let city = cities[index - 1]
             spread(
@@ -141,8 +144,10 @@ struct PassportBookView: View {
                 right: { PassportCollageView(photoCount: PassportMockPhotos.count(for: city)) }
             )
         } else {
-            // Final leaf: the colophon | the back cover.
-            spread(
+            // Final leaf: the colophon | the back cover. The right page is the
+            // oxblood cover — the same red the spine is drawn in — so the spine's
+            // crease is suppressed here (see `spine`).
+            spread(bordersCover: true,
                 left: {
                     PassportColophonPage(
                         user: MockData.currentUser,
@@ -156,25 +161,36 @@ struct PassportBookView: View {
     }
 
     private func spread<L: View, R: View>(
+        bordersCover: Bool = false,
         @ViewBuilder left: () -> L,
         @ViewBuilder right: () -> R
     ) -> some View {
         HStack(spacing: 0) {
             left()
-            spine
+            spine(bordersCover: bordersCover)
             right()
         }
     }
 
     /// The gutter between the two pages — a struck centre line with a faint
     /// shadow, so the spread reads as one bound sheet.
-    private var spine: some View {
+    ///
+    /// The gradient is drawn in `ink` (the oxblood cover colour). When the right
+    /// page is itself the oxblood cover (`bordersCover`), the red half merges into
+    /// the cover and the centred crease is orphaned into an apparently continuous
+    /// red field — reading as a stray vertical line, not a gutter. So the crease
+    /// is dropped in that case; the soft gradient stays as the binding shadow.
+    private func spine(bordersCover: Bool) -> some View {
         LinearGradient(
             colors: [Color.ink.opacity(0.25), Color.ink.opacity(0.06), Color.ink.opacity(0.25)],
             startPoint: .leading, endPoint: .trailing
         )
         .frame(width: 12)
-        .overlay(Rectangle().fill(Color.muted.opacity(0.5)).frame(width: 1))
+        .overlay {
+            if !bordersCover {
+                Rectangle().fill(Color.muted.opacity(0.5)).frame(width: 1)
+            }
+        }
     }
 
     // MARK: - Paging (tap the page edges — kept simple, no page-curl)

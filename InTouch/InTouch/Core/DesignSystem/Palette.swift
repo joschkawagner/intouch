@@ -78,6 +78,21 @@ extension Color {
     /// Bright fluorescing violet used for hero text under UV (e.g. the colophon's
     /// strongest hidden reveal). The glow itself is `stampViolet` shadow behind it.
     static let uvVioletText = Color(hex: 0xF3E9FB)
+
+    /// Legibility floor for non-glowing text under UV. `paper` at this opacity
+    /// clears ~5.3:1 contrast on `uvGround` (WCAG AA body text is 4.5:1) — the
+    /// minimum a routine field may use and still read. Small struck field labels
+    /// sit here; recede *values* sit a step above (`uvFieldValue`). The glowing
+    /// hero fields use the saturated `stamp*` inks + a `.fluoresce()` halo — a
+    /// separate visual channel (hue + glow), so they stay clearly more prominent
+    /// however bright this neutral recede text is.
+    static let uvFieldLabel = Color.paper.opacity(0.5)
+
+    /// A recede (non-glowing) field *value* under UV — routine content such as
+    /// handle, since, bio, member-since, holder no., city date. One step above
+    /// the label floor (~6:1) so content reads stronger than its label, mirroring
+    /// the daylight hierarchy where the value outweighs its 0.5-opacity label.
+    static let uvFieldValue = Color.paper.opacity(0.6)
 }
 
 // MARK: - Bauhaus city blocks
