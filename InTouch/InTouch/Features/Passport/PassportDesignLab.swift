@@ -50,6 +50,16 @@ struct PassportDesignLab: View {
                             .foregroundStyle(labelColor)
                             .padding(.top, 56)
 
+                        section("cover · front", width: pageWidth) {
+                            PassportCoverView()
+                                .frame(width: pageWidth, height: pageHeight)
+                                .clipShape(RoundedRectangle(cornerRadius: 8))
+                        }
+                        section("cover · back", width: pageWidth) {
+                            PassportBackCoverView()
+                                .frame(width: pageWidth, height: pageHeight)
+                                .clipShape(RoundedRectangle(cornerRadius: 8))
+                        }
                         section("identity", width: pageWidth) {
                             PassportIdentityPage(user: MockData.currentUser)
                                 .frame(width: pageWidth, height: pageHeight)
@@ -60,18 +70,23 @@ struct PassportDesignLab: View {
                                 .frame(width: pageWidth, height: pageHeight)
                         }
                         // All six collage templates, each labelled with its
-                        // photo count and cell census; P chips index the photo
-                        // slots (gallery scaffolding only — every cell is a
-                        // photo now).
+                        // photo count and cell census. Templates 1–3 carry
+                        // real sample photos (TEMP — composition judgment
+                        // only, not the photo model); 4–6 keep placeholders,
+                        // with P chips indexing the slots.
                         ForEach(1...6, id: \.self) { count in
                             let rects = CollageTemplate.rects(photoCount: count)
-                            section("collage · \(count) photo\(count == 1 ? "" : "s") · \(rects.count) cells",
+                            let photos = Self.samplePhotos(for: count)
+                            section("collage · \(count) photo\(count == 1 ? "" : "s") · \(rects.count) cells\(photos.isEmpty ? "" : " · real photos")",
                                     width: pageWidth) {
                                 PassportCollageView(photoCount: count,
-                                                    seed: "lab/collage-\(count)")
+                                                    seed: "lab/collage-\(count)",
+                                                    samplePhotos: photos)
                                     .frame(width: pageWidth, height: pageHeight)
-                                    .overlay(cellMarkers(rects, pageWidth: pageWidth,
-                                                         pageHeight: pageHeight))
+                                    .overlay(photos.isEmpty
+                                        ? cellMarkers(rects, pageWidth: pageWidth,
+                                                      pageHeight: pageHeight)
+                                        : nil)
                             }
                         }
                         section("colophon", width: pageWidth) {
@@ -120,6 +135,17 @@ struct PassportDesignLab: View {
     /// Gallery chrome ink — legible on the resting surface in either mode.
     private var labelColor: Color {
         mode.isUV ? Color.paper.opacity(0.6) : Color.text
+    }
+
+    /// TEMP: real sample photos for the sparse templates, so composition can
+    /// be judged with actual images (docs/sample-photos, bundled in Assets).
+    private static func samplePhotos(for count: Int) -> [String] {
+        switch count {
+        case 1:  return ["sea"]
+        case 2:  return ["ski-1", "ski-2"]
+        case 3:  return ["new-york-1", "new-york-2", "london"]
+        default: return []
+        }
     }
 
     /// Debug chips over each collage cell: "P0", "P1", … = photo slot index

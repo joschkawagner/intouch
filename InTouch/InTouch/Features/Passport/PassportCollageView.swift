@@ -21,6 +21,11 @@ struct PassportCollageView: View {
     let photoCount: Int
     /// Stable identity for this page's printing geometry (the city's collage).
     var seed: String = "collage"
+    /// TEMPORARY (UV design-lab pass): sample-photo asset names to render in
+    /// the slots, so template composition can be judged with real images.
+    /// NOT the photo model — the design lab passes these; the real book never
+    /// does. Remove with the design lab when the pass closes.
+    var samplePhotos: [String] = []
 
     @Environment(\.passportRenderMode) private var mode
     private var isUV: Bool { mode.isUV }
@@ -32,8 +37,10 @@ struct PassportCollageView: View {
         PassportPage(security: .standard, seed: seed) {
             ZStack {
                 let rects = CollageTemplate.rects(photoCount: photoCount)
-                ForEach(Array(rects.enumerated()), id: \.offset) { _, rect in
-                    PassportPhotoSlot(isUV: isUV)
+                ForEach(Array(rects.enumerated()), id: \.offset) { index, rect in
+                    PassportPhotoSlot(isUV: isUV,
+                                      sampleImage: index < samplePhotos.count
+                                          ? samplePhotos[index] : nil)
                         .frame(width: rect.width, height: rect.height)
                         .referenceOrigin(x: rect.minX, y: rect.minY)
                 }
@@ -55,8 +62,24 @@ struct PassportCollageView: View {
 /// them is the authentic continuation of this rule.
 private struct PassportPhotoSlot: View {
     let isUV: Bool
+    /// TEMPORARY (UV design-lab pass): a sample asset name; nil = placeholder.
+    var sampleImage: String?
+
     var body: some View {
-        if isUV {
+        if let sampleImage {
+            // TEMP: a real image in the slot, for composition judgment only.
+            // Photographs can't fluoresce — after dark the image sinks under
+            // the same dark wash the placeholder uses.
+            Image(sampleImage)
+                .resizable()
+                .scaledToFill()
+                .frame(minWidth: 0, minHeight: 0)
+                .clipped()
+                .overlay(isUV ? Color.uvCell.opacity(0.72) : nil)
+                .overlay(Rectangle().strokeBorder(
+                    isUV ? Color.stampTeal.opacity(0.5) : Color.paper,
+                    lineWidth: 1.5))
+        } else if isUV {
             Rectangle()
                 .fill(Color.uvCell.opacity(0.55))
                 .overlay(Rectangle().strokeBorder(Color.stampTeal.opacity(0.5), lineWidth: 1.5))
