@@ -6,8 +6,9 @@
 //
 //  DESIGN.md § The passport cover: one InTouch cover tinted into the colour
 //  *family* of the user's home-country passport (here the red family — Color.ink,
-//  "Red Inferno"), that wears visibly with use. The cover stays plain — the
-//  security printing lives on the inside pages, not here.
+//  "Red Inferno"), that wears visibly with use. The cover carries its own
+//  security printing (see PassportCoverField) — tone-on-tone by day,
+//  fluorescing after dark.
 //
 //  The content is a bottom-... no: the design sets a lowercase "passport"
 //  wordmark with the holder's name beneath it, flush-left in the upper third.

@@ -22,13 +22,17 @@ carries the analog soul; a dark shell would kill it.
 Event mode. Stepping into a dark room makes the ritual feel like a ritual. That's the whole
 lighting design: cream pages, dark cover.
 
-**Exception — the passport has a UV/blacklight night mode.** After dark, or during a live
-event, the passport itself shifts to a deep black-violet ground and its daylight elements
-**fluoresce** — cyan, magenta, violet — the way real passport pages light up under UV
-security ink. This is the one place the saturated-ink set currently parked in
-`Palette.swift` (`stampRed/Teal/Violet/Forest/Cobalt`) returns: muted by day, glowing by
-night. It's a distinct rendering of the same booklet, not a separate screen, and it deserves
-its own dedicated design-lab pass to get the glow right (see § The passport booklet).
+**Exception — the passport has a UV/blacklight night mode.** After dark the passport
+shifts to a deep black-violet ground and its printing **fluoresces**, the way real
+passport pages light up under UV security ink. Landed in the 2026-07 UV design-lab pass
+under one governing rule: **one object, two lighting states** — every printed element
+(contours, marks, microprint, frames) exists identically in both modes; UV changes only
+how they are LIT (hue, intensity, glow), never what exists or where it sits. The
+saturated `stamp*` register in `Palette.swift` (+ `stampGold`) is this mode's ink set,
+hue-zoned like the Swiss reference: teal/forest terrain, red machine zone (MRZ, page
+keyline), gold microprint and marks, violet heroes. The contours carry the page; the
+printing glows and the data stays calm (the field-glow rule — see `Palette.swift`,
+UV inks). See docs/DECISIONS.md 2026-07-24/25 for the pass's decisions.
 
 ## Palette
 
@@ -107,7 +111,8 @@ passport; a friend's is the passport you received from them (see PRD § 4.4–4.
 - Motion is a **page turn, not a slide** — paper folding over, mechanical, in step with the
   rest of the app's stamp-press motion (short durations, sharp easing).
 - The whole booklet has a **UV/blacklight night rendering** (see § Light, not dark) — same
-  pages, deep black-violet ground, elements fluorescing. It gets its own design-lab pass.
+  pages, deep black-violet ground, the printing fluorescing. Landed in the 2026-07
+  design-lab pass; driven by time of day, one object under two lighting states.
 
 ## The passport cover
 
@@ -120,6 +125,11 @@ the world" without ever copying a real government document.
   deepens the more you travel and connect. Wear is earned; it is a status marker you cannot
   buy or fake, only accumulate by showing up (see PRD § 1). A brand-new user's cover is
   crisp and unmarked — the empty-passport state should feel *new*, not *broken*.
+- **Both covers carry security printing** — the book's contour/mark vocabulary, tone-on-tone
+  pale embossing by day (the real Swiss cover embosses its contours red-on-red) and
+  fluorescing red contours with gold specks after dark. Real passport covers carry
+  UV-reactive printing even though their pigment is dark (see DECISIONS.md 2026-07-25,
+  which reversed the earlier "covers sink, nothing fluoresces" behaviour).
 
 ## The city page — Bauhaus auto-collage
 
@@ -134,8 +144,13 @@ Each city gets a page the **app composes automatically** — the user does not a
   itself is the composition, never missing content. (This supersedes BOTH earlier calls —
   solid Bauhaus-palette colour blocks, then outline-only empties; see docs/DECISIONS.md
   2026-07-24. The `bauhaus*` palette tokens are deleted with it.)
-- Colour comes from the photos; the surrounding chrome stays in the tokens, as everywhere
-  else.
+- Colour comes from the photos and their **Bauhaus frames**: every slot carries a 3pt frame
+  in the `bauhaus*` register, ONE colour per page hashed stably from the city — each city
+  permanently owns its frame colour. (A mixed per-cell set was tried and rejected: yellow
+  advances, black recedes, and the page reads as "one cell highlighted" instead of a
+  system.) Frames are daylight objects; under UV they give way to a quiet teal edge and the
+  fluorescing printing is the page's colour. The surrounding chrome stays in the tokens, as
+  everywhere else.
 
 ## The collage
 

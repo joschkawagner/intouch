@@ -132,8 +132,10 @@ The passport is a **leaf-through booklet**, not a grid of icons. Its unit is a *
   into a Bauhaus/Mondrian grid — you do **not** hand-arrange it (unlike the profile collage
   in § 4, which you assemble yourself). Every cell is a photo: a city with N photos gets an
   N-cell template, and sparse cities stay composed — the photos occupy a deliberate part of
-  the grid and the rest is bare printed page (see DESIGN.md § The city page; supersedes the
-  earlier colour-block and outline-empty-cell plans — see DECISIONS.md 2026-07-24.)
+  the grid and the rest is bare printed page. Photos sit in Bauhaus frames, one register
+  colour per page — each city permanently owns its frame colour (see DESIGN.md § The city
+  page; supersedes the earlier colour-block and outline-empty-cell plans — see DECISIONS.md
+  2026-07-24.)
 - **Country-tinted, wearing cover.** One InTouch cover tinted into the colour *family* of
   your home-country passport (~5 families cover almost everyone) — not a literal national
   design. The cover wears visibly with use; wear is earned status (see § 1 and DESIGN.md

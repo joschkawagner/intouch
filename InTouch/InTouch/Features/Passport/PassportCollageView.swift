@@ -10,7 +10,7 @@
 //  printing showing through as the composition. Laid out in the 232×330
 //  reference page so the design's cell rects map 1:1.
 //
-//  In daylight every slot carries a Bauhaus frame — one colour per page,
+//  In daylight every slot carries a 3pt Bauhaus frame — ONE colour per page,
 //  hashed stably from the page seed, so a city always frames in the same
 //  colour (a mixed set reads as "one cell highlighted": the register's
 //  yellow is far brighter than its blue). Under UV the frames give way to
@@ -28,19 +28,6 @@ struct PassportCollageView: View {
     let photoCount: Int
     /// Stable identity for this page's printing geometry (the city's collage).
     var seed: String = "collage"
-    /// TEMPORARY (UV design-lab pass): sample-photo asset names to render in
-    /// the slots, so template composition can be judged with real images.
-    /// NOT the photo model — the design lab passes these; the real book never
-    /// does. Remove with the design lab when the pass closes.
-    var samplePhotos: [String] = []
-    /// TEMPORARY (UV design-lab pass, A/B only): per-cell frame colours
-    /// instead of one per page — kept to demonstrate the rejected variant in
-    /// the lab. Remove with the design lab.
-    var mixedFrames = false
-    /// TEMPORARY (UV design-lab pass, A/B only): the dark-wash strength over
-    /// photos after dark. The lab shows candidate levels; the picked value
-    /// becomes a constant when the scaffolding is removed.
-    var uvPhotoDim: Double = 0.5
 
     @Environment(\.passportRenderMode) private var mode
     private var isUV: Bool { mode.isUV }
@@ -58,26 +45,19 @@ struct PassportCollageView: View {
         PassportPage(security: .standard, seed: seed) {
             ZStack {
                 let rects = CollageTemplate.rects(photoCount: photoCount)
-                ForEach(Array(rects.enumerated()), id: \.offset) { index, rect in
-                    PassportPhotoSlot(
-                        isUV: isUV,
-                        sampleImage: index < samplePhotos.count ? samplePhotos[index] : nil,
-                        frame: mixedFrames
-                            ? Color.bauhausFrames[index % Color.bauhausFrames.count]
-                            : pageFrame,
-                        uvDim: uvPhotoDim
-                    )
-                    .frame(width: rect.width, height: rect.height)
-                    .referenceOrigin(x: rect.minX, y: rect.minY)
+                ForEach(Array(rects.enumerated()), id: \.offset) { _, rect in
+                    PassportPhotoSlot(isUV: isUV, frame: pageFrame)
+                        .frame(width: rect.width, height: rect.height)
+                        .referenceOrigin(x: rect.minX, y: rect.minY)
                 }
             }
         }
     }
 }
 
-/// A photo slot. In daylight: the image (or a neutral placeholder) inside its
-/// Bauhaus frame. After dark: photographs don't fluoresce — the image sinks
-/// under a dark wash, clearly unlit against artwork that IS lit, with only
+/// A photo slot. In daylight: a neutral placeholder (until the photo model
+/// exists) inside its Bauhaus frame. After dark: photographs don't fluoresce —
+/// the slot sinks dark, clearly unlit against artwork that IS lit, with only
 /// the quiet teal edge.
 ///
 /// The fill is translucent in BOTH modes — the security printing runs
@@ -89,26 +69,18 @@ struct PassportCollageView: View {
 /// them is the authentic continuation of this rule.
 private struct PassportPhotoSlot: View {
     let isUV: Bool
-    /// TEMPORARY (UV design-lab pass): a sample asset name; nil = placeholder.
-    var sampleImage: String?
     /// The slot's daylight Bauhaus frame colour.
     var frame: Color
-    /// TEMPORARY (UV design-lab pass): dark-wash strength over photos.
-    var uvDim: Double
+
+    /// The dark-wash strength over a real photograph after dark, decided in
+    /// the UV pass by A/B (0.35 read as day-lit sky — photos looked LIT;
+    /// 0.72 swallowed the image; 0.50 is visible, recognisable, obviously
+    /// not glowing). Applies when the photo model lands; the placeholder
+    /// below uses its own dimmer fill meanwhile.
+    static let uvPhotoDim: Double = 0.5
 
     var body: some View {
-        if let sampleImage {
-            // TEMP: a real image in the slot, for composition judgment only.
-            Image(sampleImage)
-                .resizable()
-                .scaledToFill()
-                .frame(minWidth: 0, minHeight: 0)
-                .clipped()
-                .overlay(isUV ? Color.uvCell.opacity(uvDim) : nil)
-                .overlay(Rectangle().strokeBorder(
-                    isUV ? Color.stampTeal.opacity(0.5) : frame,
-                    lineWidth: isUV ? 1.5 : 3))
-        } else if isUV {
+        if isUV {
             Rectangle()
                 .fill(Color.uvCell.opacity(0.55))
                 .overlay(Rectangle().strokeBorder(Color.stampTeal.opacity(0.5), lineWidth: 1.5))
