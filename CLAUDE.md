@@ -44,6 +44,10 @@ it before saying you're done.** Never report a feature complete without a succes
 - Session defaults live in `.xcodebuildmcp/config.yaml`
 - Screenshot the simulator to verify UI changes visually before reporting back
 - Preferred simulator: iPhone 17
+- Check `df -h /System/Volumes/Data` at session start, and again before builds in
+  long sessions. iOS builds need real headroom, and a FULL disk fails confusingly:
+  tool harnesses fail to start (they can't create their own output files) instead
+  of giving a clear disk error.
 
 ## Conventions
 
