@@ -3,17 +3,15 @@
 //  InTouch
 //
 //  The right page of a city spread — the auto-composed photo collage (design
-//  2c). Picks a template by photo count and fills it: photo cells render as
-//  neutral placeholder slots (no photo model yet), empty cells render outline-
-//  only (a 1.5px ink border, paper through). Laid out in the 232×330 reference
-//  page so the design's cell rects map 1:1.
+//  2c). Picks a template by photo count and fills it: every cell is a photo
+//  slot (rendered as a neutral placeholder until the photo model exists).
+//  There is no empty-cell concept — a city with N photos gets an N-cell
+//  template, and on sparse pages the rest is bare printed page, the security
+//  printing showing through as the composition. Laid out in the 232×330
+//  reference page so the design's cell rects map 1:1.
 //
 //  This is deliberately the *opposite* of Core/Components/CollageView, the
 //  hand-assembled profile collage — here the app composes a Mondrian grid.
-//
-//  After dark (2c·uv): photographs can't fluoresce, so photo cells go dark and
-//  non-reactive (`uvCell` with a faint teal edge) while the empty cells become
-//  transparent with a glowing stamp-ink border — the grid is what lights up.
 //
 
 import SwiftUI
@@ -27,51 +25,19 @@ struct PassportCollageView: View {
     @Environment(\.passportRenderMode) private var mode
     private var isUV: Bool { mode.isUV }
 
-    /// Glow colours cycled across the empty cells under UV.
-    private let emptyGlow: [Color] = [.stampCobalt, .stampViolet, .stampTeal]
-
     var body: some View {
-        // The collage sits over the standard printing: the terrain threads
-        // the 6pt gutters and shows through the outline-only empty cells,
-        // so this page's ground is as alive as the rest of the book.
+        // The collage sits over the standard printing, which runs
+        // CONTINUOUSLY beneath the whole page — through the gutters, the bare
+        // regions of sparse templates, and the translucent photo slots alike.
         PassportPage(security: .standard, seed: seed) {
             ZStack {
-                let cells = CollageTemplate.cells(photoCount: photoCount)
-                let styled = Self.withEmptyIndices(cells)
-                ForEach(styled, id: \.offset) { item in
-                    cellView(item.cell, emptyIndex: item.emptyIndex)
-                        .frame(width: item.cell.rect.width, height: item.cell.rect.height)
-                        .referenceOrigin(x: item.cell.rect.minX, y: item.cell.rect.minY)
+                let rects = CollageTemplate.rects(photoCount: photoCount)
+                ForEach(Array(rects.enumerated()), id: \.offset) { _, rect in
+                    PassportPhotoSlot(isUV: isUV)
+                        .frame(width: rect.width, height: rect.height)
+                        .referenceOrigin(x: rect.minX, y: rect.minY)
                 }
             }
-        }
-    }
-
-    @ViewBuilder
-    private func cellView(_ cell: CollageCell, emptyIndex: Int) -> some View {
-        if cell.isPhoto {
-            PassportPhotoSlot(isUV: isUV)
-        } else if isUV {
-            // Empty cell after dark — transparent with a glowing stamp-ink border.
-            let color = emptyGlow[emptyIndex % emptyGlow.count]
-            Rectangle()
-                .strokeBorder(color, lineWidth: 1.5)
-                .shadow(color: color.opacity(0.6), radius: 4)
-        } else {
-            // Empty cell in daylight — outline only, paper showing through.
-            Rectangle()
-                .strokeBorder(Color.ink, lineWidth: 1.5)
-        }
-    }
-
-    /// Tags each cell with its running index and, for empty cells, the index
-    /// among empties (so their glow colours cycle).
-    private static func withEmptyIndices(_ cells: [CollageCell])
-        -> [(offset: Int, cell: CollageCell, emptyIndex: Int)] {
-        var empty = 0
-        return cells.enumerated().map { offset, cell in
-            defer { if !cell.isPhoto { empty += 1 } }
-            return (offset, cell, cell.isPhoto ? 0 : empty)
         }
     }
 }
@@ -109,10 +75,10 @@ private struct PassportPhotoSlot: View {
 
 #Preview {
     HStack(spacing: 12) {
-        PassportCollageView(photoCount: 3)
+        PassportCollageView(photoCount: 1, seed: "preview")
             .frame(width: 232, height: 330)
             .environment(\.passportRenderMode, .daylight)
-        PassportCollageView(photoCount: 1)
+        PassportCollageView(photoCount: 1, seed: "preview")
             .frame(width: 232, height: 330)
             .environment(\.passportRenderMode, .uv)
     }

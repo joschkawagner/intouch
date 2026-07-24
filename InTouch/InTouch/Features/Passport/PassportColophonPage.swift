@@ -68,6 +68,7 @@ struct PassportColophonPage: View {
             .font(Typography.passportLabel)
             .tracking(Typography.stampTracking)
             .foregroundStyle(isUV ? Color.uvFieldLabel : Color.text.opacity(0.5))
+            .uvFieldLit(isUV)
             .referenceOrigin(x: 14, y: labelY)
 
         value()
@@ -85,6 +86,7 @@ struct PassportColophonPage: View {
             .font(Typography.timestamp)
             .tracking(Typography.stampTracking)
             .foregroundStyle(isUV ? Color.uvFieldValue : Color.text)
+            .uvFieldLit(isUV)
     }
 
     private static let formatter: DateFormatter = {

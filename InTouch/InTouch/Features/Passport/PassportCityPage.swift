@@ -36,6 +36,7 @@ struct PassportCityPage: View {
                     .font(Typography.timestamp)
                     .tracking(Typography.stampTracking)
                     .foregroundStyle(isUV ? Color.uvFieldValue : Color.text.opacity(0.6))
+                    .uvFieldLit(isUV)
                     .referenceOrigin(x: 14, y: 160)
 
                 if let date {
@@ -43,6 +44,7 @@ struct PassportCityPage: View {
                         .font(Typography.timestamp)         // Courier — the date as artifact
                         .tracking(Typography.stampTracking)
                         .foregroundStyle(isUV ? Color.uvFieldValue : Color.text)
+                        .uvFieldLit(isUV)
                         .referenceOrigin(x: 14, y: 182)
                 }
 
@@ -55,6 +57,7 @@ struct PassportCityPage: View {
                     .font(Typography.passportCoord)
                     .tracking(1)
                     .foregroundStyle(isUV ? Color.uvFieldValue : Color.text.opacity(0.45))
+                    .uvFieldLit(isUV)
                     .referenceOrigin(x: 14, y: 246)
             }
         }

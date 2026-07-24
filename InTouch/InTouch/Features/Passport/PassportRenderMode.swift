@@ -43,4 +43,13 @@ extension View {
         shadow(color: color == .clear ? .clear : color.opacity(0.8),
                radius: color == .clear ? 0 : 4)
     }
+
+    /// The uniform lit-text halo for UV field text — applied equally to every
+    /// field label and value, per the field-glow rule (one treatment, no
+    /// per-field glows). Far fainter than `.fluoresce`: paper lit by the
+    /// lamp, not fluorescing ink.
+    func uvFieldLit(_ active: Bool) -> some View {
+        shadow(color: active ? Color.uvVioletText.opacity(0.25) : .clear,
+               radius: active ? 2 : 0)
+    }
 }

@@ -81,8 +81,10 @@ extension Color {
     /// while the grid lines and outlined empty cells glow around them.
     static let uvCell = Color(hex: 0x150A20)
 
-    /// Bright fluorescing violet used for hero text under UV (e.g. the colophon's
-    /// strongest hidden reveal). The glow itself is `stampViolet` shadow behind it.
+    /// Cool violet-white — the tone of paper lit by blacklight. The basis of
+    /// the uniform UV field treatment below: neutral `paper` white read as
+    /// ordinary unlit text sitting on top of the scene, where this cast reads
+    /// as the same text under the same lamp.
     static let uvVioletText = Color(hex: 0xF3E9FB)
 
     /// THE FIELD-GLOW RULE (UV). One system, no per-field exceptions:
@@ -95,47 +97,22 @@ extension Color {
     /// printing layer carries the page's fluorescence; the data stays calm.
     /// Glow is lighting, not geometry — both modes render identical elements.
     ///
-    /// Legibility floor for non-glowing text under UV. `paper` at this opacity
-    /// clears ~5.3:1 contrast on `uvGround` (WCAG AA body text is 4.5:1) — the
-    /// minimum a routine field may use and still read. Small struck field labels
-    /// sit here; recede *values* sit a step above (`uvFieldValue`). The glowing
+    /// Legibility floor for non-glowing text under UV. `uvVioletText` at this
+    /// opacity clears ~5:1 contrast on `uvGround` (WCAG AA body text is 4.5:1)
+    /// — the minimum a routine field may use and still read. Small struck
+    /// field labels sit here; recede *values* sit a step above
+    /// (`uvFieldValue`). The cool cast (not neutral `paper`) makes the calm
+    /// text read as lit by the same blacklight as the artwork. The glowing
     /// hero fields use the saturated `stamp*` inks + a `.fluoresce()` halo — a
-    /// separate visual channel (hue + glow), so they stay clearly more prominent
-    /// however bright this neutral recede text is.
-    static let uvFieldLabel = Color.paper.opacity(0.5)
+    /// separate visual channel (hue + glow), so they stay clearly more
+    /// prominent however bright this recede text is.
+    static let uvFieldLabel = Color.uvVioletText.opacity(0.5)
 
     /// A recede (non-glowing) field *value* under UV — routine content such as
     /// handle, since, bio, member-since, holder no., city date. One step above
     /// the label floor (~6:1) so content reads stronger than its label, mirroring
     /// the daylight hierarchy where the value outweighs its 0.5-opacity label.
-    static let uvFieldValue = Color.paper.opacity(0.6)
-}
-
-// MARK: - Bauhaus city blocks
-
-extension Color {
-
-    /// Solid colour blocks for the passport's per-city pages. Classic Bauhaus
-    /// register — flat, primary-leaning, unshaded — so each city reads as one
-    /// bold plane while we build the real collage in a later pass.
-    ///
-    /// A city is mapped to one of these by a stable hash of its name, so a city
-    /// always gets the same block. Chosen by eye; treat as tunable. These are
-    /// distinct from the muted eight-token palette (chrome + paper) and from the
-    /// `stamp*` inks (stamps only) — they exist solely for these full-page blocks.
-    static let bauhausRed    = Color(hex: 0xD62828)
-    static let bauhausBlue   = Color(hex: 0x1D4E89)
-    static let bauhausYellow = Color(hex: 0xE9C46A)
-    static let bauhausBlack  = Color(hex: 0x1A1A1A)
-    static let bauhausOrange = Color(hex: 0xE07A22)
-    static let bauhausTeal   = Color(hex: 0x2A9D8F)
-    static let bauhausSand   = Color(hex: 0xD8C3A5)
-
-    /// The city blocks, in a fixed order. A city name hashes into this array.
-    static let bauhausBlocks: [Color] = [
-        bauhausRed, bauhausBlue, bauhausYellow,
-        bauhausBlack, bauhausOrange, bauhausTeal, bauhausSand,
-    ]
+    static let uvFieldValue = Color.uvVioletText.opacity(0.62)
 }
 
 extension Color {

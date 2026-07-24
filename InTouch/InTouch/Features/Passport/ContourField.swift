@@ -84,10 +84,18 @@ struct ContourField: Shape {
             let y1 = y0 + gridStep
             for c in 0..<cols {
                 // UV bloom partition — whole cells belong to one intensity
-                // region, so neighbouring segments bloom together.
+                // region, so neighbouring segments bloom together. Buckets cut
+                // at QUANTILES of the sampled bloom values (equal page area
+                // each), so no bucket can ever span the page as one band —
+                // the range-based cut produced a diagonal "shadow" when the
+                // field happened to be a single smooth gradient.
                 if let bucket = bloomBucket {
-                    let b = (sample.bloom[r][c] - sample.bloomLo) / sample.bloomSpan
-                    let cellBucket = min(bloomBuckets - 1, max(0, Int(b * CGFloat(bloomBuckets))))
+                    let v = sample.bloom[r][c]
+                    var cellBucket = 0
+                    for t in 1..<bloomBuckets
+                    where v >= sample.bloomSorted[sample.bloomSorted.count * t / bloomBuckets] {
+                        cellBucket = t
+                    }
                     guard cellBucket == bucket else { continue }
                 }
 
@@ -160,7 +168,9 @@ struct ContourField: Shape {
         var field: [[CGFloat]]
         var lo, span: CGFloat
         var bloom: [[CGFloat]]
-        var bloomLo, bloomSpan: CGFloat
+        /// All sampled bloom values, sorted — bucket thresholds are quantiles
+        /// of this, so every bucket covers the same page area on every seed.
+        var bloomSorted: [CGFloat]
     }
 
     /// One field evaluation per page: every band/bucket instance a page draws
@@ -189,13 +199,16 @@ struct ContourField: Shape {
         }
 
         // Bloom bumps: a smoother, always-positive field that maps where the
-        // UV ink pools hot vs fades — spatial variation, not geometry.
+        // UV ink pools hot vs fades — spatial variation, not geometry. Twelve
+        // patches at 20–48pt keep the pooling at sub-page scale; the earlier
+        // four page-sized patches collapsed into one smooth gradient whose
+        // buckets read as a broad shadow band lying across the page.
         var bloomRng = SeededGenerator(seed: seed + "/bloom")
-        let bloomBumps: [Bump] = (0..<4).map { _ in
+        let bloomBumps: [Bump] = (0..<12).map { _ in
             let cx = rect.minX + CGFloat(bloomRng.next(in: -40...(rect.width + 40)))
             let cy = rect.minY + CGFloat(bloomRng.next(in: -40...(rect.height + 40)))
             let amp = CGFloat(bloomRng.next(in: 0.5...1.0))
-            let sigma = CGFloat(bloomRng.next(in: 40...110))
+            let sigma = CGFloat(bloomRng.next(in: 20...48))
             return Bump(cx: cx, cy: cy, amp: amp, twoSigmaSq: 2 * sigma * sigma)
         }
 
@@ -212,7 +225,8 @@ struct ContourField: Shape {
                                 count: rows + 1)
         var bloom = field
         var lo = CGFloat.greatestFiniteMagnitude, hi = -lo
-        var bLo = CGFloat.greatestFiniteMagnitude, bHi = -bLo
+        var bloomFlat: [CGFloat] = []
+        bloomFlat.reserveCapacity((rows + 1) * (cols + 1))
         for r in 0...rows {
             let y = rect.minY + CGFloat(r) * gridStep
             for c in 0...cols {
@@ -222,13 +236,12 @@ struct ContourField: Shape {
                 lo = min(lo, v); hi = max(hi, v)
                 let b = evaluate(bloomBumps, x: x, y: y)
                 bloom[r][c] = b
-                bLo = min(bLo, b); bHi = max(bHi, b)
+                bloomFlat.append(b)
             }
         }
 
         let result = FieldSample(field: field, lo: lo, span: max(hi - lo, 0.0001),
-                                 bloom: bloom, bloomLo: bLo,
-                                 bloomSpan: max(bHi - bLo, 0.0001))
+                                 bloom: bloom, bloomSorted: bloomFlat.sorted())
         cache[key] = result
         return result
     }

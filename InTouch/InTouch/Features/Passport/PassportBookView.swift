@@ -13,7 +13,7 @@
 //  the phone is held in landscape.
 //
 //  Spread 0: identity | the map (the index of everywhere you've been).
-//  Spread 1…N: one per city — a label | a collage (a Bauhaus block for now).
+//  Spread 1…N: one per city — a label | its auto-composed photo collage.
 //  Final spread: the colophon | the back cover (inside-back for now).
 //
 

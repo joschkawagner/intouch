@@ -130,9 +130,10 @@ The passport is a **leaf-through booklet**, not a grid of icons. Its unit is a *
   cover is one page; opening it is a two-page spread you flip through, city by city.
 - **Each city is a page the app composes for you.** The app auto-lays each city's photos
   into a Bauhaus/Mondrian grid — you do **not** hand-arrange it (unlike the profile collage
-  in § 4, which you assemble yourself). Empty cells are outline-only (a hairline border, paper
-  through), so a sparse city page looks as composed as a full one (see DESIGN.md § The city
-  page). (Solid colour-block fills were the earlier plan; now deferred — see DECISIONS.md.)
+  in § 4, which you assemble yourself). Every cell is a photo: a city with N photos gets an
+  N-cell template, and sparse cities stay composed — the photos occupy a deliberate part of
+  the grid and the rest is bare printed page (see DESIGN.md § The city page; supersedes the
+  earlier colour-block and outline-empty-cell plans — see DECISIONS.md 2026-07-24.)
 - **Country-tinted, wearing cover.** One InTouch cover tinted into the colour *family* of
   your home-country passport (~5 families cover almost everyone) — not a literal national
   design. The cover wears visibly with use; wear is earned status (see § 1 and DESIGN.md

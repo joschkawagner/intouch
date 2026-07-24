@@ -60,17 +60,17 @@ struct PassportDesignLab: View {
                                 .frame(width: pageWidth, height: pageHeight)
                         }
                         // All six collage templates, each labelled with its
-                        // photo count and cell census; P/E chips mark photo
-                        // slots vs empty cells (gallery scaffolding only).
+                        // photo count and cell census; P chips index the photo
+                        // slots (gallery scaffolding only — every cell is a
+                        // photo now).
                         ForEach(1...6, id: \.self) { count in
-                            let cells = CollageTemplate.cells(photoCount: count)
-                            let photos = cells.filter(\.isPhoto).count
-                            section("collage · \(count) photo\(count == 1 ? "" : "s") · \(cells.count) cells · \(photos)P + \(cells.count - photos)E",
+                            let rects = CollageTemplate.rects(photoCount: count)
+                            section("collage · \(count) photo\(count == 1 ? "" : "s") · \(rects.count) cells",
                                     width: pageWidth) {
                                 PassportCollageView(photoCount: count,
                                                     seed: "lab/collage-\(count)")
                                     .frame(width: pageWidth, height: pageHeight)
-                                    .overlay(cellMarkers(cells, pageWidth: pageWidth,
+                                    .overlay(cellMarkers(rects, pageWidth: pageWidth,
                                                          pageHeight: pageHeight))
                             }
                         }
@@ -122,20 +122,20 @@ struct PassportDesignLab: View {
         mode.isUV ? Color.paper.opacity(0.6) : Color.text
     }
 
-    /// Debug chips over each collage cell: "P0"/"E2" = cell index in template
-    /// order (photos first), photo slot vs empty. Scaffolding, not design.
-    private func cellMarkers(_ cells: [CollageCell], pageWidth: CGFloat,
+    /// Debug chips over each collage cell: "P0", "P1", … = photo slot index
+    /// in template order. Scaffolding, not design.
+    private func cellMarkers(_ rects: [CGRect], pageWidth: CGFloat,
                              pageHeight: CGFloat) -> some View {
         let scale = pageWidth / PassportMetrics.referenceSize.width
         return ZStack {
-            ForEach(Array(cells.enumerated()), id: \.offset) { index, cell in
-                Text("\(cell.isPhoto ? "P" : "E")\(index)")
+            ForEach(Array(rects.enumerated()), id: \.offset) { index, rect in
+                Text("P\(index)")
                     .font(Typography.timestamp)
                     .padding(.horizontal, 4)
                     .padding(.vertical, 2)
                     .background(Color.night.opacity(0.85))
                     .foregroundStyle(Color.paper)
-                    .position(x: cell.rect.midX * scale, y: cell.rect.midY * scale)
+                    .position(x: rect.midX * scale, y: rect.midY * scale)
             }
         }
         .frame(width: pageWidth, height: pageHeight)

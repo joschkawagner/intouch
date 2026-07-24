@@ -128,14 +128,14 @@ Each city gets a page the **app composes automatically** — the user does not a
 - Photos are laid into a **Bauhaus/Mondrian grid**: rectangles of varied size, hard edges,
   no overlap, mechanical order. This is the auto counterpart to the hand-assembled profile
   collage (§ The collage).
-- **Empty cells are outline-only** — a hairline `ink` border with the paper showing through,
-  read as composition, not as missing content. A city with two photos and a city with twelve
-  both fill the page and both look *composed*. Sparse must never look empty. (This reverses the
-  earlier "solid Bauhaus-palette colour blocks" call: the design lab's rendered `2c` templates
-  use outlined empties; solid Bauhaus fills are a **deferred** future option — see
-  docs/DECISIONS.md 2026-07-23. The `bauhaus*` palette tokens remain, unused, for that option.)
-- Colour comes from the photos; the surrounding chrome and the cell outlines stay in the
-  tokens, as everywhere else.
+- **Every cell is a photo — there is no empty-cell concept.** A city with N photos gets an
+  N-cell template. Sparse cities stay *composed*: the photos occupy a deliberate part of the
+  grid and the rest is bare printed page, the security printing showing through — the page
+  itself is the composition, never missing content. (This supersedes BOTH earlier calls —
+  solid Bauhaus-palette colour blocks, then outline-only empties; see docs/DECISIONS.md
+  2026-07-24. The `bauhaus*` palette tokens are deleted with it.)
+- Colour comes from the photos; the surrounding chrome stays in the tokens, as everywhere
+  else.
 
 ## The collage
 

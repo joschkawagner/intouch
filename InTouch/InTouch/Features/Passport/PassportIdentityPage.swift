@@ -48,6 +48,7 @@ struct PassportIdentityPage: View {
                 Text(Typography.chrome(user.handle))
                     .font(Typography.passportLabel)
                     .foregroundStyle(isUV ? Color.uvFieldValue : Color.muted)
+                    .uvFieldLit(isUV)
                     .referenceOrigin(x: 114, y: 104)
 
                 // Since + holder number, a row beneath the photo.
@@ -62,6 +63,7 @@ struct PassportIdentityPage: View {
                 Text(user.bio)
                     .font(Typography.passportBody)
                     .foregroundStyle(isUV ? Color.uvFieldValue : Color.text)
+                    .uvFieldLit(isUV)
                     .frame(width: 204, alignment: .leading)
                     .referenceOrigin(x: 14, y: 226)
 
@@ -102,6 +104,7 @@ struct PassportIdentityPage: View {
             .font(Typography.passportLabel)
             .tracking(Typography.stampTracking)
             .foregroundStyle(isUV ? Color.uvFieldLabel : Color.text.opacity(0.5))
+            .uvFieldLit(isUV)
     }
 
     /// A machine-type value (Courier) — calm in both modes per the field-glow
@@ -111,6 +114,7 @@ struct PassportIdentityPage: View {
             .font(Typography.timestamp)
             .tracking(Typography.stampTracking)
             .foregroundStyle(isUV ? Color.uvFieldValue : Color.text)
+            .uvFieldLit(isUV)
     }
 
     private var mrzBand: some View {
