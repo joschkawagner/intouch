@@ -14,7 +14,7 @@ import SwiftUI
 
 struct PassportBackCoverView: View {
     var body: some View {
-        PassportCoverField()
+        PassportCoverField(seed: "cover/back")
     }
 }
 
