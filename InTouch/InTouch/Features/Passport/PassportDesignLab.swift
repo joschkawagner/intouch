@@ -69,24 +69,41 @@ struct PassportDesignLab: View {
                                              date: MockData.entries.first?.date)
                                 .frame(width: pageWidth, height: pageHeight)
                         }
-                        // All six collage templates, each labelled with its
-                        // photo count and cell census. Templates 1–3 carry
-                        // real sample photos (TEMP — composition judgment
-                        // only, not the photo model); 4–6 keep placeholders,
-                        // with P chips indexing the slots.
+                        // All six collage templates with real sample photos
+                        // (TEMP — composition judgment only, not the photo
+                        // model), single Bauhaus frame per page (the shipped
+                        // behaviour).
                         ForEach(1...6, id: \.self) { count in
-                            let rects = CollageTemplate.rects(photoCount: count)
-                            let photos = Self.samplePhotos(for: count)
-                            section("collage · \(count) photo\(count == 1 ? "" : "s") · \(rects.count) cells\(photos.isEmpty ? "" : " · real photos")",
+                            section("collage · \(count) photo\(count == 1 ? "" : "s") · \(CollageTemplate.rects(photoCount: count).count) cells",
                                     width: pageWidth) {
                                 PassportCollageView(photoCount: count,
                                                     seed: "lab/collage-\(count)",
-                                                    samplePhotos: photos)
+                                                    samplePhotos: Self.samplePhotos(for: count))
                                     .frame(width: pageWidth, height: pageHeight)
-                                    .overlay(photos.isEmpty
-                                        ? cellMarkers(rects, pageWidth: pageWidth,
-                                                      pageHeight: pageHeight)
-                                        : nil)
+                            }
+                        }
+
+                        // A/B: the rejected mixed-frames variant, at low and
+                        // high cell counts (judged in daylight).
+                        ForEach([3, 6], id: \.self) { count in
+                            section("A/B · \(count) photos · MIXED frames", width: pageWidth) {
+                                PassportCollageView(photoCount: count,
+                                                    seed: "lab/collage-\(count)",
+                                                    samplePhotos: Self.samplePhotos(for: count),
+                                                    mixedFrames: true)
+                                    .frame(width: pageWidth, height: pageHeight)
+                            }
+                        }
+
+                        // A/B: photo dim levels under UV (judged after dark).
+                        ForEach([0.65, 0.5, 0.35], id: \.self) { dim in
+                            section("A/B · photo dim \(String(format: "%.2f", dim)) (UV)",
+                                    width: pageWidth) {
+                                PassportCollageView(photoCount: 2,
+                                                    seed: "lab/collage-2",
+                                                    samplePhotos: Self.samplePhotos(for: 2),
+                                                    uvPhotoDim: dim)
+                                    .frame(width: pageWidth, height: pageHeight)
                             }
                         }
                         section("colophon", width: pageWidth) {
@@ -137,14 +154,18 @@ struct PassportDesignLab: View {
         mode.isUV ? Color.paper.opacity(0.6) : Color.text
     }
 
-    /// TEMP: real sample photos for the sparse templates, so composition can
-    /// be judged with actual images (docs/sample-photos, bundled in Assets).
+    /// TEMP: real sample photos for every template, so composition can be
+    /// judged with actual images (docs/sample-photos, bundled in Assets).
+    /// Reuse across templates is fine — this is scaffolding, not the model.
     private static func samplePhotos(for count: Int) -> [String] {
         switch count {
         case 1:  return ["sea"]
         case 2:  return ["ski-1", "ski-2"]
         case 3:  return ["new-york-1", "new-york-2", "london"]
-        default: return []
+        case 4:  return ["cooking", "cycling", "drew-joiner", "stadium"]
+        case 5:  return ["track", "mountaineering-2", "sea", "ski-1", "london"]
+        default: return ["new-york-1", "cooking", "cycling", "ski-2",
+                         "drew-joiner", "stadium"]
         }
     }
 

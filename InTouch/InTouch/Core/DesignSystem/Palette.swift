@@ -115,6 +115,31 @@ extension Color {
     static let uvFieldValue = Color.uvVioletText.opacity(0.62)
 }
 
+// MARK: - Bauhaus collage frames
+
+extension Color {
+
+    /// The Bauhaus register, sampled by eye from the reference poster
+    /// (docs/references — bauhaus-background.jpg): cerulean blue, golden
+    /// yellow, burnt brick red, warm grid black, and the cream ground.
+    /// Deliberately NOT the fire-engine primaries the deleted first-pass
+    /// tokens guessed — the reference is warmer and dirtier throughout.
+    ///
+    /// STRICTLY for the passport collage photo frames (daylight). Never
+    /// chrome, never text; the muted eight own those. A wider Bauhaus
+    /// treatment of the app is a separate future exploration — this fenced
+    /// group is the seed of that register, so keep it faithful to the
+    /// reference rather than convenient for any one screen.
+    static let bauhausBlue   = Color(hex: 0x1B7ABF)
+    static let bauhausYellow = Color(hex: 0xEDB41F)
+    static let bauhausRed    = Color(hex: 0xA93A20)
+    static let bauhausBlack  = Color(hex: 0x221A12)
+    static let bauhausCream  = Color(hex: 0xEFE3CC)
+
+    /// Frame colours in a fixed order — a collage page hashes into this.
+    static let bauhausFrames: [Color] = [bauhausBlue, bauhausYellow, bauhausRed, bauhausBlack]
+}
+
 extension Color {
 
     /// Builds a colour from a 24-bit RGB literal, e.g. `0xF0EDE5`.
