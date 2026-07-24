@@ -181,15 +181,23 @@ struct PassportBookView: View {
     /// the cover and the centred crease is orphaned into an apparently continuous
     /// red field — reading as a stray vertical line, not a gutter. So the crease
     /// is dropped in that case; the soft gradient stays as the binding shadow.
+    ///
+    /// After dark oxblood vanishes on `uvGround`, so the binding shadow is
+    /// struck in black and the crease in faint lit paper — same geometry,
+    /// night lighting.
     private func spine(bordersCover: Bool) -> some View {
         LinearGradient(
-            colors: [Color.ink.opacity(0.25), Color.ink.opacity(0.06), Color.ink.opacity(0.25)],
+            colors: mode.isUV
+                ? [Color.black.opacity(0.45), Color.black.opacity(0.15), Color.black.opacity(0.45)]
+                : [Color.ink.opacity(0.25), Color.ink.opacity(0.06), Color.ink.opacity(0.25)],
             startPoint: .leading, endPoint: .trailing
         )
         .frame(width: 12)
         .overlay {
             if !bordersCover {
-                Rectangle().fill(Color.muted.opacity(0.5)).frame(width: 1)
+                Rectangle()
+                    .fill(mode.isUV ? Color.paper.opacity(0.15) : Color.muted.opacity(0.5))
+                    .frame(width: 1)
             }
         }
     }
@@ -209,9 +217,16 @@ struct PassportBookView: View {
     }
 
     private func edgeTap(systemImage: String, enabled: Bool, action: @escaping () -> Void) -> some View {
+        // Dark-red ink is invisible on the night ground — after dark the
+        // chevrons render in lit paper, a step above the legibility floor
+        // because the right chevron sits over the map page's grey tiles
+        // (the lightest UV surface in the book).
         Image(systemName: systemImage)
             .font(Typography.body)
-            .foregroundStyle(Color.ink.opacity(enabled ? 0.35 : 0))
+            .foregroundStyle(
+                (mode.isUV ? Color.paper.opacity(0.55) : Color.ink.opacity(0.35))
+                    .opacity(enabled ? 1 : 0)
+            )
             .frame(width: 72)
             .frame(maxHeight: .infinity)
             .contentShape(Rectangle())
