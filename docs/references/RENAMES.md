@@ -36,7 +36,10 @@ Numbered prefixes are ONE multi-photo (carousel) post; the grouping is preserved
 | `collage_2.jpg` | `collage-2.jpg` |
 | `collage_3.jpg` | `collage-3.jpg` |
 
-## `Colour_Design_Fonts/` (kept — inspiration)
+## `colour-design-fonts/` (kept — inspiration)
+
+Folder itself renamed `Colour_Design_Fonts/` → `colour-design-fonts/` (2026-07-25,
+kebab-case convention).
 
 | Before | After |
 |---|---|
