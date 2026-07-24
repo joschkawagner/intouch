@@ -34,7 +34,7 @@ struct PassportColophonPage: View {
         // microprint) is what fluoresces and carries the drama — the counts
         // stay deliberately calm and secondary (they never out-shout the
         // printing). See docs/PRD.md § Passport, "no vanity metrics".
-        PassportPage(security: .heavy) {
+        PassportPage(security: .heavy, seed: "colophon") {
             ZStack {
                 ForEach(rowRules, id: \.self) { y in
                     Rectangle()

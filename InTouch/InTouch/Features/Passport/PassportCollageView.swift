@@ -21,6 +21,8 @@ import SwiftUI
 struct PassportCollageView: View {
 
     let photoCount: Int
+    /// Stable identity for this page's printing geometry (the city's collage).
+    var seed: String = "collage"
 
     @Environment(\.passportRenderMode) private var mode
     private var isUV: Bool { mode.isUV }
@@ -29,7 +31,10 @@ struct PassportCollageView: View {
     private let emptyGlow: [Color] = [.stampCobalt, .stampViolet, .stampTeal]
 
     var body: some View {
-        PassportPage {
+        // The collage sits over the standard printing: the terrain threads
+        // the 6pt gutters and shows through the outline-only empty cells,
+        // so this page's ground is as alive as the rest of the book.
+        PassportPage(security: .standard, seed: seed) {
             ZStack {
                 let cells = CollageTemplate.cells(photoCount: photoCount)
                 let styled = Self.withEmptyIndices(cells)
@@ -74,12 +79,20 @@ struct PassportCollageView: View {
 /// A stand-in for a photo until the photo model exists. In daylight: a soft
 /// neutral field with a faint photo glyph. After dark: dark and non-reactive
 /// (photographs don't fluoresce) with only a faint teal edge.
+///
+/// The fill is translucent in BOTH modes — the security printing runs
+/// continuously beneath the whole page and shows through the slot, dimmed.
+/// One object: the printing is on the page, it doesn't stop where a photo
+/// begins. Real passports print security linework straight across the
+/// portrait (anti-substitution) — the Swiss UV reference shows contours
+/// crossing the photo — so when real photos land, a subdued overprint across
+/// them is the authentic continuation of this rule.
 private struct PassportPhotoSlot: View {
     let isUV: Bool
     var body: some View {
         if isUV {
             Rectangle()
-                .fill(Color.uvCell)
+                .fill(Color.uvCell.opacity(0.55))
                 .overlay(Rectangle().strokeBorder(Color.stampTeal.opacity(0.5), lineWidth: 1.5))
         } else {
             ZStack {

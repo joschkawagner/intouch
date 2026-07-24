@@ -45,18 +45,24 @@ extension Color {
     /// the kind that pool at the edges and read as *alive*, not tasteful. The shipping
     /// stamp ink (`ink`, #4E0000) is nearly black; these were the brighter alternative.
     ///
-    /// CURRENTLY UNUSED: stamps ship muted (person → ink, event → live, first city →
-    /// night). These are kept because the brighter register may return; harmless until then.
+    /// The register's home today is the passport's UV state: the security printing
+    /// and the per-page hero fields fluoresce in these inks after dark (daylight
+    /// stamps still ship muted — person → ink, event → live, first city → night).
     ///
-    /// STRICTLY for **stamps and marks** — the struck ink of a passport stamp. Never
-    /// use them for paper, body text, or chrome; the muted eight-token palette above
-    /// owns all of that and must stay muted (see docs/DESIGN.md § Palette). Chosen by
-    /// eye in the passport-stamp register; no source chips, so treat as tunable.
-    static let stampRed    = Color(hex: 0xC4271F)   // bright cinnabar — the classic stamp red
-    static let stampTeal   = Color(hex: 0x0E7C7D)
-    static let stampViolet = Color(hex: 0x6B2E9C)
-    static let stampForest = Color(hex: 0x1E6B39)
-    static let stampCobalt = Color(hex: 0x1E4FA0)
+    /// STRICTLY for **stamps, marks, and the UV fluorescence** — the struck ink of a
+    /// passport stamp. Never use them for paper, body text, or chrome; the muted
+    /// eight-token palette above owns all of that and must stay muted (see
+    /// docs/DESIGN.md § Palette). Chosen by eye in the passport-stamp register; no
+    /// source chips, so treat as tunable. Brightened for the UV pass: the original
+    /// print-dark hexes barely registered on `uvGround` — these sit in the
+    /// fluorescing register the reference photographs show, and today they render
+    /// only after dark, so daylight is untouched.
+    static let stampRed    = Color(hex: 0xE04A38)   // bright cinnabar — the classic stamp red
+    static let stampTeal   = Color(hex: 0x17A9A6)
+    static let stampViolet = Color(hex: 0x8B44C8)
+    static let stampForest = Color(hex: 0x2E9E55)
+    static let stampCobalt = Color(hex: 0x3568C9)
+    static let stampGold   = Color(hex: 0xD9AE31)   // ink-gold — registration marks, microprint
 }
 
 // MARK: - UV / after-dark inks

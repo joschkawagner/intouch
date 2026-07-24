@@ -42,13 +42,18 @@ struct PassportPage<Content: View>: View {
     /// (so its frame and microprint reach the page edges, under the padded
     /// fields). `nil` leaves the page plain.
     private let security: SecurityPrinting.Level?
+    /// Stable identity for the seeded printing geometry (contours, marks) —
+    /// each page prints its own terrain, the same one forever.
+    private let seed: String
     private let content: Content
 
     @Environment(\.passportRenderMode) private var mode
 
     init(security: SecurityPrinting.Level? = nil,
+         seed: String = "passport",
          @ViewBuilder content: () -> Content) {
         self.security = security
+        self.seed = seed
         self.content = content()
     }
 
@@ -59,7 +64,7 @@ struct PassportPage<Content: View>: View {
 
             ZStack {
                 if let security {
-                    SecurityPrinting(level: security)
+                    SecurityPrinting(level: security, seed: seed)
                 }
                 content
             }

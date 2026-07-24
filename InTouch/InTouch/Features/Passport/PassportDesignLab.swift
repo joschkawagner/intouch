@@ -59,13 +59,20 @@ struct PassportDesignLab: View {
                                              date: MockData.entries.first?.date)
                                 .frame(width: pageWidth, height: pageHeight)
                         }
-                        section("collage · 1 photo", width: pageWidth) {
-                            PassportCollageView(photoCount: 1)
-                                .frame(width: pageWidth, height: pageHeight)
-                        }
-                        section("collage · 6 photos", width: pageWidth) {
-                            PassportCollageView(photoCount: 6)
-                                .frame(width: pageWidth, height: pageHeight)
+                        // All six collage templates, each labelled with its
+                        // photo count and cell census; P/E chips mark photo
+                        // slots vs empty cells (gallery scaffolding only).
+                        ForEach(1...6, id: \.self) { count in
+                            let cells = CollageTemplate.cells(photoCount: count)
+                            let photos = cells.filter(\.isPhoto).count
+                            section("collage · \(count) photo\(count == 1 ? "" : "s") · \(cells.count) cells · \(photos)P + \(cells.count - photos)E",
+                                    width: pageWidth) {
+                                PassportCollageView(photoCount: count,
+                                                    seed: "lab/collage-\(count)")
+                                    .frame(width: pageWidth, height: pageHeight)
+                                    .overlay(cellMarkers(cells, pageWidth: pageWidth,
+                                                         pageHeight: pageHeight))
+                            }
                         }
                         section("colophon", width: pageWidth) {
                             PassportColophonPage(user: MockData.currentUser,
@@ -113,6 +120,26 @@ struct PassportDesignLab: View {
     /// Gallery chrome ink — legible on the resting surface in either mode.
     private var labelColor: Color {
         mode.isUV ? Color.paper.opacity(0.6) : Color.text
+    }
+
+    /// Debug chips over each collage cell: "P0"/"E2" = cell index in template
+    /// order (photos first), photo slot vs empty. Scaffolding, not design.
+    private func cellMarkers(_ cells: [CollageCell], pageWidth: CGFloat,
+                             pageHeight: CGFloat) -> some View {
+        let scale = pageWidth / PassportMetrics.referenceSize.width
+        return ZStack {
+            ForEach(Array(cells.enumerated()), id: \.offset) { index, cell in
+                Text("\(cell.isPhoto ? "P" : "E")\(index)")
+                    .font(Typography.timestamp)
+                    .padding(.horizontal, 4)
+                    .padding(.vertical, 2)
+                    .background(Color.night.opacity(0.85))
+                    .foregroundStyle(Color.paper)
+                    .position(x: cell.rect.midX * scale, y: cell.rect.midY * scale)
+            }
+        }
+        .frame(width: pageWidth, height: pageHeight)
+        .allowsHitTesting(false)
     }
 }
 

@@ -141,7 +141,8 @@ struct PassportBookView: View {
             let city = cities[index - 1]
             spread(
                 left: { PassportCityPage(city: city, date: latestDate(for: city)) },
-                right: { PassportCollageView(photoCount: PassportMockPhotos.count(for: city)) }
+                right: { PassportCollageView(photoCount: PassportMockPhotos.count(for: city),
+                                             seed: city.name + "/collage") }
             )
         } else {
             // Final leaf: the colophon | the back cover. The right page is the

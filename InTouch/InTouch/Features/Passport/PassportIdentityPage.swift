@@ -28,7 +28,7 @@ struct PassportIdentityPage: View {
     private var isUV: Bool { mode.isUV }
 
     var body: some View {
-        PassportPage(security: .standard) {
+        PassportPage(security: .standard, seed: "identity") {
             ZStack {
                 photoBlock
                     .frame(width: 90, height: 116)
@@ -119,15 +119,15 @@ struct PassportIdentityPage: View {
             Text(PassportHolder.mrz(name: user.displayName))
                 .font(Typography.passportCoord)
                 .tracking(1.5)
-                .foregroundStyle(isUV ? Color.stampTeal : Color.text.opacity(0.4))
-                .fluoresce(isUV ? Color.stampTeal : .clear)
+                .foregroundStyle(isUV ? Color.stampRed : Color.text.opacity(0.4))
+                .fluoresce(isUV ? Color.stampRed : .clear)
                 .lineLimit(1)
                 .padding(.leading, 14)
         }
         .frame(width: 232, height: 20)
         .overlay(alignment: .top) {
             Rectangle()
-                .fill(isUV ? Color.stampTeal.opacity(0.3) : Color.text.opacity(0.12))
+                .fill(isUV ? Color.stampRed.opacity(0.3) : Color.text.opacity(0.12))
                 .frame(height: 1)
         }
         .clipped()

@@ -24,7 +24,7 @@ struct PassportCityPage: View {
     private var isUV: Bool { mode.isUV }
 
     var body: some View {
-        PassportPage(security: .standard) {
+        PassportPage(security: .standard, seed: city.name) {
             ZStack {
                 Text(city.name)                             // a place name — never chrome()
                     .font(Typography.masthead)

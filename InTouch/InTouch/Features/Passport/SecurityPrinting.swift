@@ -3,20 +3,30 @@
 //  InTouch
 //
 //  The security-printing layer that sits *beneath* a passport page's identity
-//  content — the guilloché, wave field, microprint and intaglio frame that make
-//  the page read as a printed document rather than a card. Composed from the
-//  four primitives (GuillocheRosette, WaveField, MicroprintBand, IntaglioFrame)
-//  and laid out in the 232×330 reference space (see PassportPage), so it shares
-//  one coordinate system with the content drawn on top.
+//  content — the contour terrain, guilloché rosettes, microprint bands,
+//  scattered registration marks and the page keyline that make the page read
+//  as a printed document rather than a card. Composed from the parametric
+//  primitives (ContourField, GuillocheRosette, MicroprintBand,
+//  RegistrationMarks, IntaglioFrame) in the 232×330 reference space (see
+//  PassportPage), sharing one coordinate system with the content above.
 //
-//  Two levels, from the design: `.standard` for the identity and city pages
-//  (one rosette, one microprint band, a two-line frame) and `.heavy` for the
-//  colophon (a second rosette, a second band, a three-line frame — the strongest
-//  printing in the book).
+//  ONE OBJECT, TWO LIGHTING STATES. Every element exists identically in both
+//  modes; only the lighting differs. Daylight prints the whole layer in the
+//  one subtle `ink` at whisper opacities — clearly beneath the content
+//  hierarchy, the standing P2 rule. Under UV the same geometry fluoresces in
+//  the stamp register, hue-zoned like the reference: teal/forest terrain,
+//  gold microprint and marks, violet/cobalt rosette lace, a red machine
+//  keyline. Never fork the geometry between modes.
 //
-//  After dark the whole layer fluoresces: it switches from the near-black `ink`
-//  to `stampTeal`, brightens, and picks up a soft glow — the printing that read
-//  as quiet texture in daylight becomes the visible structure at night.
+//  THE CONTOURS CARRY THE PAGE. The terrain is the one loud element after
+//  dark — its index lines bloom hot in uneven seeded stretches (real UV ink
+//  pools and fades; flat uniform strokes read as vector art — see
+//  ContourField's bloom buckets). Everything else — rosettes, marks,
+//  microprint, the single hairline keyline — is subordinate texture pinned
+//  well beneath the terrain.
+//
+//  Two levels: `.standard` (identity, city, collage) and `.heavy` (the
+//  colophon — second rosette, extra bands, denser terrain).
 //
 
 import SwiftUI
@@ -26,6 +36,9 @@ struct SecurityPrinting: View {
     enum Level { case standard, heavy }
 
     var level: Level = .standard
+    /// Stable per-page identity for the seeded geometry (contours, marks).
+    /// The same seed prints the same page forever, in both modes.
+    var seed: String = "passport"
 
     @Environment(\.passportRenderMode) private var mode
 
@@ -35,113 +48,143 @@ struct SecurityPrinting: View {
     private var isHeavy: Bool { level == .heavy }
     private var isUV: Bool { mode.isUV }
 
-    /// The ink the whole layer is printed in — near-black in daylight, a
-    /// fluorescing teal after dark.
-    private var ink: Color { isUV ? .stampTeal : .ink }
+    /// Daylight prints every element in the one subtle ink; UV gives each its
+    /// zone hue and its own quiet (or blooming) intensity.
+    private func printedInk(uv uvHue: Color, uvOpacity: Double, day: Double) -> Color {
+        isUV ? uvHue.opacity(uvOpacity) : Color.ink.opacity(day)
+    }
 
     var body: some View {
         GeometryReader { geo in
             // Uniform scale from the 232×330 reference to the actual page frame
             // (≈1 in practice, since pages are laid out at the reference size).
             let s = min(geo.size.width / ref.width, geo.size.height / ref.height)
+            let levels = isHeavy ? 24 : 18
+            let bumps = isHeavy ? 18 : 14
 
             ZStack {
-                // Wave field — full bleed, faintest layer.
-                WaveField()
-                    .stroke(ink.opacity(waveOpacity), lineWidth: 0.6 * s)
+                // ── Terrain — the page's one loud element. Solid minors and a
+                // dotted interleave as the base; index lines carry the blaze,
+                // blooming unevenly through the seeded intensity buckets.
+                contourBand(.minor, hue: .stampTeal, uvBase: 0.42, day: 0.05,
+                            uvScales: [0.55, 1.0, 1.45],
+                            uvGlows: [nil, nil, (2, 0.35)],
+                            width: 0.55 * s, levels: levels, bumps: bumps)
+                contourBand(.dotted, hue: .stampTeal, uvBase: 0.42, day: 0.05,
+                            uvScales: [0.55, 1.0, 1.45],
+                            uvGlows: [nil, nil, (2, 0.35)],
+                            width: 0.55 * s, levels: levels, bumps: bumps)
+                contourBand(.index, hue: .stampForest, uvBase: 0.66, day: 0.08,
+                            uvScales: [0.55, 1.0, 1.42],
+                            uvGlows: [nil, (2, 0.4), (4, 0.7)],
+                            width: 0.7 * s, levels: levels, bumps: bumps)
 
-                // Primary rosette, bottom-right, cropped by the page edge.
-                rosette(fixedRadius: 78, rollingRadius: 13, penOffset: 36, s: s)
+                // ── Rosette lace — guilloché beneath the terrain, faint on
+                // purpose (haloed and bright it reads as cloud shapes that
+                // fight the contours). Heavy pages add a cobalt second.
+                GuillocheRosette(fixedRadius: 78, rollingRadius: 13, penOffset: 36)
+                    .stroke(printedInk(uv: .stampViolet, uvOpacity: 0.30, day: 0.06),
+                            lineWidth: 0.55 * s)
                     .frame(width: 254 * s, height: 254 * s)
                     .position(x: 190 * s, y: 270 * s)
 
-                // Heavy pages add a second, loopier rosette top-left.
                 if isHeavy {
-                    rosette(fixedRadius: 70, rollingRadius: 14, penOffset: 46, s: s)
+                    GuillocheRosette(fixedRadius: 70, rollingRadius: 14, penOffset: 46)
+                        .stroke(printedInk(uv: .stampCobalt, uvOpacity: 0.26, day: 0.05),
+                                lineWidth: 0.55 * s)
                         .frame(width: 230 * s, height: 230 * s)
                         .position(x: 40 * s, y: 55 * s)
                 }
 
-                // Microprint band up the left gutter (and the right on heavy pages).
-                MicroprintBand(color: ink.opacity(microprintOpacity))
+                // ── Microprint (gold): vertical gutter band(s) plus a
+                // horizontal row along the top edge; heavy pages mirror both.
+                microprint(repeatCount: 10)
                     .rotationEffect(.degrees(-90))
                     .position(x: 7 * s, y: ref.height / 2 * s)
+                microprint(repeatCount: 7)
+                    .position(x: ref.width / 2 * s, y: 5 * s)
 
                 if isHeavy {
-                    MicroprintBand(color: ink.opacity(microprintOpacity))
+                    microprint(repeatCount: 10)
                         .rotationEffect(.degrees(-90))
                         .position(x: 225 * s, y: ref.height / 2 * s)
+                    microprint(repeatCount: 7)
+                        .position(x: ref.width / 2 * s, y: 325 * s)
                 }
 
-                // Intaglio frame — the topmost, most defined layer.
-                IntaglioFrame(lines: frameLines, ink: ink)
-                    .modifier(UVGlow(active: isUV, ink: ink))
+                // ── Registration marks — sparse incidental specks, faintest
+                // layer; never a pattern.
+                RegistrationMarks(seed: seed, count: isHeavy ? 16 : 12)
+                    .stroke(printedInk(uv: .stampGold, uvOpacity: 0.30, day: 0.05),
+                            lineWidth: 0.55 * s)
+
+                // ── Page keyline — a single red hairline, the machine zone's
+                // quiet bracket (the old triple intaglio frame boxed the page
+                // in and shouted over the terrain).
+                IntaglioFrame(lines: [.init(inset: 8, opacity: 1.0)],
+                              ink: printedInk(uv: .stampRed, uvOpacity: 0.30, day: 0.06))
             }
             .frame(width: geo.size.width, height: geo.size.height)
         }
         .allowsHitTesting(false)
     }
 
-    private func rosette(fixedRadius: CGFloat, rollingRadius: CGFloat,
-                         penOffset: CGFloat, s: CGFloat) -> some View {
-        GuillocheRosette(fixedRadius: fixedRadius, rollingRadius: rollingRadius,
-                         penOffset: penOffset)
-            .stroke(ink.opacity(rosetteOpacity), lineWidth: 0.7 * s)
-            .modifier(UVGlow(active: isUV, ink: ink))
-    }
+    // MARK: - Pieces
 
-    // MARK: - Per-mode intensity
-
-    private var waveOpacity: Double {
-        isUV ? 0.13 : (isHeavy ? 0.08 : 0.07)
-    }
-
-    private var rosetteOpacity: Double {
-        isUV ? 0.16 : (isHeavy ? 0.09 : 0.06)
-    }
-
-    private var microprintOpacity: Double {
-        isUV ? 0.24 : (isHeavy ? 0.20 : 0.18)
-    }
-
-    private var frameLines: [IntaglioFrame.Line] {
+    /// One contour band. Daylight: a single instance in uniform subtle ink.
+    /// UV: one instance per bloom bucket — the same segments partitioned by
+    /// the seeded bloom field, each stroked at its own intensity and glow, so
+    /// fluorescence varies along the linework. The buckets' union is exactly
+    /// the daylight geometry.
+    @ViewBuilder
+    private func contourBand(_ band: ContourField.Band, hue: Color,
+                             uvBase: Double, day: Double,
+                             uvScales: [Double], uvGlows: [(CGFloat, Double)?],
+                             width: CGFloat, levels: Int, bumps: Int) -> some View {
         if isUV {
-            return isHeavy
-                ? [.init(inset: 8, opacity: 0.18),
-                   .init(inset: 11, opacity: 0.13),
-                   .init(inset: 14, opacity: 0.10)]
-                : [.init(inset: 8, opacity: 0.16),
-                   .init(inset: 11, opacity: 0.11)]
+            ForEach(0..<uvScales.count, id: \.self) { bucket in
+                ContourField(seed: seed, band: band, levels: levels,
+                             bumpCount: bumps, bloomBucket: bucket,
+                             bloomBuckets: uvScales.count)
+                    .stroke(hue.opacity(min(uvBase * uvScales[bucket], 1)),
+                            lineWidth: width)
+                    .modifier(Halo(color: uvGlows[bucket].map { hue.opacity($0.1) } ?? .clear,
+                                   radius: uvGlows[bucket]?.0 ?? 0))
+            }
+        } else {
+            ContourField(seed: seed, band: band, levels: levels, bumpCount: bumps)
+                .stroke(Color.ink.opacity(day), lineWidth: width)
         }
-        return isHeavy
-            ? [.init(inset: 8, opacity: 0.11),
-               .init(inset: 11, opacity: 0.09),
-               .init(inset: 14, opacity: 0.07)]
-            : [.init(inset: 8, opacity: 0.10),
-               .init(inset: 11, opacity: 0.07)]
+    }
+
+    private func microprint(repeatCount: Int) -> some View {
+        MicroprintBand(repeatCount: repeatCount,
+                       color: printedInk(uv: .stampGold, uvOpacity: 0.55,
+                                         day: isHeavy ? 0.20 : 0.18))
     }
 }
 
-/// A soft fluorescing halo, applied to the strokes that "glow" after dark.
-private struct UVGlow: ViewModifier {
-    var active: Bool
-    var ink: Color
+/// A soft fluorescing halo. `.clear` disables it, so call sites can pass a
+/// colour conditionally and read declaratively.
+private struct Halo: ViewModifier {
+    var color: Color
+    var radius: CGFloat
     func body(content: Content) -> some View {
-        if active {
-            content.shadow(color: ink.opacity(0.5), radius: 3)
-        } else {
+        if color == .clear {
             content
+        } else {
+            content.shadow(color: color, radius: radius)
         }
     }
 }
 
 #Preview {
     HStack(spacing: 20) {
-        PassportPage { SecurityPrinting(level: .standard) }
+        PassportPage(security: .standard, seed: "preview") { EmptyView() }
             .frame(width: 232, height: 330)
             .environment(\.passportRenderMode, .daylight)
 
-        PassportPage { SecurityPrinting(level: .heavy) }
+        PassportPage(security: .heavy, seed: "preview") { EmptyView() }
             .frame(width: 232, height: 330)
             .environment(\.passportRenderMode, .uv)
     }
