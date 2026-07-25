@@ -75,9 +75,9 @@ struct EmptyStateView: View {
 #Preview {
     EmptyStateView(
         title: "No groups yet",
-        message: "A group is a set of people you've already met in person. You can start one after your next handshake.",
+        message: "A group is a handful of people you've already met. Start one after your next handshake — everyone in it has to be someone you've stood next to.",
         ghostLabel: "Groups",
-        footnote: "NO SHORTCUTS IN"
+        footnote: "NO INVITE LINKS"
     )
     .paperBackground()
 }

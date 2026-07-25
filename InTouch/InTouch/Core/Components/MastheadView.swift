@@ -62,7 +62,7 @@ struct MastheadView: View {
 
 #Preview {
     VStack {
-        MastheadView(title: "Passport", detail: "6 stamps · 5 cities")
+        MastheadView(title: "Passport", detail: "\(MockData.cities.count) cities")
         Spacer()
     }
     .paperBackground()

@@ -8,6 +8,11 @@
 //  an @Observable wrapper around a static array would be ceremony. The model
 //  arrives in Phase 3 with the real feed service.
 //
+//  The masthead sits OUTSIDE the ScrollView, as it does on Groups and Events —
+//  inside the LazyVStack it scrolled away with the feed, taking the app's only
+//  entry point to Profile with it, on a lazily-recycled row that also owned the
+//  sheet.
+//
 
 import SwiftUI
 
@@ -16,17 +21,21 @@ struct FriendsFeedView: View {
     private let posts = MockData.posts
 
     var body: some View {
-        ScrollView {
-            LazyVStack(spacing: 0) {
-                MastheadView(title: "Friends", detail: "\(posts.count) posts · 12 connected")
+        VStack(spacing: 0) {
+            // A count of posts, never of people — see DECISIONS.md 2026-07-25.
+            MastheadView(title: "Friends", detail: "\(posts.count) posts")
 
-                ForEach(posts) { post in
-                    FeedCardView(post: post)
+            ScrollView {
+                LazyVStack(spacing: 0) {
+                    ForEach(posts) { post in
+                        FeedCardView(post: post)
+                    }
                 }
             }
+            .scrollIndicators(.hidden)
         }
-        .scrollIndicators(.hidden)
         .paperBackground()
+        .toolbar(.hidden, for: .navigationBar)
     }
 }
 

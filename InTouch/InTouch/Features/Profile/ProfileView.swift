@@ -80,11 +80,10 @@ struct ProfileView: View {
                 .tracking(1)
                 .foregroundStyle(Color.muted)
 
-            HStack(spacing: 28) {
-                stat(profile.friendCount, "friends")
-                stat(profile.cityCount, "cities")
-            }
-            .padding(.top, 10)
+            // Cities only. A count of people is a scoreboard; a count of places is
+            // the passport's own unit. See DECISIONS.md 2026-07-25.
+            stat(profile.cityCount, "cities")
+                .padding(.top, 10)
         }
         .padding(.horizontal, 20)
     }

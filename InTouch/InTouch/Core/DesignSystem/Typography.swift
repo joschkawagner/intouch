@@ -114,7 +114,7 @@ enum Typography {
     /// only risk clipping the label in the fixed-height bar for no real gain.
     static let tabLabelUIFont = displayUIFont(11, .semiBold)
 
-    /// The big number in a profile stat (friend / stamp count).
+    /// The big number in a profile stat (cities — never a count of people).
     static var statNumber: Font { display(26, .bold, relativeTo: .title) }
 
     // MARK: - Reading (Jost)

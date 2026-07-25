@@ -21,6 +21,7 @@ struct EventsView: View {
             )
         }
         .paperBackground()
+        .toolbar(.hidden, for: .navigationBar)
     }
 }
 

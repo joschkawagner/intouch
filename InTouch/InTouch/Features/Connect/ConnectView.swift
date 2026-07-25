@@ -62,7 +62,14 @@ struct ConnectView: View {
         }
     }
 
+    /// Dev-only scaffolding. The whole block is fenced, not just its label: shipping
+    /// the two "simulate" buttons without the line that explains why they exist would
+    /// read worse than shipping neither. Release shows the viewfinder alone, which is
+    /// honest — there is no scanning yet. Replaced wholesale when the real scan states
+    /// land (a ScanSource protocol with mock + AVFoundation drivers).
+    @ViewBuilder
     private var buttons: some View {
+        #if DEBUG
         VStack(spacing: 12) {
             Text("NO CAMERA YET")
                 .font(Typography.stampMark)
@@ -76,6 +83,7 @@ struct ConnectView: View {
                 result = .event(MockData.scannedEvent)
             }
         }
+        #endif
     }
 
     private func simulateButton(_ title: String, action: @escaping () -> Void) -> some View {

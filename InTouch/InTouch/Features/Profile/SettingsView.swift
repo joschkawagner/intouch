@@ -86,7 +86,6 @@ private struct SettingsRow: View {
         }
         .padding(.vertical, 15)
         .padding(.horizontal, 20)
-        .contentShape(Rectangle())
     }
 }
 

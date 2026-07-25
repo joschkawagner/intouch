@@ -2,9 +2,12 @@
 //  UserProfile.swift
 //  InTouch
 //
-//  A person, as shown on a profile. The collage is the hero; the rest is the
-//  passport-form line beneath it — handle, and the two counts that are the whole
-//  status mechanic (see docs/PRD.md § 1).
+//  A person, as shown on a profile.
+//
+//  There is deliberately NO friend count here. A number attached to a human being
+//  is comparable between people, which makes it a scoreboard — the mechanic
+//  docs/PRD.md § 4.1 rejects. Counts belong to places and occasions, so `cityCount`
+//  stays and nothing counts people. See DECISIONS.md 2026-07-25.
 //
 
 import Foundation
@@ -13,7 +16,6 @@ struct UserProfile: Identifiable, Hashable {
     let id: String
     let displayName: String
     let handle: String
-    let friendCount: Int
     let cityCount: Int
     let collage: Collage
 

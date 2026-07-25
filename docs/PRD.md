@@ -90,7 +90,14 @@ rewrite.
 Passport**. Connect is an ordinary tab (selecting it opens the dark handshake screen and stays
 selected — a scan leads somewhere, so staying put is right), not a special centre button.
 Passport is one tab with three lenses — **Stamps · Map · Calendar**. A profile avatar sits
-top-right of every main masthead and opens Profile → Settings.
+top-right of the **list** screens' mastheads (Friends, Groups, Events) and opens Profile →
+Settings. Connect and Passport carry no masthead by design — Connect is a full-bleed dark
+ritual and Passport is a floating book that clears the system chrome when opened (see
+DECISIONS.md 2026-07-25).
+
+**No number is ever attached to a person.** A count of people is comparable between people and
+therefore a scoreboard — the mechanic § 4.1 rejects. Counts belong to places and occasions: a
+group's members, an event's attendees, the cities in a passport. Never a friend count, anywhere.
 
 **Profiles are collages.** A profile is not a contact card: it is a collage the person
 assembles — layered photos, stickers, torn text, tape (see DESIGN.md § The collage). Events and

@@ -21,6 +21,7 @@ struct GroupsView: View {
             )
         }
         .paperBackground()
+        .toolbar(.hidden, for: .navigationBar)
     }
 }
 
