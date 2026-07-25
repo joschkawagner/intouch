@@ -49,7 +49,7 @@ struct PassportCalendarLens: View {
 
             Spacer(minLength: 12)
 
-            Text(Self.dateString(entry.date))
+            Text(DocumentDate.dayMonthYear(entry.date))
                 .font(Typography.timestamp)             // Courier — the date as artifact
                 .tracking(1)
                 .foregroundStyle(Color.muted)
@@ -59,18 +59,6 @@ struct PassportCalendarLens: View {
         .contentShape(Rectangle())
     }
 
-    /// e.g. "14 MAR 2026". Fixed en_US_POSIX so the month abbreviation never
-    /// localises out from under the mechanical look.
-    private static let formatter: DateFormatter = {
-        let f = DateFormatter()
-        f.locale = Locale(identifier: "en_US_POSIX")
-        f.dateFormat = "dd MMM yyyy"
-        return f
-    }()
-
-    private static func dateString(_ date: Date) -> String {
-        formatter.string(from: date).uppercased()
-    }
 }
 
 #Preview {

@@ -53,7 +53,7 @@ struct PassportIdentityPage: View {
 
                 // Since + holder number, a row beneath the photo.
                 label("since").referenceOrigin(x: 14, y: 164)
-                stamp(Self.joinedString(user.joinedDate)).referenceOrigin(x: 14, y: 180)
+                stamp(DocumentDate.monthYear(user.joinedDate)).referenceOrigin(x: 14, y: 180)
 
                 label("holder no.").referenceOrigin(x: 118, y: 164)
                 stamp(PassportHolder.formattedNumber).referenceOrigin(x: 118, y: 180)
@@ -137,17 +137,6 @@ struct PassportIdentityPage: View {
         .clipped()
     }
 
-    /// e.g. "SEP 2025" — Courier machine type, the value under the "since" label.
-    private static let formatter: DateFormatter = {
-        let f = DateFormatter()
-        f.locale = Locale(identifier: "en_US_POSIX")
-        f.dateFormat = "MMM yyyy"
-        return f
-    }()
-
-    private static func joinedString(_ date: Date) -> String {
-        formatter.string(from: date).uppercased()
-    }
 }
 
 #Preview {

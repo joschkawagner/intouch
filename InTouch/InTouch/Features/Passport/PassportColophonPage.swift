@@ -44,7 +44,7 @@ struct PassportColophonPage: View {
                 }
 
                 field(label: "member since", labelY: 68) {
-                    stamp(Self.monthYear(user.joinedDate))
+                    stamp(DocumentDate.monthYear(user.joinedDate))
                 }
                 field(label: "cities", labelY: 114) {
                     stamp("\(cityCount)")
@@ -89,16 +89,6 @@ struct PassportColophonPage: View {
             .uvFieldLit(isUV)
     }
 
-    private static let formatter: DateFormatter = {
-        let f = DateFormatter()
-        f.locale = Locale(identifier: "en_US_POSIX")
-        f.dateFormat = "MMM yyyy"
-        return f
-    }()
-
-    private static func monthYear(_ date: Date) -> String {
-        formatter.string(from: date).uppercased()
-    }
 }
 
 #Preview {

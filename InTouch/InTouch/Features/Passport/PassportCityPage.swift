@@ -40,7 +40,7 @@ struct PassportCityPage: View {
                     .referenceOrigin(x: 14, y: 160)
 
                 if let date {
-                    Text(Self.dateString(date))
+                    Text(DocumentDate.dayMonthYear(date))
                         .font(Typography.timestamp)         // Courier — the date as artifact
                         .tracking(Typography.stampTracking)
                         .foregroundStyle(isUV ? Color.uvFieldValue : Color.text)
@@ -61,18 +61,6 @@ struct PassportCityPage: View {
                     .referenceOrigin(x: 14, y: 246)
             }
         }
-    }
-
-    /// e.g. "14 MAR 2026" — same format as the calendar lens.
-    private static let formatter: DateFormatter = {
-        let f = DateFormatter()
-        f.locale = Locale(identifier: "en_US_POSIX")
-        f.dateFormat = "dd MMM yyyy"
-        return f
-    }()
-
-    private static func dateString(_ date: Date) -> String {
-        formatter.string(from: date).uppercased()
     }
 
     /// e.g. "47.3769°N · 8.5417°E".
