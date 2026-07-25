@@ -206,21 +206,43 @@ struct PassportBookView: View {
 
     private var pagingControls: some View {
         HStack(spacing: 0) {
-            edgeTap(systemImage: "chevron.left", enabled: spreadIndex > 0) {
+            edgeTap(systemImage: "chevron.left",
+                    label: "Previous page",
+                    enabled: spreadIndex > 0) {
                 if spreadIndex > 0 { spreadIndex -= 1 }
             }
             Spacer()
-            edgeTap(systemImage: "chevron.right", enabled: spreadIndex < spreadCount - 1) {
+            edgeTap(systemImage: "chevron.right",
+                    label: "Next page",
+                    enabled: spreadIndex < spreadCount - 1) {
                 if spreadIndex < spreadCount - 1 { spreadIndex += 1 }
             }
         }
     }
 
-    private func edgeTap(systemImage: String, enabled: Bool, action: @escaping () -> Void) -> some View {
+    private func edgeTap(systemImage: String,
+                         label: String,
+                         enabled: Bool,
+                         action: @escaping () -> Void) -> some View {
         // Dark-red ink is invisible on the night ground — after dark the
         // chevrons render in lit paper, a step above the legibility floor
         // because the right chevron sits over the map page's grey tiles
         // (the lightest UV surface in the book).
+        //
+        // Without the accessibility block below these are bare Images
+        // carrying a tap gesture: VoiceOver announces "chevron.left", Switch
+        // Control and Full Keyboard Access can't reach them at all, and (how
+        // this surfaced) no UI automation can page the book, because every
+        // tap tool resolves an element from the accessibility tree and there
+        // was nothing there to resolve. Untraversable UI is untestable UI.
+        //
+        // NO `.accessibilityElement()` here, deliberately. An SF Symbol Image
+        // is already an accessibility element, so labelling it in place is
+        // enough — whereas `.accessibilityElement()` MINTS a new one, which
+        // sends SwiftUI down a different compositing path and shifts
+        // sub-pixel antialiasing along this edge. Invisible to the eye,
+        // caught by a checksum against the pre-change build. Annotate the
+        // element that exists; don't create one.
         Image(systemName: systemImage)
             .font(Typography.body)
             .foregroundStyle(
@@ -232,6 +254,10 @@ struct PassportBookView: View {
             .contentShape(Rectangle())
             .onTapGesture { if enabled { action() } }
             .allowsHitTesting(enabled)
+            .accessibilityLabel(label)
+            .accessibilityValue("Spread \(spreadIndex + 1) of \(spreadCount)")
+            .accessibilityAddTraits(.isButton)
+            .accessibilityAction { if enabled { action() } }
     }
 
     // MARK: - Geometry
