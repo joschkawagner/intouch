@@ -38,6 +38,30 @@ struct IDCardPrinting: View {
 
     private var isUV: Bool { mode.isUV }
 
+    // MARK: - Terrain density (judged in the lab, not carried from the page)
+    //
+    // The first pass reused the page's numbers unchanged (18 levels, 14 bumps)
+    // and dropped gridStep to 4 to "control cost". Seen on screen it read far
+    // too sparse in both modes — big lazy loops where the book has dense
+    // topography — because two different things had been conflated:
+    //
+    //   gridStep  — line RESOLUTION (and most of the cost)
+    //   bumpCount — how much TERRAIN there is (feature density)
+    //
+    // The card is 539×340 = 183,260pt² against the page's 232×330 = 76,560pt²,
+    // i.e. 2.39× the area. Keeping the page's bump count spreads the same
+    // features 2.4× thinner; dropping the resolution on top made it coarser
+    // still. So: bumps scale WITH AREA, and gridStep returns to the
+    // primitive's default so the line quality matches the book's.
+    //
+    // Cost, actually computed: page ≈ 8,470 cells/band at step 3; card ≈ 20,340
+    // (2.4×). Affordable here in a way it would not be in the book — the card
+    // is ONE object on ONE screen, where PassportBookView eagerly builds nine
+    // spreads at once.
+    private static let gridStep: CGFloat = 3
+    private static let levels = 20
+    private static let bumps = 32
+
     var body: some View {
         GeometryReader { geo in
             // Uniform scale from the 539×340 reference to the actual frame
@@ -45,11 +69,10 @@ struct IDCardPrinting: View {
             let s = min(geo.size.width / ref.width, geo.size.height / ref.height)
 
             ZStack {
-                // ── Terrain — the card's one loud element after dark, as on the
-                // page. gridStep 4 rather than the primitive's default 3: a
-                // 539×340 rect at step 3 carries ~2.4× the page's cell count,
-                // and this runs behind a card that is on screen the whole time
-                // the profile is open.
+                // ── Terrain — the card's one loud element after dark, as on
+                // the page. Density JUDGED in the lab (see the band function):
+                // the first pass carried the page's numbers unchanged and read
+                // far too sparse, because the card is 2.4× the page's area.
                 contourBand(.minor, hue: .stampTeal, uvBase: 0.42, day: 0.05,
                             uvScales: [0.55, 1.0, 1.45],
                             uvGlows: [nil, nil, (2, 0.35)],
@@ -127,8 +150,8 @@ struct IDCardPrinting: View {
                              width: CGFloat) -> some View {
         if isUV {
             ForEach(0..<uvScales.count, id: \.self) { bucket in
-                ContourField(seed: seed, band: band, levels: 18,
-                             bumpCount: 14, gridStep: 4,
+                ContourField(seed: seed, band: band, levels: Self.levels,
+                             bumpCount: Self.bumps, gridStep: Self.gridStep,
                              bloomBucket: bucket, bloomBuckets: uvScales.count)
                     .stroke(hue.opacity(min(uvBase * uvScales[bucket], 1)),
                             lineWidth: width)
@@ -136,8 +159,8 @@ struct IDCardPrinting: View {
                                    radius: uvGlows[bucket]?.0 ?? 0))
             }
         } else {
-            ContourField(seed: seed, band: band, levels: 18,
-                         bumpCount: 14, gridStep: 4)
+            ContourField(seed: seed, band: band, levels: Self.levels,
+                         bumpCount: Self.bumps, gridStep: Self.gridStep)
                 .stroke(Color.ink.opacity(day), lineWidth: width)
         }
     }
