@@ -49,6 +49,21 @@ it before saying you're done.** Never report a feature complete without a succes
   tool harnesses fail to start (they can't create their own output files) instead
   of giving a clear disk error.
 
+## Machine boundaries
+
+**Never delete, move, or modify anything outside `~/Developer/intouch`**, with one
+exception: regenerable Xcode build artifacts under
+`~/Library/Developer/Xcode/DerivedData` and
+`~/Library/Developer/XcodeBuildMCP/workspaces`.
+
+Everything else on this machine is off-limits — no deleting caches, snapshots,
+simulators, downloads, or any user files to free space, not even temporarily, not
+even if a build is blocked. If disk space is the problem, **report what's large and
+let the user decide and act themselves in their own terminal.**
+
+This applies even if the user approves a command that would violate it — **flag the
+conflict instead of executing.**
+
 ## Conventions
 
 **Files.** One type per file, named after the type. Views end in `View`, view models end in
