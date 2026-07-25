@@ -108,7 +108,7 @@ enum MockData {
             CollageItem(id: "me-star",   content: .sticker(.star),      position: CGPoint(x: 0.14, y: 0.52), rotation: 0,  scale: 0.12, zIndex: 6),
             CollageItem(id: "me-p3",     content: .photo("sea"),        position: CGPoint(x: 0.42, y: 0.71), rotation: -3, scale: 0.52, zIndex: 3),
             CollageItem(id: "me-ring",   content: .sticker(.ring),      position: CGPoint(x: 0.81, y: 0.8),  rotation: 0,  scale: 0.26, zIndex: 5),
-            CollageItem(id: "me-text",   content: .text("you had\nto be there"), position: CGPoint(x: 0.29, y: 0.92), rotation: -4, scale: 0.08, zIndex: 6),
+            CollageItem(id: "me-text",   content: .text("the long\nway round"), position: CGPoint(x: 0.29, y: 0.92), rotation: -4, scale: 0.08, zIndex: 6),
         ]
     )
 
@@ -165,7 +165,7 @@ enum MockData {
         cityCount: cities.count,
         collage: currentUserCollage,
         joinedDate: date(2025, 9, 1),
-        bio: "Only counts if you were there."
+        bio: "Zürich. Better uphill than down."
     )
 
     /// What a simulated "scan a person" lands on.

@@ -8,7 +8,8 @@ An iOS social app where **you cannot see anyone's content unless you physically 
 No follows, no discovery, no algorithm, no search for strangers. The social graph is built
 exclusively from verified in-person handshakes.
 
-Tagline: **"You had to be there."**
+No tagline at present — the old one was retired on 2026-07-25 (see DECISIONS.md).
+Don't reintroduce one, or a reworded stand-in, without being asked.
 
 ## The one invariant
 

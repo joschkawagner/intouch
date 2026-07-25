@@ -10,7 +10,9 @@ Status: v0.1, pre-build. Owner: (you). Last updated: 23 July 2026.
 You cannot follow, request, search for, or be recommended a stranger. The only way in is a
 handshake that both people physically attended.
 
-**Tagline.** "You had to be there."
+**Tagline.** None at present — the previous one was retired on 2026-07-25 (see
+DECISIONS.md). A new one may be written later; until then the product does not carry
+a slogan, and reworded stand-ins don't count as "no tagline".
 
 **The status mechanic.** Most apps sell exclusivity you can buy (Amex) or virtue you can
 perform (digital-detox apps). InTouch's exclusivity is *earned by presence*. A profile
@@ -76,8 +78,8 @@ The heart of the product. Must feel like a ritual, not a form.
 Physical tags, not phone-to-phone. Apple restricts iPhone NFC tag emulation to Secure
 Element use cases (payments, keys, transit, badges, tickets) behind a paid entitlement, and
 social contact exchange doesn't qualify. So: users carry a chip — card, keychain, ring —
-which is on-brand for "you had to be there." Event chips at venues are unrestricted and
-work today via CoreNFC.
+which suits a graph built from physical meetings. Event chips at venues are unrestricted
+and work today via CoreNFC.
 
 Implement the handshake behind a `ConnectionMethod` protocol so QR → NFC is a swap, not a
 rewrite.
@@ -268,6 +270,14 @@ P3 first). Share export follows. See § 4.4.
   (*In Touch Weekly* is an existing US magazine mark in a different class), App Store name
   availability, domain. Generic phrase = weak search discoverability; consider stylising
   as `inTouch` or `IN / TOUCH`.
-- Should friend count be public, or only visible to friends?
+- ~~Should friend count be public, or only visible to friends?~~ **Settled 2026-07-25:**
+  there is no friend count, anywhere, at any visibility — no number is ever attached to a
+  person (see § 4 and DECISIONS.md).
+- **The recap card's "74 tapped in" (§ 4.3).** Legitimate under the people-count rule —
+  it is the *event's* count, not a person's — but borderline for two reasons the rule
+  doesn't capture: it is the only number strangers see (the card is shareable), and it
+  counts people rather than places. Worth asking whether the recap works better without
+  it: photos, place and date may carry it fine, and "212 photos" already conveys scale
+  without counting anyone. Decide when Events is built.
 - Who can create events — anyone, or invite-only for v1?
 - Group size cap?

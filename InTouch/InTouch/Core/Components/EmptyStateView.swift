@@ -23,8 +23,11 @@ struct EmptyStateView: View {
     /// The word set inside the ghost stamp.
     let ghostLabel: String
 
-    /// Small letterspaced line at the bottom, in the product's voice.
-    let footnote: String
+    /// Small letterspaced line at the bottom, in the product's voice. Optional:
+    /// a screen only earns one if it has something factual to say about how the
+    /// thing works. It is not a slot to be filled — most screens shouldn't
+    /// explain themselves at all.
+    var footnote: String? = nil
 
     var body: some View {
         VStack(spacing: 22) {
@@ -43,11 +46,13 @@ struct EmptyStateView: View {
                     .frame(maxWidth: 260)
             }
 
-            Text(footnote)
-                .font(Typography.label)
-                .tracking(Typography.stampTracking)
-                .foregroundStyle(Color.muted)
-                .padding(.top, 4)
+            if let footnote {
+                Text(footnote)
+                    .font(Typography.label)
+                    .tracking(Typography.stampTracking)
+                    .foregroundStyle(Color.muted)
+                    .padding(.top, 4)
+            }
         }
         .padding(.horizontal, 32)
         .frame(maxWidth: .infinity, maxHeight: .infinity)

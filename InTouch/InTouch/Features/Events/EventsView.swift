@@ -15,9 +15,8 @@ struct EventsView: View {
 
             EmptyStateView(
                 title: "Nothing on tonight",
-                message: "An event shows up here the moment you tap in at the door. There's no way to join one from your sofa, and that's the point.",
-                ghostLabel: "Events",
-                footnote: "YOU HAD TO BE THERE"
+                message: "An event shows up here the moment you tap in at the door.",
+                ghostLabel: "Events"
             )
         }
         .paperBackground()
