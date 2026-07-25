@@ -1,0 +1,60 @@
+//
+//  IDCardMachineStrip.swift
+//  InTouch
+//
+//  The card's machine-readable strip.
+//
+//  DIFFERENT PLACEMENT FROM THE PASSPORT, deliberately. The identity page runs
+//  a full-width MRZ along the bottom edge of the leaf — a book's machine zone.
+//  The card's strip is short and sits INSIDE the portrait plate, reading as
+//  engraved into the portrait window rather than banded across the base. Same
+//  vocabulary, different object.
+//
+//  The string is clipped rather than wrapped or shrunk: a machine band runs off
+//  its own edge, and `PassportHolder.mrz(name:)` pads up to 44 characters but
+//  never truncates, so a long name simply runs past the clip. That is correct
+//  behaviour for the artifact, not an overflow bug.
+//
+//  UV: the strip belongs to the machine/printing layer, NOT the field system,
+//  so it fluoresces independently in stampRed while every field stays calm —
+//  the same exemption the book's MRZ has (see the field-glow rule in
+//  Palette.swift).
+//
+//  ⚠️ NOT YET VERIFIED — nothing renders this. Everything about the ID card
+//  except its terrain density is unverified until it is wired into ProfileView.
+//
+
+import SwiftUI
+
+struct IDCardMachineStrip: View {
+
+    let name: String
+    /// Strip width — the portrait plate's width at the card reference.
+    var width: CGFloat = 180
+    var height: CGFloat = 24
+
+    @Environment(\.passportRenderMode) private var mode
+    private var isUV: Bool { mode.isUV }
+
+    var body: some View {
+        ZStack(alignment: .leading) {
+            Rectangle()
+                .fill(isUV ? Color.paper.opacity(0.03) : Color.text.opacity(0.04))
+
+            Text(PassportHolder.mrz(name: name))
+                .font(Typography.passportCoord)
+                .tracking(Typography.idCardMrzTracking)
+                .foregroundStyle(isUV ? Color.stampRed : Color.text.opacity(0.4))
+                .fluoresce(isUV ? Color.stampRed : .clear)
+                .lineLimit(1)
+                .padding(.leading, 14)
+        }
+        .frame(width: width, height: height)
+        .overlay(alignment: .top) {
+            Rectangle()
+                .fill(isUV ? Color.stampRed.opacity(0.3) : Color.text.opacity(0.12))
+                .frame(height: 1)
+        }
+        .clipped()
+    }
+}

@@ -225,6 +225,12 @@ enum Typography {
     /// The bio / remarks line — the one value allowed to wrap.
     static var idCardRemarks: Font { Font(courier(12, bold: false)) }
 
+    /// Letterspacing for the card's machine-readable strip. A token rather than
+    /// a literal at the call site: the passport's MRZ hardcodes `.tracking(1.5)`
+    /// and is logged as a design-system violation to fix — no reason to add a
+    /// second instance of the same mistake.
+    static let idCardMrzTracking: CGFloat = 1.5
+
     /// Holder initials struck into the portrait plate.
     static var idCardInitials: Font { display(72, .bold) }
     /// The ghosted initials repeated into the security tint (the reference's
