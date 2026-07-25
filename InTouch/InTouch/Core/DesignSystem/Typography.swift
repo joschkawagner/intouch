@@ -189,6 +189,48 @@ enum Typography {
     /// The vertical microprint band running up the page gutter ("INTOUCH · …").
     static var passportMicroprint: Font { Font(courier(4, bold: false)) }
 
+    // MARK: - ID card (fixed sizes — baked into the scaled card)
+
+    // The ID card is authored on its own fixed 539×340 reference (ID-1, 85.6×54mm
+    // — see IDCardMetrics) and scaled to fit, exactly as the passport page is on
+    // its ID-3 232×330. Same rule, different geometry: no Dynamic Type, because
+    // the type is baked into a fixed-size graphic and scaling it independently
+    // would burst the layout.
+    //
+    // THE REGISTER IS INVERTED FROM THE PASSPORT PAGE, deliberately. On a page,
+    // labels and values sit at nearly the same size and the name is set in Jost.
+    // On a card every VALUE is Courier and every LABEL is Jost, with the value
+    // roughly twice the label — a page is printed and filled in; a card is
+    // personalised by a machine. That inversion is the single strongest reason
+    // the card reads as a different object rather than a page turned sideways.
+
+    /// The card's own masthead — "INTOUCH · IDENTITY CARD", widest tracking in the app.
+    static var idCardTitle: Font { display(15, .semiBold) }
+    /// Letterspacing for `idCardTitle`. Wider than `stampTracking`: a document
+    /// naming itself across its top edge, not a struck mark.
+    static let idCardTitleTracking: CGFloat = 4.5
+
+    /// A struck field label on the card ("NAME", "CITIES"). Small and Jost —
+    /// half the size of the value it sits above.
+    static var idCardLabel: Font { display(9.5, .semiBold) }
+    /// Letterspacing for `idCardLabel`.
+    static let idCardLabelTracking: CGFloat = 1.2
+
+    /// The holder's name — the card's one fluorescing hero.
+    static var idCardName: Font { Font(courier(26, bold: true)) }
+    /// The document number in the header band.
+    static var idCardSerial: Font { Font(courier(15, bold: true)) }
+    /// An ordinary machine-set field value (handle, member since, cities).
+    static var idCardValue: Font { Font(courier(17, bold: false)) }
+    /// The bio / remarks line — the one value allowed to wrap.
+    static var idCardRemarks: Font { Font(courier(12, bold: false)) }
+
+    /// Holder initials struck into the portrait plate.
+    static var idCardInitials: Font { display(72, .bold) }
+    /// The ghosted initials repeated into the security tint (the reference's
+    /// second, watermarked portrait).
+    static var idCardGhost: Font { display(190, .bold) }
+
     // MARK: - Collage content (a hand, not chrome)
 
     /// Handwritten-style face for collage `.text` scraps. This is *content*, not
