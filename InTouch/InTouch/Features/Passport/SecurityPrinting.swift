@@ -49,9 +49,11 @@ struct SecurityPrinting: View {
     private var isUV: Bool { mode.isUV }
 
     /// Daylight prints every element in the one subtle ink; UV gives each its
-    /// zone hue and its own quiet (or blooming) intensity.
+    /// zone hue and its own quiet (or blooming) intensity. The policy itself
+    /// lives on `PassportRenderMode` (Core/SecurityPrinting/PrintedInk.swift)
+    /// so this composition and the ID card's cannot drift apart.
     private func printedInk(uv uvHue: Color, uvOpacity: Double, day: Double) -> Color {
-        isUV ? uvHue.opacity(uvOpacity) : Color.ink.opacity(day)
+        mode.printedInk(uv: uvHue, uvOpacity: uvOpacity, day: day)
     }
 
     var body: some View {
@@ -164,19 +166,9 @@ struct SecurityPrinting: View {
     }
 }
 
-/// A soft fluorescing halo. `.clear` disables it, so call sites can pass a
-/// colour conditionally and read declaratively.
-private struct Halo: ViewModifier {
-    var color: Color
-    var radius: CGFloat
-    func body(content: Content) -> some View {
-        if color == .clear {
-            content
-        } else {
-            content.shadow(color: color, radius: radius)
-        }
-    }
-}
+// `Halo` lived here until the ID card needed the same conditional glow; it is
+// now Core/SecurityPrinting/PrintedInk.swift, unchanged in form so the
+// `.modifier(Halo(...))` call site above renders through the identical wrapper.
 
 #Preview {
     HStack(spacing: 20) {
