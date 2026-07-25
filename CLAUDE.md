@@ -52,10 +52,15 @@ it before saying you're done.** Never report a feature complete without a succes
 
 ## Machine boundaries
 
-**Never delete, move, or modify anything outside `~/Developer/intouch`**, with one
-exception: regenerable Xcode build artifacts under
-`~/Library/Developer/Xcode/DerivedData` and
-`~/Library/Developer/XcodeBuildMCP/workspaces`.
+**Never delete, move, or modify anything outside `~/Developer/intouch`**, with two
+exceptions:
+
+1. **Regenerable Xcode build artifacts** under `~/Library/Developer/Xcode/DerivedData`
+   and `~/Library/Developer/XcodeBuildMCP/workspaces`.
+2. **Your own working files** — read and write freely in `~/.claude/plans/`,
+   `~/.claude/projects/…/memory/`, and the session scratchpad. That is your
+   bookkeeping, not the user's data. This does **not** extend to deleting anything
+   in `~/.claude/` that isn't yours.
 
 Everything else on this machine is off-limits — no deleting caches, snapshots,
 simulators, downloads, or any user files to free space, not even temporarily, not
