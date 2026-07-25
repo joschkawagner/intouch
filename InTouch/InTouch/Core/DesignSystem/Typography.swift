@@ -233,9 +233,11 @@ enum Typography {
 
     /// Holder initials struck into the portrait plate.
     static var idCardInitials: Font { display(72, .bold) }
-    /// The ghosted initials repeated into the security tint (the reference's
-    /// second, watermarked portrait).
-    static var idCardGhost: Font { display(190, .bold) }
+    /// Initials inside the ghost portrait — the small second impression beside
+    /// the plate. Sized against the PLATE's initials (72 in a 180-wide plate),
+    /// scaled to the ghost's 44-wide block. Was 190 when this was mistakenly a
+    /// card-spanning watermark; a ghost is adjacent and comparable, not vast.
+    static var idCardGhost: Font { display(18, .bold) }
 
     // MARK: - Collage content (a hand, not chrome)
 

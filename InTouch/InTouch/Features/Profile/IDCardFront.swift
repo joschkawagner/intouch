@@ -55,12 +55,14 @@ struct IDCardFront: View {
         IDCardFace(seed: "id-card/\(user.id)") {
             ZStack(alignment: .topLeading) {
 
-                // ── Ghost initials: printed into the tint, beneath the fields
-                // and above the terrain. UNRESOLVED (2): placement and weight —
-                // whether this reads as a watermark or a smudge is a seeing
-                // question, and these coordinates are the design's guess.
+                // ── Ghost portrait: a second, smaller impression BESIDE the
+                // plate, in the band between the header rule (y=48) and the
+                // name label (y=128). Adjacency is its security function — it
+                // is compared against the primary by being seen next to it.
+                // It clears the field block entirely, which is what the
+                // card-spanning first version did not.
                 IDCardGhostInitials(initials: user.initials)
-                    .referenceOrigin(x: 232, y: 34)
+                    .referenceOrigin(x: 200, y: 54)
 
                 IDCardOVDPatch()
                     .referenceOrigin(x: 452, y: 56)

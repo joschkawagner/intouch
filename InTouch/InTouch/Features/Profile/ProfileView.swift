@@ -2,16 +2,36 @@
 //  ProfileView.swift
 //  InTouch
 //
-//  A profile is the person's collage, framed. The collage is loud; the chrome
-//  around it — name, handle, the two counts — is quiet Jost and ink, the same
-//  loud-content-inside-quiet-order rule DESIGN.md applies to photos.
+//  Your profile IS your ID card. Not a collage, not a passport.
 //
-//  Reachable two ways: the masthead avatar (your own, `isCurrentUser`) and a
-//  simulated scan of someone else. On your own profile a (non-functional) edit
-//  button and a gear to Settings appear; on someone else's they don't.
+//  THE REAL-WORLD MAPPING, which is the whole point: an ID card is identity
+//  only — who you are, since when, under what number. A passport is the travel
+//  record: the pages, the cities, the stamps. So your own profile shows your
+//  ID, and the Passport tab holds your book. A connected person's profile shows
+//  THEIR passport — you receive their record, not their papers — and there is
+//  deliberately no ID for other people and no route between the two. Keep it
+//  simple until there's a reason not to.
 //
-//  Presented as a sheet wrapped in a NavigationStack — this is where real
-//  navigation returns (the gear *pushes* Settings), as docs/DECISIONS.md foresaw.
+//  This supersedes PRD §4.5's "your profile IS your passport booklet" and the
+//  hand-assembled-collage profile that stood here before. The collage survives
+//  where it still belongs: scan results, events and groups.
+//
+//  The card renders IMMEDIATELY, sideways — never hidden behind a rotation.
+//  That is the deliberate contrast with the passport, where portrait shows a
+//  closed cover and turning the phone OPENS it. Here turning is only for
+//  legibility; the object is fully present either way. See IDCardView.
+//
+//  Chrome is deliberately minimal and quarter-turn-invariant: `xmark` is
+//  rotationally symmetric at 90°, `gearshape` has 8-fold symmetry. A chevron or
+//  a word label would break the illusion the moment the phone turned.
+//
+//  ⚠️ THE STATUS BAR IS STILL VISIBLE HERE, sideways, which is exactly the
+//  "this app is confused" artifact the design wants gone. `.statusBarHidden`
+//  was tried both inside and outside the NavigationStack and had no effect
+//  under `.sheet` presentation. The fix is a presentation change and lands in
+//  its own commit, so this one stays a pure card-wiring change. Until then a
+//  live clock sits in frame, which also means the CARD CANNOT BE BASELINED —
+//  its full-frame hash changes every minute by construction.
 //
 
 import SwiftUI
@@ -19,88 +39,58 @@ import SwiftUI
 struct ProfileView: View {
 
     let profile: UserProfile
-    var isCurrentUser: Bool = false
 
     @Environment(\.dismiss) private var dismiss
+    @State private var clock = PassportTimeOfDay()
+
+    /// The card follows the same day/UV clock as the book — one object, two
+    /// lighting states, applied to both documents.
+    private var mode: PassportRenderMode {
+        #if DEBUG
+        if let forced = DebugUV.shared.forced { return forced }
+        #endif
+        return clock.renderMode
+    }
+
+    /// Toolbar marks have to survive the card's ground changing under them:
+    /// `ink` is invisible on `uvGround`.
+    private var chromeTint: Color {
+        mode.isUV ? Color.paper.opacity(0.55) : Color.ink
+    }
 
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(spacing: 20) {
-                    CollageView(collage: profile.collage)
-                        .padding(.horizontal, 16)
-                        .shadow(color: Color.text.opacity(0.18), radius: 12, x: 0, y: 6)
-                        .padding(.top, 8)
+            ZStack {
+                PassportRestingSurface()
+                    .ignoresSafeArea()
 
-                    identity
-
-                    if isCurrentUser {
-                        Button(action: {}) {          // editor arrives a later phase
-                            Text(Typography.chrome("Edit collage"))
-                                .font(Typography.label)
-                                .foregroundStyle(Color.ink)
-                                .padding(.vertical, 10)
-                                .padding(.horizontal, 22)
-                                .overlay(Capsule().stroke(Color.ink, lineWidth: 1.5))
-                        }
-                    }
-                }
-                .padding(.bottom, 40)
+                IDCardView(user: profile)
             }
-            .scrollIndicators(.hidden)
-            .paperBackground()
+            .environment(\.passportRenderMode, mode)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
                     Button { dismiss() } label: {
-                        Image(systemName: "xmark").foregroundStyle(Color.ink)
+                        Image(systemName: "xmark").foregroundStyle(chromeTint)
                     }
                     .accessibilityLabel("Close")
                 }
-                if isCurrentUser {
-                    ToolbarItem(placement: .topBarTrailing) {
-                        NavigationLink { SettingsView() } label: {
-                            Image(systemName: "gearshape").foregroundStyle(Color.ink)
-                        }
-                        .accessibilityLabel("Settings")
+                ToolbarItem(placement: .topBarTrailing) {
+                    NavigationLink { SettingsView() } label: {
+                        Image(systemName: "gearshape").foregroundStyle(chromeTint)
                     }
+                    .accessibilityLabel("Settings")
                 }
             }
-        }
-    }
-
-    private var identity: some View {
-        VStack(spacing: 6) {
-            Text(profile.displayName)                   // a person's name — never chrome()
-                .font(Typography.masthead)
-                .foregroundStyle(Color.ink)
-
-            Text(profile.handle)
-                .font(Typography.timestamp)
-                .tracking(1)
-                .foregroundStyle(Color.muted)
-
-            // Cities only. A count of people is a scoreboard; a count of places is
-            // the passport's own unit. See DECISIONS.md 2026-07-25.
-            stat(profile.cityCount, "cities")
-                .padding(.top, 10)
-        }
-        .padding(.horizontal, 20)
-    }
-
-    private func stat(_ value: Int, _ label: String) -> some View {
-        VStack(spacing: 2) {
-            Text("\(value)")
-                .font(Typography.statNumber)
-                .foregroundStyle(Color.text)
-            Text(label.uppercased())
-                .font(Typography.stampMark)         // Courier — reads as a form field
-                .tracking(Typography.stampTracking)
-                .foregroundStyle(Color.muted)
+            #if DEBUG
+            .overlay(alignment: .bottomTrailing) { DebugUVChip().padding(8) }
+            #endif
+            .onAppear { clock.start() }
+            .onDisappear { clock.stop() }
         }
     }
 }
 
 #Preview {
-    ProfileView(profile: MockData.currentUser, isCurrentUser: true)
+    ProfileView(profile: MockData.currentUser)
 }

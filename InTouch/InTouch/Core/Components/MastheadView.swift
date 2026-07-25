@@ -55,7 +55,7 @@ struct MastheadView: View {
         .padding(.top, 8)
         .padding(.bottom, 14)
         .sheet(isPresented: $showingProfile) {
-            ProfileView(profile: MockData.currentUser, isCurrentUser: true)
+            ProfileView(profile: MockData.currentUser)
         }
     }
 }
