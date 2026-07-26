@@ -14,10 +14,16 @@ never a reason to edit this table. History and supersessions live in `DECISIONS.
 | `card-uv` | `485fe120f399903fd67a935c68e98f9e` | Any tested route (C settled · D carried-in · E chained), forced mode |
 
 Passport captures follow the pinned route A in the pinned order (`zur-day` → `zur-uv` →
-`col-uv` → `col-day`), full-frame lossless PNG, wall-clock hour recorded. **Route A requires
-the simulator physically in LANDSCAPE** — the book must be open for the chevrons to exist,
-and sim rotation is manual (Cmd+arrow, the operator's hand). This precondition was implicit
-until 2026-07-26: the sim had simply stayed in landscape since the baselines were first cut.
+`col-uv` → `col-day`), full-frame lossless PNG, wall-clock hour recorded.
+
+**OPERATOR STEP — before any passport net, no exceptions:** route A requires the simulator
+physically in **LANDSCAPE** (the book must be open for the chevrons to exist). The agent
+cannot rotate the simulator and cannot see which way it is facing; only the operator can.
+So every passport net begins with: **the agent stops, asks the operator to rotate the
+simulator to landscape (Cmd+arrow), and waits for explicit confirmation before the first
+capture.** A net run without that confirmed step is not a valid measurement. This was
+implicit until 2026-07-26 — the sim had simply stayed in landscape since the baselines were
+first cut.
 
 The card baselines are **orientation-independent, measured**: both modes byte-identical with
 the simulator in portrait and in landscape (2026-07-26).
