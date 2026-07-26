@@ -27,7 +27,7 @@ struct FeedCardView: View {
 
                 Text("\(post.author.uppercased())  ·  \(post.city.uppercased())  ·  \(Self.timestampFormatter.string(from: post.date).uppercased())")
                     .font(Typography.timestamp)
-                    .tracking(1)
+                    .tracking(Typography.machineTracking)
                     .foregroundStyle(Color.muted)
             }
             .padding(.horizontal, 20)

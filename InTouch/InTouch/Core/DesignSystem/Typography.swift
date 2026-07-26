@@ -153,6 +153,14 @@ enum Typography {
     /// Letterspacing applied to stamp text, in points.
     static let stampTracking: CGFloat = 1.6
 
+    /// Letterspacing for a machine-set METADATA line — a timestamp kicker, a coordinate
+    /// readout, a microprint band. Lighter than `stampTracking`, because a struck mark wants
+    /// air around every glyph while a data line only wants to read as machine-set rather than
+    /// typeset. Named for the role, not the caller: the same value serves `timestamp`,
+    /// `passportCoord` and `passportMicroprint`, so the passport's sites can adopt it without
+    /// a rename when they migrate (they are inside the pixel gate; see docs/BASELINES.md).
+    static let machineTracking: CGFloat = 1
+
     /// Mechanical timestamp on a feed card / calendar row. Unlike the stamp fonts
     /// this is a normal caption line, so it scales with Dynamic Type. `.custom`
     /// falls back to the system face on its own if Courier is ever missing.

@@ -81,7 +81,7 @@ struct ScanResultView: View {
                         .foregroundStyle(Color.ink)
                     Text(result.subtitle)
                         .font(Typography.timestamp)
-                        .tracking(1)
+                        .tracking(Typography.machineTracking)
                         .foregroundStyle(Color.muted)
                 }
 
