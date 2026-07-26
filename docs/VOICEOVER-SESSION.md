@@ -48,20 +48,51 @@ tested: that a disabled element stays in the tree so focus has somewhere to rest
 hidden one is removed and focus is discarded. **If T1 fails, that reasoning was wrong and the
 mechanism should be reconsidered** — not patched around.
 
-**Route.** Passport tab, landscape (book opens). Swipe to focus **"Next page"**. Activate it
-repeatedly to page forward, staying on that element, until arriving at **spread 9 of 9** — the
-moment the forward chevron becomes disabled.
+### Both directions, of equal standing — not a main test and a footnote
 
-**Observe.** Where VoiceOver focus lands immediately after the activation that reaches spread 9.
+Both boundaries run the **same code path** (`edgeTap`, driven by `enabled:`), so **a mechanism
+that survives one and not the other is itself a finding** — it would mean the cause sits outside
+that path, and the obvious candidate is VoiceOver treating the first and last elements of a
+container differently.
 
-**PASS** — focus remains on the "Next page" element, which now announces as unavailable
-(typically "dimmed"). The user knows they are at the end and has not lost their place.
+**Run B is the shorter route to the same event, and is worth running first.**
 
-**FAIL** — focus jumps elsewhere (top of screen, another element, or is lost entirely). That
-falsifies the focus-stability argument the mechanism was chosen on.
+**Run A · forward.** From spread 1, focus **"Next page"**, then activate repeatedly — staying on
+that element — until arriving at **spread 9 of 9**. Eight activations. The element under focus
+disables on the last one.
 
-**Also run backwards:** page to **spread 1 of 9** with focus on "Previous page". Same pass
-condition. Both boundaries use the same code path, so a split result would itself be a finding.
+**Run B · backward.** From spread 1, activate "Next page" once to reach spread 2. Move focus to
+**"Previous page"**. Activate once → back to spread 1, and the element under focus disables.
+**One activation, same event.**
+
+*(Run B has to start from spread 2 because at spread 1 "Previous page" is already `.disabled`
+and absent from the actionable-targets list entirely.)*
+
+**Observe, in both runs.** Where VoiceOver focus lands immediately after the activation that
+disables the focused chevron.
+
+### What "focus survived" means — pinned before observation
+
+Three outcomes, all named in advance so none can be argued into a verdict afterwards:
+
+| Outcome | Verdict |
+|---|---|
+| Focus **stays on the disabled chevron**, which announces as unavailable ("dimmed") | **PASS** — the intended behaviour, and precisely the argument the mechanism was chosen on |
+| Focus **moves to a sensible neighbour** — an adjacent element on the same spread | **PASS** — stated in advance deliberately, so it cannot be rationalised later; but see the discriminator |
+| Focus **dumps to the top of the screen, or is lost entirely** | **FAIL** — falsifies the focus-stability argument |
+
+**The line between the second and third outcomes is not taste — it is one more swipe.**
+"Sensible neighbour" is not a judgment about whether the landing spot looks reasonable; it is
+whether the user **keeps their place**. After the activation, swipe once more:
+
+- The sequence **continues locally** from where you were → focus was genuinely retained. **PASS.**
+- The sequence **restarts** — the next swipe walks in from the beginning of the screen → focus
+  was discarded and VoiceOver simply reset to its default. **FAIL**, even if the element it
+  landed on looked plausible.
+
+This distinction is the whole reason to state it now: a discarded focus and a moved focus can
+look identical in the instant after the activation. **The swipe afterwards is what separates
+them**, and deciding that rule while looking at the result is how a fail becomes a pass.
 
 ### The DECISIONS row is pre-committed now, in both directions
 
@@ -76,9 +107,14 @@ Written 2026-07-26, before the test ran, so the result cannot be written to suit
   no framing it as a refinement. A failure would mean "a control vanishing mid-sequence is the
   problem" was never the real diagnosis, and the fix has to restart from that — including
   revisiting whether `.accessibilityHidden` was right all along.
+- **On a SPLIT** (one direction passes, the other fails) → the row records **which** direction
+  failed and treats the split as its own finding rather than averaging the two into a verdict.
+  Both boundaries run identical code, so a split locates the cause *outside* `edgeTap` — and a
+  mechanism that only holds at one end of the sequence has not been validated, it has been
+  half-falsified.
 
-Either way the row is written the same day the test runs, and it names which of the two
-outcomes occurred rather than summarising the session.
+The row is written the same day the test runs, and it names which outcome occurred rather than
+summarising the session.
 
 ---
 
