@@ -260,28 +260,34 @@ struct PassportBookView: View {
             .accessibilityAction { if enabled { action() } }
             // At the first and last spread the corresponding chevron is drawn at
             // opacity 0 and `allowsHitTesting(false)` — but neither of those
-            // touches the accessibility tree, so VoiceOver still reached a
-            // button announced "Previous page, Spread 1 of 9" whose action did
+            // touches the accessibility tree, so VoiceOver reached a button
+            // announced "Previous page, Spread 1 of 9" whose action did
             // nothing. An inert announced control.
             //
-            // HIDDEN rather than `.disabled(!enabled)`, which was the other
-            // candidate. `.disabled` keeps the control discoverable and marks it
-            // unavailable — right when a control is visibly present but
-            // temporarily inert. Here it is visibly ABSENT, so announcing a
-            // dimmed button describes something no sighted user can see; the
-            // accessibility tree should match what is presented. `.disabled`
-            // also dims content and alters hit testing, i.e. a wider change
-            // with pixel risk, where this one is narrow.
+            // DISABLED, NOT HIDDEN, and the difference is FOCUS. This shipped
+            // as `.accessibilityHidden(!enabled)` in cd29b81 and that was
+            // WRONG: the element a VoiceOver user is focused on when they reach
+            // the last spread is the very chevron that then disappears, so
+            // focus is discarded and dumped to the top of the screen. Hiding
+            // breaks the sequence at exactly the moment it triggers. `.disabled`
+            // keeps the element present, keeps focus stable, and announces
+            // "dimmed" — which TELLS the user they have reached the end of the
+            // book, better information than silence.
+            //
+            // The reasoning that produced the wrong choice is worth keeping,
+            // because the category error will recur: "the accessibility tree
+            // should match what is presented" is sound, but it was applied to
+            // VISUAL presentation — for a user who is not looking. What is
+            // presented to a VoiceOver user is a SEQUENCE OF REACHABLE THINGS,
+            // and a control vanishing mid-sequence is a discontinuity, not
+            // fidelity.
             //
             // ⚠️ EFFECT UNVERIFIED — no instrument exists for this claim. The
-            // available accessibility snapshot walks the view hierarchy, not
-            // the assistive-technology tree, and does not honour
-            // `accessibilityHidden` at all (docs/DECISIONS.md 2026-07-26,
-            // measured via a control). The earlier conclusion that this
-            // mechanism "did not suppress" the control came from that blind
-            // tree and is withdrawn — untested, not ruled out. Confirming it
-            // needs real VoiceOver, by hand. See docs/RULES.md § C1.
-            .accessibilityHidden(!enabled)
+            // available snapshot walks the view hierarchy, not the
+            // assistive-technology tree (docs/DECISIONS.md 2026-07-26). Both
+            // the announcement and the focus behaviour need real VoiceOver, by
+            // hand. See docs/RULES.md § C1.
+            .disabled(!enabled)
     }
 
     // MARK: - Geometry

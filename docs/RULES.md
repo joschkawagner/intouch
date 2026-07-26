@@ -46,6 +46,31 @@ channel, i.e. indistinguishable, so the remaining choice was margin rather than 
 
 ---
 
+## R3 · The accessibility snapshot lists ACTIONABLE TARGETS, not accessibility elements
+
+It is a **navigation instrument, not an accessibility instrument.** It returns two lists — a
+`targets` list of things you can dispatch a tap to, and a `text` list of rendered strings. That
+single model explains every observation of it so far, and is what stops a third misreading.
+
+**It can answer:** does an actionable element exist · can I resolve a ref and tap it · what
+static text is rendered.
+
+**It cannot answer:** is this hidden from assistive tech · focus order · what VoiceOver
+announces · does modality apply.
+
+**The two observations it took to get the model right:**
+- `.accessibilityHidden(true)` — element **stays listed**. Hiding does not affect
+  actionability, so the target survives. (First read as "the tool walks the view hierarchy",
+  which was close but wrong.)
+- `.disabled(true)` — element **drops out**. It is no longer actionable, so the target is gone.
+  This is the tool working correctly, and it says nothing about VoiceOver focus.
+
+**Consequence:** the disappearance or persistence of an entry in `targets` is evidence about
+**tappability only**. Never read it as evidence about assistive-technology behaviour. Any claim
+about hidden-ness, focus or announcement needs real VoiceOver, driven by hand — see C1.
+
+---
+
 # Recognised categories
 
 Shapes worth naming so they are not re-litigated each time they appear.
@@ -63,13 +88,36 @@ already settled.
 The discipline is **not** "ship only what's verified". It is **"never call something verified
 when it isn't."**
 
+### ⚠️ The boundary — C1 is not a licence to ship anything unverifiable
+
+**"Right by construction" is the whole load-bearing condition.** It means the change is correct
+by an argument that does not depend on observing it. A change that is *probably* right, or
+right *if* an assumption holds, does not qualify — that is a **guess**, and shipping a guess
+you cannot check is how an unverifiable defect enters and stays.
+
+The test: *if I could observe the effect, is there an outcome that would surprise me?* If yes,
+it is a guess. Hold it for real verification, or record the analysis and implement nothing.
+
+**Worked example (2026-07-26).** `AccessibilityNotification.PageScrolled` on page turn was
+considered and **deliberately not implemented**. The chevron's `.accessibilityValue` is already
+`"Spread N of 9"` and updates every turn, and VoiceOver re-announces a changed value on the
+focused element — so the announcement probably already happens and adding the notification
+would likely **double** it. That fixes a gap whose existence could not be established, with a
+change that might make things worse. Not construction-correct; not shipped. The analysis was
+recorded instead.
+
 **Instances (2026-07-26):**
 - `Color.uvShadow` — correct on principle, ~1.5% per channel at the spine's opacities, so
   nobody will see it land. Committed with that stated.
 - Both MRZ bands hidden from VoiceOver — right by construction (a machine-encoding band is
-  not a reading zone), but the available accessibility snapshot walks the view hierarchy
-  rather than the assistive-technology tree, so it cannot confirm hidden-ness at all.
+  not a reading zone), but no instrument can confirm hidden-ness (see R3).
   Committed labelled *UNVERIFIED — no instrument exists for this claim*.
+- The disabled page-turn chevron marked `.disabled(!enabled)` — a real defect (an inert
+  announced control) fixed on an untestable argument about focus stability, by a reasoner who
+  had misread R3's instrument earlier the same day. Committed with the lowered confidence
+  stated, on **asymmetric failure modes**: if this choice is wrong a user hears a redundant
+  "dimmed" at the last spread; if the alternative was wrong they lose their place mid-book.
+  **When two guesses are both unverifiable, ship the one that fails boringly.**
 
 **What still applies:** the pixel gate is a separate question from the effect. Both instances
 above were gate-checked even though their effects were not observable.
