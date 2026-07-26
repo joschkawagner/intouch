@@ -258,6 +258,30 @@ struct PassportBookView: View {
             .accessibilityValue("Spread \(spreadIndex + 1) of \(spreadCount)")
             .accessibilityAddTraits(.isButton)
             .accessibilityAction { if enabled { action() } }
+            // At the first and last spread the corresponding chevron is drawn at
+            // opacity 0 and `allowsHitTesting(false)` — but neither of those
+            // touches the accessibility tree, so VoiceOver still reached a
+            // button announced "Previous page, Spread 1 of 9" whose action did
+            // nothing. An inert announced control.
+            //
+            // HIDDEN rather than `.disabled(!enabled)`, which was the other
+            // candidate. `.disabled` keeps the control discoverable and marks it
+            // unavailable — right when a control is visibly present but
+            // temporarily inert. Here it is visibly ABSENT, so announcing a
+            // dimmed button describes something no sighted user can see; the
+            // accessibility tree should match what is presented. `.disabled`
+            // also dims content and alters hit testing, i.e. a wider change
+            // with pixel risk, where this one is narrow.
+            //
+            // ⚠️ EFFECT UNVERIFIED — no instrument exists for this claim. The
+            // available accessibility snapshot walks the view hierarchy, not
+            // the assistive-technology tree, and does not honour
+            // `accessibilityHidden` at all (docs/DECISIONS.md 2026-07-26,
+            // measured via a control). The earlier conclusion that this
+            // mechanism "did not suppress" the control came from that blind
+            // tree and is withdrawn — untested, not ruled out. Confirming it
+            // needs real VoiceOver, by hand. See docs/RULES.md § C1.
+            .accessibilityHidden(!enabled)
     }
 
     // MARK: - Geometry
