@@ -24,8 +24,43 @@ silently changed lighting mode; and the simulator sat in landscape for a full da
 which was simultaneously what made route A work at all and what hid the passport's tab bar,
 producing a false accessibility finding that had to be withdrawn.
 
-**Apply it forward.** New surfaces get this question *before* their procedures are pinned,
-not after a fourth instance.
+### Instance 4 — the *correction* you apply to a capture is hidden state too (2026-07-26)
+
+The first three instances were about conditions that produced the pixels. This one is about
+what you do to the pixels afterwards, and it is the same failure in a new place: **a rotation
+constant was pinned without naming what it depends on.**
+
+**"Landscape" is two states, and they need opposite corrections.**
+`DeviceOrientationModel.contentRotation` returns **+90° for `.landscapeLeft` and −90° for
+`.landscapeRight`** — the book counter-rotates its own content to stay upright for whoever is
+holding the phone. `IDCardView` instead applies a **fixed +90°** whatever the orientation,
+because a card that is permanently sideways has only one state.
+
+**So the correct viewing rotation depends on the surface AND on which landscape:**
+
+| Surface | Content rotated by | Correct `sips --rotate` |
+|---|---|---|
+| ID card | `+90` always | **270** always |
+| Book, sim in `.landscapeLeft` | `+90` | **270** — same as the card |
+| Book, sim in `.landscapeRight` | `−90` | **90** — opposite |
+
+The book and the card can therefore require opposite corrections *at the same moment*, and the
+book's own correct value flips with an orientation nobody can see. On 2026-07-26 the book
+needed 90 — which is itself the measurement that the simulator was in `.landscapeRight`.
+
+**How it bit, twice, in mirror image.** Once on the card (`--rotate 90` where 270 was right,
+producing a 180°-flipped card that sat one inference away from a false product finding), and
+once on the book (`--rotate 270` where 90 was right). Both were caught by *reading the frame* —
+the text came out inverted — and never by a procedure asking.
+
+**The check:** a rotated capture is not readable until something inside it proves its
+orientation. Find a text run and confirm it reads before judging anything. **Never carry a
+rotation constant from one surface to another.**
+
+**Apply it forward.** New surfaces get this question *before* their procedures are pinned.
+The original wording of this line was "not after a fourth instance" — the fourth instance
+landed anyway, the same day, found the same way: by accident. That is an argument for the
+rule, not against it.
 
 ---
 
@@ -43,6 +78,24 @@ without a look comparison.
 screen. `0x090418` failed exactly here — at 0.45 over the ground its blue composited to
 ~21.8 against the ground's 20. The two survivors then differed by under half a percent per
 channel, i.e. indistinguishable, so the remaining choice was margin rather than appearance.
+
+### The sharper form — check the range before reaching for depth (2026-07-26)
+
+The rule above forbids a UV shadow that composites *above* the ground. The stronger statement
+is about how much room exists *below* it:
+
+> **When the ground barely emits, the absence of emission barely reads.**
+
+`uvGround` is `0x0D0714` — (13, 7, 20) of 255. That is the entire range available to any UV
+shadow, before opacity is even applied. The binding shadow already sits at (9.9, 5.2, 15.1),
+so driving it to the absolute floor of `uvShadow` buys **3.9 / 2.2 / 6.1** — about 2% of
+channel range, across a 12pt band.
+
+**Consequence:** on a near-black ground, depth is not a design parameter to be tuned, it is a
+channel with almost nothing in it. Compute the remaining range *first*; if it is a handful of
+units, no opacity value will help and rendering candidates only confirms it expensively.
+Where the ground is dark, the range lives **upward** — light on the lit element, not depth in
+the dark one.
 
 ---
 
