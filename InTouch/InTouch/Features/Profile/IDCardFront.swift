@@ -49,9 +49,13 @@
 //       the prediction went the other way, which is why this was a seeing
 //       question and not one to settle by argument.
 //
-//  ⚠️ Q4 IS UNTESTED: the bio's two-line wrap has never been seen with a bio
-//  long enough to wrap. Needs a temporary long-bio substitution, captured, then
-//  reverted — never committed, and never with the passport net running.
+//  Q4 (bio wrap) WAS TESTED 2026-07-26 with a temporary long-bio substitution
+//  and the verdict split: the two-line wrap and the ellipsis were right, but
+//  SwiftUI's tail truncation cut MID-WORD ("…than dow…"), which reads as
+//  software counting characters where a document breaks at the field's width.
+//  Fixed by `machinePrinted(_:)` below — the bio is line-broken the way the
+//  personalising machine would break it, and the Text's lineLimit(2) is now a
+//  safety net that never engages mid-word.
 //
 
 import SwiftUI
@@ -180,7 +184,7 @@ struct IDCardFront: View {
             // the gap is what carries it. Do not fill it.
 
             IDCardField(label: "bio", width: 300) {
-                Text(user.bio)
+                Text(machinePrinted(user.bio))
                     .font(Typography.idCardRemarks)
                     .foregroundStyle(isUV ? Color.uvFieldValue : Color.text)
                     .uvFieldLit(isUV)
@@ -189,5 +193,59 @@ struct IDCardFront: View {
             }
             .referenceOrigin(x: colA, y: 278)
         }
+    }
+
+    // MARK: - Machine line-breaking
+
+    /// The bio broken the way the MACHINE that personalised the card would
+    /// break it: a fixed column budget per line, words never split.
+    ///
+    /// Courier advances exactly 0.6em per glyph, so at idCardRemarks' 12pt a
+    /// column is 7.2pt and 41 columns fill 295.2pt of the field's 300 —
+    /// character counting IS width measurement on a monospace face. When the
+    /// text overruns the last line it is cut back to the last whole word that
+    /// leaves a column for the ellipsis: a mid-word "…than dow…" reads as
+    /// software counting characters, where a document breaks at the field's
+    /// width (Q4's verdict, 2026-07-26). A single word wider than the field is
+    /// hard-cut — that is not prose, and a field cannot grow for it.
+    private func machinePrinted(_ text: String) -> String {
+        let columns = 41   // 300pt field / 7.2pt per Courier-12 column
+        let maxLines = 2
+
+        var lines: [String] = []
+        var current = ""
+        var truncated = false
+
+        for word in text.split(separator: " ").map(String.init) {
+            let candidate = current.isEmpty ? word : current + " " + word
+            if candidate.count <= columns {
+                current = candidate
+            } else if current.isEmpty {
+                current = String(word.prefix(columns))
+            } else if lines.count + 1 < maxLines {
+                lines.append(current)
+                current = String(word.prefix(columns))
+            } else {
+                truncated = true
+                break
+            }
+        }
+        lines.append(current)
+
+        if truncated {
+            var last = lines.removeLast()
+            // Make room for the ellipsis without ever splitting a word: drop
+            // whole trailing words until it fits; hard-cut only if a single
+            // word still overflows on its own.
+            while last.count + 1 > columns {
+                if let cut = last.range(of: " ", options: .backwards) {
+                    last = String(last[..<cut.lowerBound])
+                } else {
+                    last = String(last.prefix(columns - 1))
+                }
+            }
+            lines.append(last + "…")
+        }
+        return lines.joined(separator: "\n")
     }
 }
