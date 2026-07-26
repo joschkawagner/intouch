@@ -54,7 +54,18 @@ struct MastheadView: View {
         .padding(.horizontal, 20)
         .padding(.top, 8)
         .padding(.bottom, 14)
-        .sheet(isPresented: $showingProfile) {
+        // fullScreenCover, not sheet. The card is a quarter-turned object filling
+        // the screen, and a sheet keeps the status bar in frame — a sideways
+        // status bar is the single most "this app is confused" artifact possible,
+        // and its live clock also made the card impossible to baseline, since the
+        // full-frame hash changed every minute. `.statusBarHidden(true)` was tried
+        // under `.sheet` both inside and outside the NavigationStack and had no
+        // effect; the presentation style is what carries it.
+        //
+        // ACCEPTED CONSEQUENCE: fullScreenCover has no swipe-to-dismiss, so the
+        // toolbar X is the ONLY way out. That is why it is gated on being present
+        // and tappable in the accessibility tree, not merely visible.
+        .fullScreenCover(isPresented: $showingProfile) {
             ProfileView(profile: MockData.currentUser)
         }
     }

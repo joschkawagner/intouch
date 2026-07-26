@@ -25,13 +25,20 @@
 //  rotationally symmetric at 90°, `gearshape` has 8-fold symmetry. A chevron or
 //  a word label would break the illusion the moment the phone turned.
 //
-//  ⚠️ THE STATUS BAR IS STILL VISIBLE HERE, sideways, which is exactly the
-//  "this app is confused" artifact the design wants gone. `.statusBarHidden`
-//  was tried both inside and outside the NavigationStack and had no effect
-//  under `.sheet` presentation. The fix is a presentation change and lands in
-//  its own commit, so this one stays a pure card-wiring change. Until then a
-//  live clock sits in frame, which also means the CARD CANNOT BE BASELINED —
-//  its full-frame hash changes every minute by construction.
+//  THE STATUS BAR IS HIDDEN HERE, and it took a presentation change to do it.
+//  `.statusBarHidden(true)` alone had no effect under `.sheet`, tried both
+//  inside and outside the NavigationStack — a sheet does not own the status
+//  bar. Presented as a `.fullScreenCover` (see MastheadView) the modifier
+//  takes. A sideways status bar is the worst possible artifact for an object
+//  whose whole claim is "deliberately placed, not broken", and its live clock
+//  also made the card impossible to baseline: the full-frame hash changed
+//  every minute by construction.
+//
+//  ⚠️ fullScreenCover HAS NO SWIPE-TO-DISMISS. The toolbar X is the only exit,
+//  which makes it load-bearing rather than decorative — it is gated on being
+//  present and tappable in the ACCESSIBILITY TREE, not merely visible on
+//  screen. A9's lesson was that untraversable UI is untestable UI, and the
+//  passport chevrons failed in exactly that way.
 //
 
 import SwiftUI
@@ -88,6 +95,7 @@ struct ProfileView: View {
             .onAppear { clock.start() }
             .onDisappear { clock.stop() }
         }
+        .statusBarHidden(true)
     }
 }
 
