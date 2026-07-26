@@ -233,11 +233,18 @@ enum Typography {
     /// The bio / remarks line — the one value allowed to wrap.
     static var idCardRemarks: Font { Font(courier(12, bold: false)) }
 
-    /// Letterspacing for the card's machine-readable strip. A token rather than
-    /// a literal at the call site: the passport's MRZ hardcodes `.tracking(1.5)`
-    /// and is logged as a design-system violation to fix — no reason to add a
-    /// second instance of the same mistake.
-    static let idCardMrzTracking: CGFloat = 1.5
+    /// Letterspacing for a machine-readable strip — the passport's MRZ band and
+    /// the card's, which are the same artifact struck at two sizes. Wider than
+    /// `machineTracking` because an MRZ is read by a scanner before a person:
+    /// the glyphs are meant to be separable, not to look composed.
+    ///
+    /// Was `idCardMrzTracking` until 2026-07-26. The card got a token first and
+    /// the passport's `.tracking(1.5)` stayed a literal, so adopting it would
+    /// have pointed a passport site at an `idCard*` name — backwards, and the
+    /// kind of thing that outlives the cleanup that caused it. Renamed at the
+    /// moment the second consumer arrived, which is when the right name was
+    /// knowable.
+    static let mrzTracking: CGFloat = 1.5
 
     /// Holder initials struck into the portrait plate.
     static var idCardInitials: Font { display(72, .bold) }

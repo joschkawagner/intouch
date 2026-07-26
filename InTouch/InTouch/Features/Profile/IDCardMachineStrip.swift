@@ -54,7 +54,7 @@ struct IDCardMachineStrip: View {
 
             Text(PassportHolder.mrz(name: name))
                 .font(Typography.passportCoord)
-                .tracking(Typography.idCardMrzTracking)
+                .tracking(Typography.mrzTracking)
                 .foregroundStyle(isUV ? Color.stampRed : Color.text.opacity(0.4))
                 .fluoresce(isUV ? Color.stampRed : .clear)
                 .lineLimit(1)
