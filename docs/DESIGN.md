@@ -67,10 +67,19 @@ Two faces, chosen to do opposite jobs.
   small x-height went spindly at tab-label size (11pt), where a geometric face has to hold on
   its own; Jost keeps the same cold-geometric character with far more presence at 11pt. Its
   larger x-height also meant the body/label sizes Josefin needed bumped could be tightened back.
-- **Stamps, dates, timestamps — Courier.** Ships with iOS. Real passport stamps are struck by
-  a machine, not set in a designed typeface; Courier is what makes a stamp, a date or a
-  timestamp read as an *artifact* rather than a graphic. Letterspaced, slightly imperfect,
-  rotated a few degrees, never centred perfectly.
+- **Machine type — Courier.** Ships with iOS. Real passport stamps are struck by a machine,
+  not set in a designed typeface; Courier is what makes a mark read as an *artifact* rather
+  than a graphic. Its role has two tiers:
+  - **Stamps, dates, timestamps** — the original job. Letterspaced, slightly imperfect,
+    rotated a few degrees, never centred perfectly.
+  - **Every personalised value on the ID card** — name, handle, member-since, cities, bio,
+    holder number, MRZ. The rule is **chrome is set, data is machine-printed**: a document's
+    pre-printed furniture is typeset (Jost), and what a machine stamped into *this* copy is
+    machine type (Courier). The card follows the rule strictly; the passport page does not —
+    its name is set in Jost, page-register — and that difference is deliberate (see § The ID
+    card and DECISIONS.md 2026-07-26: each document personalises in its own register, so the
+    same name appears in different faces across passport and card, exactly as it does on the
+    real documents in your pocket).
 - **The distinction that matters:** a **cold** geometric face (Jost — chosen; Josefin Sans,
   Futura) is correct for this brand. A **warm, rounded** geometric sans — Poppins, Circular,
   Nunito — is not; that friendliness is every other app. The line isn't "no geometric sans,"

@@ -43,7 +43,11 @@
 //       clearance is MOOT. Do not reuse 8pt elsewhere on this row's authority.
 //    2. Ghost initials placement and weight — RESOLVED. Reads as a second
 //       impression beside the plate, not as a stray layer.
-//    3. The empty col-B row 3 — STILL OPEN, marked UNRESOLVED at its site.
+//    3. The empty col-B row 3 — RESOLVED 2026-07-26, judged on screen in both
+//       modes: it reads as printed field space because the contour printing
+//       runs continuously through it. It reads BETTER under UV, not worse —
+//       the prediction went the other way, which is why this was a seeing
+//       question and not one to settle by argument.
 //
 //  ⚠️ Q4 IS UNTESTED: the bio's two-line wrap has never been seen with a bio
 //  long enough to wrap. Needs a temporary long-bio substitution, captured, then
@@ -169,10 +173,11 @@ struct IDCardFront: View {
             }
             .referenceOrigin(x: colA, y: 231)
 
-            // UNRESOLVED (3): col B row 3 is deliberately EMPTY — printed field
-            // space, as the reference leaves. Whether it reads as composed or
-            // as "a field failed to load" is a seeing question. Do not fill it
-            // to be safe; that decision is pending judgment.
+            // Col B row 3 is deliberately EMPTY — printed field space, as the
+            // reference leaves it. RESOLVED 2026-07-26 (was open question 3):
+            // judged on screen in both modes, it reads as composed, and better
+            // under UV than by day — the terrain running continuously through
+            // the gap is what carries it. Do not fill it.
 
             IDCardField(label: "bio", width: 300) {
                 Text(user.bio)
