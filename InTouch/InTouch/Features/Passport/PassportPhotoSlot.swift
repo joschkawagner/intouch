@@ -47,6 +47,27 @@ struct PassportPhotoSlot: View {
                     .scaledToFit()
                     .frame(width: 22, height: 22)
                     .foregroundStyle(Color.text.opacity(0.30))
+                    // An SF Symbol Image is an accessibility element by
+                    // default, carrying the symbol's own description — the same
+                    // construction that made the page-turn chevrons announce
+                    // "chevron.left" before they were labelled. A city page
+                    // renders one slot per cell, so without this a VoiceOver
+                    // user swiping the spread hits a run of elements each
+                    // announcing "photo": noise standing in for content that
+                    // does not exist yet.
+                    //
+                    // ⚠️ THIS HIDES THE PLACEHOLDER, NOT PHOTOGRAPHS. When the
+                    // real photo model lands, a photo in a city page IS content
+                    // and wants a LABEL ("Zürich, 19 July"), not this modifier.
+                    // Do not carry the hiding forward onto real images.
+                    //
+                    // Daylight branch only, deliberately: the UV branch is a
+                    // bare Rectangle, and shapes are not accessibility elements,
+                    // so there is nothing there to hide. (Worth noticing that
+                    // the slot's accessibility footprint therefore differs by
+                    // lighting mode — silent under UV, noisy by day. This
+                    // equalises it downward.)
+                    .accessibilityHidden(true)
             }
             .overlay(Rectangle().strokeBorder(frame, lineWidth: 3))
         }
