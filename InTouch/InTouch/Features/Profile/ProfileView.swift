@@ -34,11 +34,22 @@
 //  also made the card impossible to baseline: the full-frame hash changed
 //  every minute by construction.
 //
-//  ⚠️ fullScreenCover HAS NO SWIPE-TO-DISMISS. The toolbar X is the only exit,
-//  which makes it load-bearing rather than decorative — it is gated on being
-//  present and tappable in the ACCESSIBILITY TREE, not merely visible on
-//  screen. A9's lesson was that untraversable UI is untestable UI, and the
-//  passport chevrons failed in exactly that way.
+//  ⚠️ fullScreenCover HAS NO SWIPE-TO-DISMISS. The X is the only exit, which
+//  makes it load-bearing rather than decorative — it is gated on being present
+//  and tappable in the ACCESSIBILITY TREE, not merely visible on screen. A9's
+//  lesson was that untraversable UI is untestable UI, and the passport
+//  chevrons failed in exactly that way.
+//
+//  THE CHROME IS IN-PAGE, NOT A SYSTEM TOOLBAR — twice over. First, the app's
+//  standing convention (see MastheadView): chrome drawn in-page keeps every
+//  type and colour decision inside the design system, and the toolbar this
+//  view briefly carried was the app's FIRST system toolbar, adopted without
+//  noticing it broke that rule. Second, measured: the system toolbar's
+//  material-backed buttons render differently on every launch (DECISIONS.md
+//  2026-07-26 — twelve launches, twelve distinct hashes; toolbar removed,
+//  byte-identical 3/3 across a rebuild), which made this screen the only one
+//  in the app that could not be pixel-gated. The buttons keep the passport
+//  chevrons' register: Typography.body symbols, mode-aware ink, no material.
 //
 
 import SwiftUI
@@ -74,20 +85,28 @@ struct ProfileView: View {
                 IDCardView(user: profile)
             }
             .environment(\.passportRenderMode, mode)
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
-                    Button { dismiss() } label: {
-                        Image(systemName: "xmark").foregroundStyle(chromeTint)
-                    }
-                    .accessibilityLabel("Close")
+            .toolbar(.hidden, for: .navigationBar)
+            .overlay(alignment: .topLeading) {
+                Button { dismiss() } label: {
+                    Image(systemName: "xmark")
+                        .font(Typography.body)
+                        .foregroundStyle(chromeTint)
+                        .frame(width: 44, height: 44)
+                        .contentShape(Rectangle())
                 }
-                ToolbarItem(placement: .topBarTrailing) {
-                    NavigationLink { SettingsView() } label: {
-                        Image(systemName: "gearshape").foregroundStyle(chromeTint)
-                    }
-                    .accessibilityLabel("Settings")
+                .accessibilityLabel("Close")
+                .padding(8)
+            }
+            .overlay(alignment: .topTrailing) {
+                NavigationLink { SettingsView() } label: {
+                    Image(systemName: "gearshape")
+                        .font(Typography.body)
+                        .foregroundStyle(chromeTint)
+                        .frame(width: 44, height: 44)
+                        .contentShape(Rectangle())
                 }
+                .accessibilityLabel("Settings")
+                .padding(8)
             }
             #if DEBUG
             .overlay(alignment: .bottomTrailing) { DebugUVChip().padding(8) }
