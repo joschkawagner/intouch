@@ -188,7 +188,7 @@ struct PassportBookView: View {
     private func spine(bordersCover: Bool) -> some View {
         LinearGradient(
             colors: mode.isUV
-                ? [Color.black.opacity(0.45), Color.black.opacity(0.15), Color.black.opacity(0.45)]
+                ? [Color.uvShadow.opacity(0.45), Color.uvShadow.opacity(0.15), Color.uvShadow.opacity(0.45)]
                 : [Color.ink.opacity(0.25), Color.ink.opacity(0.06), Color.ink.opacity(0.25)],
             startPoint: .leading, endPoint: .trailing
         )

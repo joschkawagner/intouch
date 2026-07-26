@@ -81,6 +81,27 @@ extension Color {
     /// while the grid lines and outlined empty cells glow around them.
     static let uvCell = Color(hex: 0x150A20)
 
+    /// A SHADOW under blacklight — the ground's own colour deepened, never
+    /// neutral black. Under UV there is no white light to scatter, so a shadow
+    /// is ABSENT FLUORESCENCE rather than absorbed light: it reads as less of
+    /// the violet that is already there. Pure black is a daylight shadow and
+    /// looks borrowed here. Named for the lighting condition, not for the one
+    /// thing that currently casts one (the book's binding gutter) — the next
+    /// shadow under UV wants this same value.
+    /// THE DISQUALIFYING TEST for any UV colour, reusable: a shadow under
+    /// blacklight cannot ADD emission, so any candidate that composites ABOVE
+    /// `uvGround` in ANY channel is out on principle, not taste. A third
+    /// candidate (`0x090418`) was rejected exactly there — at 0.45 over the
+    /// ground its blue landed at ~21.8 against the ground's 20, so it read as
+    /// a faint glow rather than a shadow.
+    ///
+    /// ⚠️ IMPERCEPTIBLE AT CURRENT OPACITIES. The spine draws this at
+    /// 0.45/0.15/0.45, where the change from pure black is ~1.5% per channel.
+    /// This is a CORRECTNESS fix, not a visible one. Whether the binding shadow
+    /// should actually register under UV is a separate look decision about
+    /// OPACITY, deliberately not taken with it.
+    static let uvShadow = Color(hex: 0x060309)
+
     /// Cool violet-white — the tone of paper lit by blacklight. The basis of
     /// the uniform UV field treatment below: neutral `paper` white read as
     /// ordinary unlit text sitting on top of the scene, where this cast reads

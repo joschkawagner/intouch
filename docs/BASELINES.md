@@ -7,8 +7,8 @@ never a reason to edit this table. History and supersessions live in `DECISIONS.
 | Surface | Hash | Valid via |
 |---|---|---|
 | `zur-day` | `9f5fbe9ccd118a3e969d0f27757a3e3b` | Route A only |
-| `zur-uv` | `63e9ab963927ba29672d55b10d1d0aba` | Route A only |
-| `col-uv` | `15aa0e86e6118c7d6f98f0562e48064a` | Route A only |
+| `zur-uv` | `e7c3538d857bf83f6fa28630c093bdc5` | Route A only |
+| `col-uv` | `ccb5420bf36a82b99f8197a0fa6d91e8` | Route A only |
 | `col-day` | `b0b25a04b74dfef4650b71db81fbc7bd` | Route A only |
 | `card-day` | `e3004da3ac4b85b078906783a5cabea6` | Any tested route (C settled · D carried-in · E chained), forced mode |
 | `card-uv` | `485fe120f399903fd67a935c68e98f9e` | Any tested route (C settled · D carried-in · E chained), forced mode |
