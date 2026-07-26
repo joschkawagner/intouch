@@ -62,6 +62,17 @@ The original wording of this line was "not after a fourth instance" — the four
 landed anyway, the same day, found the same way: by accident. That is an argument for the
 rule, not against it.
 
+### Instance 5 — a session was scoped against an instrument nobody checked existed (2026-07-26)
+
+The VoiceOver session was scripted in full — five tests, instruments matched per test, pass
+conditions pre-committed, setup notes down to the speech rate — and the simulator ships no
+VoiceOver at all. Discovered by the operator at setup time, in Settings, where the pane
+simply isn't. Full Keyboard Access is absent too, which killed a second test the same
+moment. **Whether the instrument exists is part of scoping, not part of setup.** The more
+care a plan invests downstream of an unchecked assumption, the more authoritative the plan
+looks while being unrunnable — this script was at its most polished the moment it was
+impossible.
+
 ---
 
 ## R2 · A shadow cannot add emission — any UV colour compositing above the ground is out on principle
@@ -121,6 +132,30 @@ announces · does modality apply.
 **Consequence:** the disappearance or persistence of an entry in `targets` is evidence about
 **tappability only**. Never read it as evidence about assistive-technology behaviour. Any claim
 about hidden-ness, focus or announcement needs real VoiceOver, driven by hand — see C1.
+
+---
+
+## R4 · Existence is not availability — verify at the control surface, not on disk
+
+An artifact being present does not mean the capability is offered. The simulator runtime
+ships `VoiceOverTouch.app`, `VoiceOver.axuiservice`, `VoiceOverServices.framework`, a
+LaunchDaemon, and `VoiceOverSettings.plist` *inside the Settings bundle* — and the Settings
+UI gates the pane out entirely. An existence check ("is it installed?") answers **yes** and
+is worthless.
+
+This is R3's shape in a new place: **an instrument answering a question adjacent to the one
+asked.** "Are the components on disk?" is adjacent to "can a user turn this on?" — only the
+control surface (the Settings UI, the menu, the actual toggle) answers the real question.
+
+**The check:** before planning against a capability, confirm it at the surface where it
+would be switched on — not by finding its binaries, not by documentation, not by memory of
+other environments.
+
+**Corollary — a check must itself be validated before it validates anything.** The same
+evening, a portrait-shaped Settings screenshot was nearly adopted as an orientation check.
+It proves nothing until someone establishes that Settings *rotates*: if it doesn't, the
+capture is portrait in both orientations and the "check" always passes. Untested to date;
+one deliberate rotation with Settings open settles it.
 
 ---
 
