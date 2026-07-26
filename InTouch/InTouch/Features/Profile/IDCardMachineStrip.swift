@@ -67,5 +67,10 @@ struct IDCardMachineStrip: View {
                 .frame(height: 1)
         }
         .clipped()
+        // Machine zone, not a reading zone — the same call as the book's MRZ
+        // band. VoiceOver would spell out "JOSCHKA<WAGNER<<INT<1924<<<<…" one
+        // character at a time, and every field it encodes is already announced
+        // in plain language by the labelled rows beside it.
+        .accessibilityHidden(true)
     }
 }

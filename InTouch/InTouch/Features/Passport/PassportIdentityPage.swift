@@ -135,6 +135,13 @@ struct PassportIdentityPage: View {
                 .frame(height: 1)
         }
         .clipped()
+        // The band is a MACHINE zone, not a reading zone. VoiceOver would
+        // otherwise spell out "JOSCHKA<WAGNER<<INT<1924<<<<…" one character at
+        // a time — the raw encoding, whose every field is already announced in
+        // plain language by the labelled rows above it. Hidden as decoration,
+        // exactly like the printing layer: no information is lost, only the
+        // second, unreadable copy of it.
+        .accessibilityHidden(true)
     }
 
 }
