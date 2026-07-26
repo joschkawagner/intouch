@@ -23,16 +23,31 @@
 //  to the printing layer, not the field system, so it fluoresces independently
 //  in stampRed. One hero, no exceptions.
 //
-//  ⚠️ NOT YET VERIFIED — nothing renders this. Everything about the ID card
-//  except its terrain density is unverified until it is wired into ProfileView.
+//  ✅ RENDERED AND SEEN as of f09c2eb — the card is wired into ProfileView and
+//  has run in the simulator in both lighting modes. ⚠️ What that does NOT cover:
+//    • ROUTE STABILITY of the card's own render is UNESTABLISHED. Tap ordering
+//      selects between stable render outcomes elsewhere in this app and the
+//      cause is unknown (DECISIONS.md 2026-07-25). The card is reached by a
+//      brand-new path and has not been captured by two routes and compared.
+//    • NO BASELINE EXISTS. The status bar is still in frame, so the card's
+//      full-frame hash changes every minute by construction.
+//    • MICROPRINT DENSITY is container-dependent — see IDCardPrinting.
 //
-//  ⚠️ THREE OPEN QUESTIONS, marked UNRESOLVED below and at their sites. They are
-//  one question in three places — does this read as DELIBERATE or as a FAILURE?
-//  That ambiguity is what security printing is, which is why they must be judged
-//  together on screen and not settled one at a time by argument:
-//    1. OVD patch clearance against the name row (8pt).
-//    2. Ghost initials placement and weight.
-//    3. The empty col-B row 3.
+//  THE THREE OPEN QUESTIONS — they were one question in three places (does this
+//  read as DELIBERATE or as a FAILURE?), judged together on screen rather than
+//  settled one at a time by argument. Two are closed:
+//    1. OVD patch clearance against the name row — RESOLVED, but on a NARROWER
+//       account than first argued. The claim "8pt reads as registration, not
+//       collision" was never tested; what is actually true is that the patch is
+//       top-RIGHT and the NAME label mid-LEFT, so they never approach and the
+//       clearance is MOOT. Do not reuse 8pt elsewhere on this row's authority.
+//    2. Ghost initials placement and weight — RESOLVED. Reads as a second
+//       impression beside the plate, not as a stray layer.
+//    3. The empty col-B row 3 — STILL OPEN, marked UNRESOLVED at its site.
+//
+//  ⚠️ Q4 IS UNTESTED: the bio's two-line wrap has never been seen with a bio
+//  long enough to wrap. Needs a temporary long-bio substitution, captured, then
+//  reverted — never committed, and never with the passport net running.
 //
 
 import SwiftUI

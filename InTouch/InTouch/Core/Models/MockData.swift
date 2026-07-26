@@ -96,6 +96,16 @@ enum MockData {
     // (see Collage.swift). Photos are the real sample assets — swap the asset names to
     // recompose. This is the one place collage fixtures live.
 
+    /// ⚠️ ORPHANED IN PRACTICE, BUT NOT SAFELY DELETABLE — flagged, not removed.
+    ///
+    /// Nothing renders the *current user's* collage any more: your own profile is
+    /// an ID card as of f09c2eb (see DECISIONS.md 2026-07-26). But `UserProfile
+    /// .collage` is still LIVE production code — `ScanResultView` renders
+    /// `p.collage` for a scanned person — and the property is non-optional, so
+    /// `currentUser` below must supply a value that simply never reaches a screen
+    /// (you never scan yourself). Deleting this therefore means making `collage`
+    /// optional, which is a model change and not a cleanup. Do that deliberately
+    /// or not at all. Contrast `groupCollage`, which has no consumer whatsoever.
     static let currentUserCollage = Collage(
         ownerId: "user-me",
         aspectRatio: 0.82,

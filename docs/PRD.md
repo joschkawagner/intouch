@@ -134,12 +134,13 @@ someone they're connected to. Effectively a private shared album with a name.
 The passport is a **leaf-through booklet**, not a grid of icons. Its unit is a **city**
 (a place you have photos) and the **photos/moments** inside it.
 
-- **The passport is a booklet you own and receive.** Your own profile *is* your passport;
-  a connected person's profile *is* the passport you received from them (see § 4.5). The
+- **The passport is a booklet you own and receive.** The Passport tab is your own book, and
+  a connected person's profile *is* the passport you received from them (see § 4.5). Your own
+  *profile*, by contrast, is your ID card, not your book — identity, not the record. The
   cover is one page; opening it is a two-page spread you flip through, city by city.
 - **Each city is a page the app composes for you.** The app auto-lays each city's photos
-  into a Bauhaus/Mondrian grid — you do **not** hand-arrange it (unlike the profile collage
-  in § 4, which you assemble yourself). Every cell is a photo: a city with N photos gets an
+  into a Bauhaus/Mondrian grid — you do **not** hand-arrange it (unlike a collage, which a
+  person, host or member assembles). Every cell is a photo: a city with N photos gets an
   N-cell template, and sparse cities stay composed — the photos occupy a deliberate part of
   the grid and the rest is bare printed page. Photos sit in Bauhaus frames, one register
   colour per page — each city permanently owns its frame colour (see DESIGN.md § The city
@@ -166,13 +167,24 @@ separately, in strict order because each leans on the last:
    collage pages need the shell to exist first before they have anywhere to live.
 
 ### 4.5 Profile & settings
-**Your profile *is* your passport booklet, and a friend's profile *is* the passport you
-received from them** — "profile" and "passport" (§ 4.4) are two names for one object, not
-two screens. The person's **collage is the hero**, filling most of the screen; handle,
-display name, friend count and city count sit beneath it. On your own profile: an edit-collage entry (editor is a
-later phase) and a gear to Settings. Settings carries Account, Privacy, **Blocked users**,
-Notifications, About, Sign out — Blocked users and reporting exist from day one because they're
-an App Store requirement (§ 6). Block list. Account deletion.
+**Your own profile *is* your ID card. Another person's profile *is* their passport.** Two
+different documents for two different relationships, and there is deliberately **no ID for
+other people and no route between the two**.
+
+*(This supersedes the earlier "your profile IS your passport booklet, profile and passport are
+two names for one object" — see DECISIONS.md 2026-07-26. It also supersedes the
+hand-assembled-collage profile that stood before it; the collage survives for scan results,
+events and groups. See DESIGN.md § The ID card and § The collage.)*
+
+- **Your ID** carries identity only: display name, handle, member since, holder number,
+  initials and bio. **No photos, no city pages, no map** — those are the passport. No friend
+  count and no slot that could grow one; `cities` survives because it counts places, not
+  people (§ 4.1, DECISIONS.md 2026-07-25). Landscape ID-1, rendered sideways and immediately.
+- **Their passport** is the booklet you received from them (§ 4.4) — their record, not their
+  papers. The Passport tab remains your own book.
+- On your own profile: a gear to Settings. Settings carries Account, Privacy, **Blocked users**,
+  Notifications, About, Sign out — Blocked users and reporting exist from day one because they're
+  an App Store requirement (§ 6). Block list. Account deletion.
 
 ---
 

@@ -21,8 +21,21 @@
 //  rule is mechanical-not-bouncy anyway. It reads as a patch because of its
 //  boundary and its different linework, not because it moves.
 //
-//  ⚠️ NOT YET VERIFIED — nothing renders this. Everything about the ID card
-//  except its terrain density is unverified until it is wired into ProfileView.
+//  ✅ RENDERED AND SEEN as of f09c2eb — the card is wired into ProfileView and
+//  has run in the simulator in both lighting modes. The patch's clearance
+//  against the name row (open question 1) is RESOLVED, but on a narrower
+//  account than first argued: the patch sits top-RIGHT and the NAME label sits
+//  mid-LEFT, so they never approach horizontally and the 8pt vertical clearance
+//  is MOOT rather than answered. Do not cite it as evidence that 8pt works.
+//  ⚠️ What the render does NOT cover:
+//    • ROUTE STABILITY of the card's own render is UNESTABLISHED. Tap ordering
+//      selects between stable render outcomes elsewhere in this app and the
+//      cause is unknown (DECISIONS.md 2026-07-25). The card is reached by a
+//      brand-new path and has not been captured by two routes and compared.
+//    • NO BASELINE EXISTS. The status bar is still in frame, so the card's
+//      full-frame hash changes every minute by construction.
+//    • MICROPRINT DENSITY is container-dependent — see IDCardPrinting.
+//    • Q3 (the empty col-B row 3) and Q4 (bio wrap on a long bio) are OPEN.
 //
 
 import SwiftUI

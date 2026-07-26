@@ -18,10 +18,25 @@
 //  its hue — teal/forest terrain, gold microprint and marks, violet rosette
 //  lace, a red keyline. Never fork the geometry between modes.
 //
-//  ⚠️ NOT YET VERIFIED. Xcode Previews use a different rendering path from the
-//  simulator, so nothing here counts as verified until it has run in the sim.
-//  The level/bump/opacity values below are a considered first pass, not a
-//  judged result.
+//  ✅ THE TERRAIN DENSITY IS JUDGED. An earlier version of this header said the
+//  level/bump/opacity values below were "a considered first pass, not a judged
+//  result". That was ALREADY FALSE when it stood here: 78b3ddc ("ID card:
+//  terrain density scaled to the card's area (judged on screen)") modified this
+//  very file after the values were compared on screen in both modes in the
+//  short-lived ID-card lab, and DECISIONS.md 2026-07-25 records the same from
+//  the other side — "the terrain density, which WAS judged on screen in both
+//  modes before the route was removed". The first-pass numbers carried the
+//  page's 14 bumps onto a card of 2.4x the area and read far too sparse.
+//
+//  ⚠️ BUT DENSITY IS CONTAINER-DEPENDENT, and this is the live caveat. The
+//  primitives are authored in ABSOLUTE POINTS (MicroprintBand at 4pt) while the
+//  card scales its 539x340 reference to fit. So the card's LAYOUT is
+//  scale-invariant and layout judgements survive a presentation change, while
+//  PRINTING DENSITY RELATIVE TO THE CARD IS NOT and density judgements do not.
+//  Everything here was judged at the `.sheet` container size; moving to
+//  fullScreenCover changes the scale factor and therefore the printed density.
+//  Re-look after that lands — do not carry these numbers across on the strength
+//  of the layout having been unaffected.
 //
 
 import SwiftUI

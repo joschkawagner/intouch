@@ -136,8 +136,9 @@ the world" without ever copying a real government document.
 Each city gets a page the **app composes automatically** — the user does not arrange it.
 
 - Photos are laid into a **Bauhaus/Mondrian grid**: rectangles of varied size, hard edges,
-  no overlap, mechanical order. This is the auto counterpart to the hand-assembled profile
-  collage (§ The collage).
+  no overlap, mechanical order. This is the auto counterpart to the hand-assembled collages
+  a person, host or member arranges (§ The collage) — note the profile is no longer one of
+  them (§ The ID card).
 - **Every cell is a photo — there is no empty-cell concept.** A city with N photos gets an
   N-cell template. Sparse cities stay *composed*: the photos occupy a deliberate part of the
   grid and the rest is bare printed page, the security printing showing through — the page
@@ -152,32 +153,71 @@ Each city gets a page the **app composes automatically** — the user does not a
   fluorescing printing is the page's colour. The surrounding chrome stays in the tokens, as
   everywhere else.
 
+## The ID card
+
+**Your own profile is your ID card.** Identity only — name, handle, member since, holder
+number, initials, bio. No photos, no city pages, no map. Landscape ID-1, rendered *sideways
+and immediately*: it is never hidden behind a rotation prompt.
+
+The mapping is the whole point. **An ID card is identity; a passport is the record.** So your
+own profile shows your ID, the Passport tab holds your book, and **a connected person's profile
+shows their PASSPORT** — you receive their record, not their papers. There is deliberately no
+ID for other people and no route between the two.
+
+- **Turning is for legibility, not for opening.** The card is fully present either way. That is
+  the deliberate contrast with the passport, where portrait shows a closed cover and turning the
+  phone *opens* it. The card has one state; the book has two.
+- **No rotate hint.** The composition has to carry "deliberately placed, not broken" on its own.
+  What carries it: a radius-only shadow with no y-offset (a directional shadow declares a light
+  source that is wrong in one of the two holding positions), exact symmetric margins on the
+  vignetted resting surface, nothing else on screen, and chrome chosen to survive a quarter turn
+  (`xmark`, `gearshape` — a chevron or a word label would break it instantly).
+- **The register is inverted from the passport page.** Every VALUE is Courier, every LABEL is
+  Jost, at roughly 1:1.9 against the page's 1:1.15. A page is printed and filled in; a card is
+  personalised by a machine. That inversion is the strongest reason the card reads as a
+  different object rather than a page turned sideways.
+- **Same security printing, different composition.** Every primitive is shared with the book
+  (contours, guilloché, microprint, registration marks); the *composition* is per-document and
+  always will be — the page's layout is authored in 232×330 and lands wrong on a 539×340 card.
+- **One fluorescing hero, as in the book:** the name. Every other value is calm, every label at
+  the label floor, and the machine strip fluoresces independently because it belongs to the
+  printing layer rather than the field system.
+- **The portrait plate is a photo slot, not a hero** — dark and non-reactive under UV like every
+  photo cell, which is both physically true and what lets the real photo model drop in later
+  without redesign.
+
 ## The collage
 
-A profile is not a contact card — it is a **collage the person assembles themselves**: layered
-photos, cut-out stickers, torn scraps of handwriting, tape, all overlapping and rotated. Events
-and groups get their own collage too, set by a host or a member.
+A **collage is assembled by a person, item by item**: layered photos, cut-out stickers, torn
+scraps of handwriting, tape, all overlapping and rotated. It belongs to **scan results, events
+and groups** — a scanned person's collage, an event's, a group's, set by a host or a member.
 
-- **Hand-assembled here, auto-composed in the passport.** This collage is authored by the
-  person, item by item. The passport's per-city pages (§ The city page) are the opposite:
-  the app composes them automatically on a Bauhaus/Mondrian grid. Same visual family —
-  overlapping photos, palette colour, mechanical order — but opposite authorship. Keep the
-  two straight: *you* arrange your profile; the *app* arranges your cities.
+**It is no longer the profile.** Your own profile is an ID card (§ The ID card). The line that
+stood here — "a profile is not a contact card, it is a collage the person assembles themselves"
+— was inverted by that change: the profile is now precisely a document of identity.
 
+- **Hand-assembled here, auto-composed in the passport.** A collage is authored by a person,
+  item by item. The passport's per-city pages (§ The city page) are the opposite: the app
+  composes them automatically on a Bauhaus/Mondrian grid. Same visual family — overlapping
+  photos, palette colour, mechanical order — but opposite authorship. The contrast survives the
+  profile change; only its first pole moved, from *your profile* to *a person's, event's or
+  group's collage*.
 - **Loud content inside quiet order.** The collage is meant to be chaotic and personal; the app
-  around it stays calm — framed on a paper page, chrome in Josefin and ink. This is the same
+  around it stays calm — framed on a paper page, chrome in Jost and ink. This is the same
   rule the feed already follows ("photos carry the colour, the interface stays in the eight
-  tokens"). The user's chaos sits inside the app's order, and the contrast is the point.
+  tokens"). The content's chaos sits inside the app's order, and the contrast is the point.
 - **Relative coordinates, always.** Every item stores its position as `0…1` fractions of the
   collage bounds and its size as a fraction of the collage width — never absolute points. A
   collage laid out in points would drift the instant it opened on a different-sized phone;
   fractions make it compose identically on every device. This is enforced in the model
   (`Core/Models/Collage.swift`) and non-negotiable.
-- **Read-only for now.** `Core/Components/CollageView.swift` renders a collage; the editor is a
-  later phase. Cut-outs are clipped to the frame so they can bleed off the edge like a real
-  pasted photo overhanging the page.
-- Phase-0.5 stand-ins: photos are the existing generated colour blocks, stickers are simple
-  palette shapes and badges, text is a handwriting hand. Real JPGs drop into `MockData` later.
+- **Read-only for now.** `Core/Components/CollageView.swift` renders a collage; an editor is a
+  later phase, and its subject is now an event's or group's collage rather than your own
+  profile. Cut-outs are clipped to the frame so they can bleed off the edge like a real pasted
+  photo overhanging the page.
+- Stickers are simple palette shapes and badges, text is a handwriting hand. **Photos are real
+  sample assets** in `MockData`, not the generated colour blocks the earlier draft of this line
+  described.
 
 ## The handshake ritual
 

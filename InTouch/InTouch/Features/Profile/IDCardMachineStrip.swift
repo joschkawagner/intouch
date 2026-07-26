@@ -20,8 +20,19 @@
 //  the same exemption the book's MRZ has (see the field-glow rule in
 //  Palette.swift).
 //
-//  ⚠️ NOT YET VERIFIED — nothing renders this. Everything about the ID card
-//  except its terrain density is unverified until it is wired into ProfileView.
+//  ✅ RENDERED AND SEEN as of f09c2eb — the card is wired into ProfileView and
+//  has run in the simulator in both lighting modes. ⚠️ What that does NOT cover,
+//  and must not be assumed from it:
+//    • ROUTE STABILITY of the card's own render is UNESTABLISHED. Tap ordering
+//      selects between stable render outcomes elsewhere in this app and the
+//      cause is unknown (DECISIONS.md 2026-07-25). The card is reached by a
+//      brand-new path and has not been captured by two routes and compared.
+//    • NO BASELINE EXISTS. The status bar is still in frame, so the card's
+//      full-frame hash changes every minute by construction.
+//    • MICROPRINT DENSITY is container-dependent — see IDCardPrinting.
+//    • Q3 (the empty col-B row 3) and Q4 (bio wrap on a long bio) are OPEN.
+//      Q4 bears on THIS file too: the clip behaviour on a long name is reasoned
+//      above but has never been seen with a name long enough to reach the clip.
 //
 
 import SwiftUI
