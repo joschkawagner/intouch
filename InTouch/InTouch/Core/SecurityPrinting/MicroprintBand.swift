@@ -28,7 +28,7 @@ struct MicroprintBand: View {
     var body: some View {
         Text(line)
             .font(Typography.passportMicroprint)
-            .tracking(1)
+            .tracking(Typography.machineTracking)
             .foregroundStyle(color)
             .fixedSize()
             .lineLimit(1)

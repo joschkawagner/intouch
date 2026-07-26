@@ -55,7 +55,7 @@ struct PassportCityPage: View {
 
                 Text(Self.coordString(city))
                     .font(Typography.passportCoord)
-                    .tracking(1)
+                    .tracking(Typography.machineTracking)
                     .foregroundStyle(isUV ? Color.uvFieldValue : Color.text.opacity(0.45))
                     .uvFieldLit(isUV)
                     .referenceOrigin(x: 14, y: 246)
