@@ -14,14 +14,17 @@ import Foundation
 
 enum PassportHolder {
 
-    /// Mocked holder number, shown as "1,924" (matches the design mock).
+    /// Mocked holder number.
     static let number = 1924
 
-    /// The holder number formatted for display, e.g. "1,924". Uses a fixed
-    /// document grouping (comma) rather than the device locale, so the passport
-    /// number reads the same everywhere — it is a document field, not local UI.
+    /// The holder number as the machine prints it: zero-padded, ungrouped —
+    /// identical to the %04d core the MRZ strikes, because a real document's
+    /// printed serial matches its machine zone. The earlier form ran the
+    /// number through a quantity formatter ("1,924"); serials do not group,
+    /// and that comment argued carefully about WHICH grouping to use while
+    /// never asking WHETHER to group. See DECISIONS.md 2026-07-26.
     static var formattedNumber: String {
-        number.formatted(.number.locale(Locale(identifier: "en_US")))
+        String(format: "%04d", number)
     }
 
     /// The machine-readable band for a holder name, e.g.
