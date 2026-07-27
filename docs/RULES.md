@@ -159,6 +159,37 @@ one deliberate rotation with Settings open settles it.
 
 ---
 
+## R5 · Decorative printing is an accessibility element by default — hide it at the primitive
+
+A document's **content** is its fields. Its **printing** is texture: microprint, guilloche,
+registration marks, machine-readable bands, placeholder slots. A sighted reader tells them
+apart instantly. VoiceOver cannot, because SwiftUI makes every `Text` and every `Image` an
+accessibility element unless told otherwise.
+
+**Four instances, and only two were found by asking:**
+
+| Element | Announced as | Found by |
+|---|---|---|
+| Page-turn chevrons | "chevron.left" | building automation that couldn't reach them |
+| Placeholder photo slots | "photo", once per collage cell | asking, during the chevron work |
+| MRZ bands, both documents | the raw encoding | asking, deliberately |
+| **Microprint gutter bands** | "INTOUCH · INTOUCH · …" | **hearing it on hardware** |
+
+**The check:** treat every `Text` and `Image` in the security-printing layer as exposed until
+proven otherwise. Enumerate them — do not wait to hear one. The MRZ fix was scoped to the
+machine-readable band, and nobody asked whether its principle extended to the rest of the
+printing layer. It did, and the gap survived four commits and a full docs pass.
+
+**Hide at the shared primitive, not at the call site.** `MicroprintBand` has one `Text` and
+three consumers (`SecurityPrinting`, `IDCardPrinting`, `IDCardFace`). One
+`.accessibilityHidden(true)` covers every surface at once; three site-level fixes drift.
+
+**⚠️ Hiding decoration is not hiding content.** When the real photo model lands, a photo in a
+city page IS content and wants a label, not this modifier. The rule is about the printing
+layer, not about everything that happens to be an image.
+
+---
+
 # Recognised categories
 
 Shapes worth naming so they are not re-litigated each time they appear.
@@ -193,6 +224,26 @@ focused element — so the announcement probably already happens and adding the 
 would likely **double** it. That fixes a gap whose existence could not be established, with a
 change that might make things worse. Not construction-correct; not shipped. The analysis was
 recorded instead.
+
+### ⚠️ C1 holds TWO categories, and only one of them can ever graduate
+
+Proven by the device session on 2026-07-26 evening, which resolved one kind and left the
+other exactly where it was:
+
+- **C1a · imperceptible.** Correct by construction, but there is nothing to observe — the
+  effect sits below the threshold of perception. `Color.uvShadow` is this: ~1.5% per channel
+  at the spine's opacities. **No instrument will ever graduate it**, because the limit is
+  perceptual, not instrumental. Its label is permanent and correct.
+- **C1b · uninstrumented.** Correct by construction, there IS something to observe, but no
+  instrument was available. Both MRZ bands and the `.disabled` chevron were this. **These
+  graduate the moment an instrument appears** — and on 2026-07-26 a physical iPhone appeared,
+  after which T3 passed outright and T1's backward boundary passed.
+
+**Why the split is load-bearing:** a C1b item carries a debt that can be paid and should be
+tracked until it is; a C1a item carries no debt at all. Filing them together makes the first
+look permanently unfinished and lets the second quietly become permanent. **Decide which kind
+you have before writing the label** — and if it is C1b, name the instrument that would
+settle it.
 
 **Instances (2026-07-26):**
 - `Color.uvShadow` — correct on principle, ~1.5% per channel at the spine's opacities, so
