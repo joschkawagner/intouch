@@ -151,8 +151,21 @@ Both boundaries, equal standing, same code path — a split is its own finding.
 focus to "Previous page", activate once — back to the first spread, and the element under
 focus disables.
 
-**Run A:** from the first spread, focus "Next page" and activate repeatedly, staying on it,
-until **the last spread** — the activation that disables the element under focus.
+**Run A:** ⚠️ **REVISED 2026-07-26 after a void run — do not page the whole book.** Reach
+**the second-to-last spread** by touch-exploration (rest a finger on the forward chevron,
+double-tap, repeat — never swipe), focus the forward chevron, then activate **once**. One
+activation, exactly symmetric with Run B.
+
+**Why the revision.** The original phrasing said "activate repeatedly until the last spread",
+and the first attempt was **VOID**: swiping between activations walked focus onto the
+`DBG: CLOCK` chip, the eighth activation hit the chip instead of the chevron, and the lighting
+mode toggled. Neither pinned outcome was reached, and the run measured nothing.
+
+**The lesson, which generalises past this test: minimise traversal between the setup and the
+measured event.** The eight activations were never the point — the test is the *boundary
+activation*. Every element crossed on the way is an opportunity to activate the wrong thing,
+and any control that changes app state (a debug chip, a mode toggle) turns a mis-activation
+into silent contamination rather than an obvious error.
 
 **Observe, both runs:** where VoiceOver focus lands immediately after the disabling
 activation.
