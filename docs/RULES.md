@@ -133,6 +133,23 @@ announces · does modality apply.
 **tappability only**. Never read it as evidence about assistive-technology behaviour. Any claim
 about hidden-ness, focus or announcement needs real VoiceOver, driven by hand — see C1.
 
+### Sharpened on hardware, 2026-07-26 — demonstrated, no longer argued
+
+The model above was inferred from two simulator observations. A device settled it directly:
+
+**`.disabled(!enabled)` removed the chevron from the snapshot's `targets` list, while VoiceOver
+went on seeing the very same element and announcing it as „Grau dargestellt, Taste" — "dimmed,
+button".** Both were true of one element at one moment.
+
+**So actionability and accessibility-element-ness are separate axes, and the snapshot only ever
+reported the first.** That is the whole rule, now with a witness rather than an argument. An
+element can be simultaneously *absent from `targets`* and *present, focusable and announced* to
+assistive technology — which is precisely the reading that a disappearance in `targets` invites
+and that this rule forbids.
+
+Note what this cost before it was known: the disappearance was once read as evidence that
+`.accessibilityHidden` "didn't work", a diagnosis that had to be withdrawn.
+
 ---
 
 ## R4 · Existence is not availability — verify at the control surface, not on disk

@@ -170,6 +170,13 @@ into silent contamination rather than an obvious error.
 **Observe, both runs:** where VoiceOver focus lands immediately after the disabling
 activation.
 
+> **⚠️ SCRIPT DEFECT, found in Run A attempt 2 — read before running any boundary test.**
+> A discriminator that says "swipe once more" without naming a direction is **unfalsifiable**.
+> Forward swipes report what comes *next*, which is identical from position N and from
+> position 1. **The discriminator must be BACKWARD.** Correct landing content is not evidence
+> of retention — only what lies behind it is. **A pre-committed pass condition can still be
+> unfalsifiable if it omits the axis the observation has to be taken along.**
+
 **The three outcomes, pinned in advance:**
 
 | Outcome | Verdict |
@@ -211,12 +218,52 @@ reset. Correct landing content is not evidence; only what lies behind it is.
   the cause outside `edgeTap`. No averaging into a verdict: a mechanism holding at one end
   has been half-falsified, not validated.
 
+### ✅ RESULT — BOTH BOUNDARIES PASS, outcome 1. `38b3986` is verified
+
+**iPhone 13 mini, iOS 26.5.2, VoiceOver on, German locale.** Run B (backward) and Run A
+(forward) both reached **outcome 1** — the strongest of the three: focus stayed *on* the
+chevron as it became disabled.
+
+**Run A route.** Touch-explore to the forward chevron, double-tap to advance to the last
+spread (the measured activation), then swipe **LEFT**.
+
+**Landing announcement, heard at the moment of activation:**
+
+> „Nächste Seite. Spread neun von neun. **Grau dargestellt, Taste**, Bild."
+
+*Grau dargestellt, Taste* is German VoiceOver for **"dimmed, button"**. This matters more than
+any inference drawn afterwards: **retention was announced directly**, at the instant the
+element under focus became disabled. Run B established retention by reconstruction; Run A
+heard it stated.
+
+**Backward confirmation** (the discriminator, applied on the correct axis): swipe left →
+INTOUCH microprint band 1; swipe left → INTOUCH microprint band 2; swipe left → "member
+since". That string is authored **only** at `PassportColophonPage.swift:46`, so it is
+last-spread-only content: a sequence demonstrably exists behind the landing point.
+
+**Discard-to-element-1 is excluded on two independent grounds.** First, VoiceOver does not
+wrap on a backward swipe from the first element — it plays a **boundary tone and holds**;
+content was heard, not a boundary. Second, a discarded focus is incompatible with *"dimmed,
+button"* being the landing announcement at all. Either alone would settle it.
+
+**Consequence, per the pre-committed branches above:** the UNVERIFIED / lowered-confidence
+label comes off `38b3986`, and C1's chevron instance upgrades from *shipped on an untestable
+argument* to **shipped, then verified**. Not a split — both boundaries agree, and agree on the
+same outcome.
+
 ### T2 · Is the turn announced — once?
 
 Page between interior spreads, staying focused on "Next page". P2 established the value
 updates; this asks what is spoken. **PASS** — the new spread number, exactly once per turn.
 **FAIL-gap** — silence → implement `PageScrolled`. **FAIL-double** — announced twice → a
 different defect; do NOT add `PageScrolled`.
+
+**⚠️ PARTLY ANSWERED BY ACCIDENT (2026-07-26).** Run A's landing announcement contained
+„Spread neun von neun" — so **the announcement half is confirmed present**: a page turn *is*
+spoken, and the `PageScrolled` gap does not exist. **What remains open is only whether it
+doubles.** Note the provenance honestly: this was overheard while measuring something else,
+not produced by T2's route, so it answers T2's first branch and leaves FAIL-double untested.
+The remaining test is cheap — page 2 → 3 → 4 staying on "Next page" and count.
 
 ### T4a · Full Keyboard Access *(external keyboard required)*
 
