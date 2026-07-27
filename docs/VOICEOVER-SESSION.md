@@ -178,11 +178,29 @@ activation.
 | Focus moves to a sensible neighbour on the same spread | **PASS** — but apply the discriminator |
 | Focus dumps to the top of the screen or is lost | **FAIL** |
 
-**The discriminator is one more swipe.** If the next swipe continues the sequence locally,
-focus was retained; if it restarts from the beginning of the screen, focus was discarded and
-VoiceOver merely reset — **FAIL**, however plausible the landing spot looked. A discarded
-focus and a moved focus are identical in the instant after activation; only the swipe
-separates them, which is why the rule exists before the observation.
+**The discriminator is one more swipe, and it must go BACKWARD.**
+
+⚠️ **DIRECTION IS LOAD-BEARING — corrected 2026-07-26, after a forward swipe produced an
+uninterpretable Run A.** After the disabling activation, swipe **left**, to the *previous*
+element:
+
+- **Something lies behind the landing point** → focus was mid-sequence, therefore genuinely
+  retained. **PASS.**
+- **Nothing lies behind it** — the landing point is the screen's *first* element → focus was
+  discarded and VoiceOver reset to its default. **FAIL**, however plausible the element looked.
+
+**Why a forward swipe cannot decide it.** Swiping right tells you what comes *next*, and what
+comes next is identical whether focus sits at position N or at position 1. Only a backward
+swipe distinguishes *mid-sequence* from *at the start* — which is the entire question. A
+discarded focus and a retained one are indistinguishable in the instant after activation, and
+indistinguishable again on any forward swipe; the backward swipe is the only separator, which
+is why the rule is fixed before the observation.
+
+**Worked, both ways:** Run B swiped left from its landing element and reached the identity
+page's bio field — sequence behind it, PASS. Run A's second attempt swiped right three times
+onto correct last-spread content (two microprint bands, then "Member Since") and established
+**nothing** about retention, because every one of those elements is equally consistent with a
+reset. Correct landing content is not evidence; only what lies behind it is.
 
 **The DECISIONS row is pre-committed, all three branches:**
 - **PASS** → `.disabled` was right on the right reasoning; the UNVERIFIED label comes off;
