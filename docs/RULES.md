@@ -62,6 +62,29 @@ The original wording of this line was "not after a fourth instance" — the four
 landed anyway, the same day, found the same way: by accident. That is an argument for the
 rule, not against it.
 
+### Instance 6 — route A was pinned only as far as spread 2 (2026-07-28)
+
+**The paging cadence used to reach the colophon has never been written down.** The pinned
+procedure specifies the launch, the tab tap, the one tap to spread 2 and the mode toggles —
+and then says only *"same for the colophon after paging."* How you get from spread 2 to
+spread 9 is not part of the pin.
+
+**Four consecutive nets agreed on that stretch because nothing happened to vary it, not
+because it was controlled.** That is the whole shape of this instance: a procedure can look
+reproducible for as long as the same person runs it the same way out of habit. Stability
+through habit is indistinguishable from stability through control until something changes —
+and the difference only shows up when you most need the measurement to be trustworthy.
+
+**The gap is real even though the baseline is not ad hoc.** `2a864e0` shows this stretch has
+at least once produced a genuine baseline: a full four-frame route A pass, with `col-day`
+confirmed in the same commit as a stable regression check. So the values are earned. It is
+the *route to them* that remains unpinned — and an earned value reached by an unpinned route
+still cannot tell you what a mismatch means.
+
+**Close it by writing down the actual cadence in `BASELINES.md`** the next time the colophon
+is deliberately paged to. Tap count, cadence, and settle time — the same detail the first two
+steps already get.
+
 ### Instance 5 — a session was scoped against an instrument nobody checked existed (2026-07-26)
 
 The VoiceOver session was scripted in full — five tests, instruments matched per test, pass
