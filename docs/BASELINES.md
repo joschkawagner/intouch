@@ -13,6 +13,12 @@ never a reason to edit this table. History and supersessions live in `DECISIONS.
 | `card-day` | `e3004da3ac4b85b078906783a5cabea6` | Any tested route (C settled · D carried-in · E chained), forced mode |
 | `card-uv` | `485fe120f399903fd67a935c68e98f9e` | Any tested route (C settled · D carried-in · E chained), forced mode |
 
+> **⚠️ `col-uv` IS UNDER INVESTIGATION as of 2026-07-28.** A net that night held 5/6 — every
+> other value above reproduced byte-exact — while `col-uv` alone did not. The value in the
+> table is **unchanged and still the reference**; it has not been re-baselined and no fix has
+> been attempted. Expect a mismatch on that one frame until this resolves, and do not treat it
+> as a fresh regression. Details and the ruled-out causes are in `DECISIONS.md`, 2026-07-28.
+
 Passport captures follow the pinned route A in the pinned order (`zur-day` → `zur-uv` →
 `col-uv` → `col-day`), full-frame lossless PNG, wall-clock hour recorded.
 
