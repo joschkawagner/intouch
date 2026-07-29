@@ -25,7 +25,11 @@ struct FeedCardView: View {
                     .font(Typography.body)
                     .foregroundStyle(Color.text)
 
-                Text("\(post.author.uppercased())  ·  \(post.city.uppercased())  ·  \(Self.timestampFormatter.string(from: post.date).uppercased())")
+                // `shortName`, not `displayName`: the byline has always shown a
+                // first name. That used to happen because the fixture *was* a
+                // first name; now that a post carries a whole person, the rule is
+                // stated rather than implied. Renders identically to before.
+                Text("\(post.author.shortName.uppercased())  ·  \(post.city.uppercased())  ·  \(Self.timestampFormatter.string(from: post.date).uppercased())")
                     .font(Typography.timestamp)
                     .tracking(Typography.machineTracking)
                     .foregroundStyle(Color.muted)

@@ -57,34 +57,34 @@ enum MockData {
     // the feed renders this array in order, no algorithm.
 
     static let posts: [FeedPost] = [
-        FeedPost(id: "post-ski", author: "Nora", caption: "Top lift, empty run, blue sky. No notes.",
+        FeedPost(id: "post-ski", author: friendNora, caption: "Top lift, empty run, blue sky. No notes.",
                  city: "Verbier", date: date(2026, 7, 21, hour: 14, minute: 20),
                  photos: ["ski-1", "ski-2"]),
-        FeedPost(id: "post-mountaineering", author: "Emil", caption: "On the ridge before the sun cleared it.",
+        FeedPost(id: "post-mountaineering", author: scannedPerson, caption: "On the ridge before the sun cleared it.",
                  city: "Zermatt", date: date(2026, 7, 20, hour: 6, minute: 5),
                  photos: ["mountaineering-1", "mountaineering-2"]),
-        FeedPost(id: "post-cooking", author: "Sam", caption: "First real meal I've cooked all week.",
+        FeedPost(id: "post-cooking", author: friendSam, caption: "First real meal I've cooked all week.",
                  city: "Zürich", date: date(2026, 7, 19, hour: 20, minute: 40),
                  photos: ["cooking"]),
-        FeedPost(id: "post-sea", author: "Juno", caption: "Colder than it looked. Went in anyway.",
+        FeedPost(id: "post-sea", author: friendJuno, caption: "Colder than it looked. Went in anyway.",
                  city: "Hvar", date: date(2026, 7, 18, hour: 16, minute: 12),
                  photos: ["sea"]),
-        FeedPost(id: "post-newyork", author: "Drew", caption: "Two parks, one very long walk.",
+        FeedPost(id: "post-newyork", author: friendDrew, caption: "Two parks, one very long walk.",
                  city: "New York", date: date(2026, 7, 16, hour: 19, minute: 30),
                  photos: ["new-york-1", "new-york-2"]),
-        FeedPost(id: "post-london", author: "Ada", caption: "Missed the last bus. In the rain. Again.",
+        FeedPost(id: "post-london", author: friendAda, caption: "Missed the last bus. In the rain. Again.",
                  city: "London", date: date(2026, 7, 14, hour: 23, minute: 15),
                  photos: ["london"]),
-        FeedPost(id: "post-cycling", author: "Sam", caption: "73 km before breakfast. Ask me why.",
+        FeedPost(id: "post-cycling", author: friendSam, caption: "73 km before breakfast. Ask me why.",
                  city: "Zürich", date: date(2026, 7, 12, hour: 7, minute: 50),
                  photos: ["cycling"]),
-        FeedPost(id: "post-track", author: "Nora", caption: "Lane four. Didn't win. Didn't fall.",
+        FeedPost(id: "post-track", author: friendNora, caption: "Lane four. Didn't win. Didn't fall.",
                  city: "Zürich", date: date(2026, 7, 10, hour: 18, minute: 0),
                  photos: ["track"]),
-        FeedPost(id: "post-stadium", author: "Emil", caption: "Three hours early for a seat this good.",
+        FeedPost(id: "post-stadium", author: scannedPerson, caption: "Three hours early for a seat this good.",
                  city: "Dublin", date: date(2026, 7, 7, hour: 15, minute: 45),
                  photos: ["stadium"]),
-        FeedPost(id: "post-drew", author: "Drew", caption: "New fit. Subzero field test passed.",
+        FeedPost(id: "post-drew", author: friendDrew, caption: "New fit. Subzero field test passed.",
                  city: "Oslo", date: date(2026, 7, 5, hour: 12, minute: 30),
                  photos: ["drew-joiner"]),
     ]
@@ -178,7 +178,59 @@ enum MockData {
         bio: "Zürich. Better uphill than down."
     )
 
+    // MARK: - The friends whose posts fill the feed
+    //
+    // These exist because A7 turned `FeedPost.author` from a bare string into a
+    // whole person, and a person needs more than a first name. Before this, the
+    // feed's "Nora" was a string with no identity — nothing could route from a
+    // byline to a passport, which is what P11 needs.
+    //
+    // ⚠️ THEY CARRY FULL NAMES, and the feed still shows first names, because
+    // `UserProfile.shortName` derives the byline. A mononym would have been less
+    // invented data, but P4 puts these people's PASSPORTS on screen and a travel
+    // document issued to "Nora" reads as broken. The surnames are fixtures and
+    // change in one place.
+    //
+    // The collage is shared deliberately: no screen renders a feed author's
+    // collage yet, so five invented collages would be five pieces of fiction
+    // nobody can see. It is a placeholder, not a claim that they made the same one.
+
+    static let friendNora = UserProfile(
+        id: "user-nora", displayName: "Nora Lindqvist", handle: "@nora",
+        cityCount: 6, collage: scannedPersonCollage,
+        joinedDate: date(2025, 10, 4), bio: "Runs early. Skis earlier."
+    )
+
+    static let friendSam = UserProfile(
+        id: "user-sam", displayName: "Sam Okafor", handle: "@sam",
+        cityCount: 3, collage: scannedPersonCollage,
+        joinedDate: date(2025, 12, 2), bio: "Cooks properly. Cycles unreasonably."
+    )
+
+    static let friendJuno = UserProfile(
+        id: "user-juno", displayName: "Juno Bergström", handle: "@juno",
+        cityCount: 5, collage: scannedPersonCollage,
+        joinedDate: date(2026, 1, 19), bio: "Swims in whatever's nearest."
+    )
+
+    static let friendDrew = UserProfile(
+        id: "user-drew", displayName: "Drew Halloran", handle: "@drew",
+        cityCount: 8, collage: scannedPersonCollage,
+        joinedDate: date(2025, 9, 26), bio: "Walks cities end to end."
+    )
+
+    static let friendAda = UserProfile(
+        id: "user-ada", displayName: "Ada Whitfield", handle: "@ada",
+        cityCount: 4, collage: scannedPersonCollage,
+        joinedDate: date(2026, 2, 8), bio: "London. Always missing the last bus."
+    )
+
     /// What a simulated "scan a person" lands on.
+    ///
+    /// ⚠️ ALSO THE FEED'S "Emil" — the same `UserProfile`, used in both places.
+    /// That is the point of A7: before this, the feed's "Emil" and this profile
+    /// were unrelated strings, and the audit's exact complaint was that the feed
+    /// and the passport shared no identifier. Now they share this one.
     static let scannedPerson = UserProfile(
         id: "user-emil",
         displayName: "Emil Roth",

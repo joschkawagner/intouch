@@ -13,7 +13,21 @@ import Foundation
 
 struct FeedPost: Identifiable, Hashable {
     let id: String
-    let author: String
+
+    /// Who posted it — a whole person, not a name.
+    ///
+    /// This was a bare `String` (audit finding A7), which meant the feed and the
+    /// passport shared no identifier at all: a post by "Emil" and the profile of
+    /// Emil Roth were two unrelated pieces of text. Nothing could route from a
+    /// byline to a passport, which is what P11 needs.
+    ///
+    /// **Modelled as the JOINED row, not as embedded data.** In Postgres this is
+    /// `posts.author_id → profiles.id`, and the feed query fetches the profile
+    /// alongside the post (`select *, author:profiles(*)`). Holding a
+    /// `UserProfile` here is that join result, not a claim that a post owns a
+    /// copy of a person — a post never edits its author.
+    let author: UserProfile
+
     let caption: String
     let city: String
     let date: Date

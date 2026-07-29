@@ -30,4 +30,19 @@ struct UserProfile: Identifiable, Hashable {
         let parts = displayName.split(separator: " ").prefix(2)
         return parts.compactMap(\.first).map(String.init).joined().uppercased()
     }
+
+    /// The name as a feed byline says it — first name only.
+    ///
+    /// This makes explicit a rule that used to be encoded by accident: feed posts
+    /// stored a bare `"Nora"`, so the byline showed a first name because the
+    /// *fixture* was a first name, not because anything decided it should be.
+    /// Now that a post carries a whole person, the rule has to live somewhere,
+    /// and it lives here beside `initials` — the other place a display form is
+    /// derived from `displayName` rather than stored twice.
+    ///
+    /// Derived, never stored: a stored short name is a second source of truth for
+    /// the same fact, and the two drift the first time someone edits their name.
+    var shortName: String {
+        String(displayName.split(separator: " ").first ?? Substring(displayName))
+    }
 }
