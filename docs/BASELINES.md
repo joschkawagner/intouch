@@ -1,8 +1,27 @@
-# Baselines — the operative table
+# Baselines — the reference values
 
-The six current pixel-gate values. This file is updated in the same commit whenever a
-baseline moves **by design**; an unexplained mismatch against these values is a regression,
-never a reason to edit this table. History and supersessions live in `DECISIONS.md`.
+**⚠️ DEMOTED 2026-07-29 — a pixel net is a SPOT-CHECK, not a gate.** It blocks nothing. An
+unexplained mismatch is **no longer automatically a regression**: it is one observation, to
+be diagnosed on its own terms alongside every hidden precondition `RULES.md` R1 enumerates
+— the wall-clock hour, the orientation, the route, the cached refs, what was actually in the
+build. `col-uv` is the standing case in point and is still open.
+
+**The values below are still the reference.** Demoting the net changes what a mismatch
+*obliges*, not what the numbers *are*. This file is still updated in the same commit
+whenever a baseline moves **by design**; history and supersessions live in `DECISIONS.md`.
+
+**When to run one: before something that genuinely worries you** — a change to the book's
+geometry, to a shared `Core/SecurityPrinting` primitive, to a page's layout. Not as ceremony
+around every commit. A net run out of habit is not evidence of correctness in the first
+place: the finding of 2026-07-28 is that the page-turn chevron has been overlapping colophon
+content since at least `2a864e0` while `col-day` reproduced byte-exact around it. **A wrong
+pixel rendered consistently passes every net forever.** Four passing frames certify that
+nothing moved, never that anything is right.
+
+**THIS FILE IS THE ONLY SOURCE OF HASH TRUTH.** Never read a value out of a `DECISIONS.md`
+row, a commit message or a plan file — those record what was true when written, and at least
+one of them has already gone stale without noticing. A second document carrying these
+literals is wrong by construction, not merely out of date.
 
 | Surface | Hash | Valid via |
 |---|---|---|

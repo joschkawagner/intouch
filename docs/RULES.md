@@ -5,6 +5,12 @@ anyone can apply without re-deriving it. Add one when a decision has been made t
 twice and the reasoning is worth more than the instance. Keep them short enough to read
 before acting; the reasoning and evidence live in `DECISIONS.md`.
 
+**Citing hashes, across all three files.** "Never truncate" is a rule about **MD5 pixel
+baselines** — 32 chars, quoted whole, because a truncated baseline compares against nothing,
+and that is the only place truncation has ever cost anything here. **Git commit SHAs are not
+that:** they follow the repo's 7-char convention, as every row of `DECISIONS.md` already
+does. Operative baseline values live in `BASELINES.md` and nowhere else.
+
 ---
 
 ## R1 · Before pinning any procedure, ask what state it depends on that the framebuffer doesn't show
