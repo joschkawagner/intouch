@@ -19,6 +19,11 @@ struct SettingsView: View {
         let id = UUID()
         let icon: String
         let label: String
+        /// Only About is wired this phase — it is the one row that needs no
+        /// backend at all, so it is the only one that can be finished rather
+        /// than mocked. The rest stay inert until their phase; see the P7
+        /// table in the plan for which of them are backend-shaped.
+        var opensAbout = false
     }
 
     private let rows: [Row] = [
@@ -26,7 +31,7 @@ struct SettingsView: View {
         Row(icon: "lock", label: "Privacy"),
         Row(icon: "hand.raised", label: "Blocked users"),
         Row(icon: "bell", label: "Notifications"),
-        Row(icon: "info.circle", label: "About"),
+        Row(icon: "info.circle", label: "About", opensAbout: true),
     ]
 
     var body: some View {
@@ -41,7 +46,20 @@ struct SettingsView: View {
 
                 VStack(spacing: 0) {
                     ForEach(rows) { row in
-                        SettingsRow(icon: row.icon, label: row.label)
+                        if row.opensAbout {
+                            NavigationLink { AboutView() } label: {
+                                SettingsRow(icon: row.icon, label: row.label)
+                                    // The row is icon · label · Spacer · chevron, so without
+                                    // an explicit shape the hit area is only the DRAWN glyphs
+                                    // and the wide gap in the middle swallows taps. P0 deleted
+                                    // this exact modifier as dead code, correctly — nothing was
+                                    // tappable then. Wiring the first row brings it back.
+                                    .contentShape(Rectangle())
+                            }
+                            .buttonStyle(.plain)   // keep the paper row, not a tinted system link
+                        } else {
+                            SettingsRow(icon: row.icon, label: row.label)
+                        }
                         Divider().background(Color.muted.opacity(0.4)).padding(.leading, 56)
                     }
                 }
