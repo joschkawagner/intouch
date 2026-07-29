@@ -15,24 +15,36 @@ import SwiftUI
 
 struct SettingsView: View {
 
+    /// Where a row goes. `none` is the honest state for the rows whose content
+    /// is backend-shaped and cannot be finished yet — see the P7 table in the
+    /// plan for which those are and why.
+    private enum Destination {
+        case none, privacy, about
+    }
+
     private struct Row: Identifiable {
         let id = UUID()
         let icon: String
         let label: String
-        /// Only About is wired this phase — it is the one row that needs no
-        /// backend at all, so it is the only one that can be finished rather
-        /// than mocked. The rest stay inert until their phase; see the P7
-        /// table in the plan for which of them are backend-shaped.
-        var opensAbout = false
+        var destination: Destination = .none
     }
 
     private let rows: [Row] = [
         Row(icon: "person.crop.circle", label: "Account"),
-        Row(icon: "lock", label: "Privacy"),
+        Row(icon: "lock", label: "Privacy", destination: .privacy),
         Row(icon: "hand.raised", label: "Blocked users"),
         Row(icon: "bell", label: "Notifications"),
-        Row(icon: "info.circle", label: "About", opensAbout: true),
+        Row(icon: "info.circle", label: "About", destination: .about),
     ]
+
+    @ViewBuilder
+    private func destinationView(for destination: Destination) -> some View {
+        switch destination {
+        case .privacy: PrivacyView()
+        case .about:   AboutView()
+        case .none:    EmptyView()
+        }
+    }
 
     var body: some View {
         ScrollView {
@@ -46,19 +58,19 @@ struct SettingsView: View {
 
                 VStack(spacing: 0) {
                     ForEach(rows) { row in
-                        if row.opensAbout {
-                            NavigationLink { AboutView() } label: {
+                        if row.destination == .none {
+                            SettingsRow(icon: row.icon, label: row.label)
+                        } else {
+                            NavigationLink { destinationView(for: row.destination) } label: {
                                 SettingsRow(icon: row.icon, label: row.label)
                                     // The row is icon · label · Spacer · chevron, so without
                                     // an explicit shape the hit area is only the DRAWN glyphs
                                     // and the wide gap in the middle swallows taps. P0 deleted
                                     // this exact modifier as dead code, correctly — nothing was
-                                    // tappable then. Wiring the first row brings it back.
+                                    // tappable then. Wiring the first row brought it back.
                                     .contentShape(Rectangle())
                             }
                             .buttonStyle(.plain)   // keep the paper row, not a tinted system link
-                        } else {
-                            SettingsRow(icon: row.icon, label: row.label)
                         }
                         Divider().background(Color.muted.opacity(0.4)).padding(.leading, 56)
                     }
