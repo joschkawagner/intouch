@@ -88,22 +88,38 @@ struct SettingsView: View {
 }
 
 /// One inert settings row: icon, label, and a chevron unless it's a terminal action.
+///
+/// **Destructive rows render in `Color.alarm`, not `Color.ink`.** They used to
+/// use `ink` — which on these screens is also the screen title and the on-state
+/// toggle tint, so "Sign out" was the same colour as the heading above it and
+/// warned of nothing.
+///
+/// ⚠️ **Colour is not the whole job, and the rest of it is not paint.** WCAG
+/// 1.4.1 forbids colour as the sole carrier of meaning, so a destructive row
+/// needs a non-visual signal too. Today it has one for free — no chevron, since
+/// it is terminal rather than navigational — and it needs `role: .destructive`
+/// the moment it becomes a real `Button`. That is deliberately NOT added now:
+/// the row is inert, and giving an inert row a destructive announcement would
+/// recreate the "inert announced control" defect this project already fixed on
+/// the page-turn chevron. The announcement belongs with the wiring, not here.
 private struct SettingsRow: View {
 
     let icon: String
     let label: String
     var destructive = false
 
+    private var tint: Color { destructive ? Color.alarm : Color.text }
+
     var body: some View {
         HStack(spacing: 16) {
             Image(systemName: icon)
                 .resizable().scaledToFit()
                 .frame(width: 20, height: 20)
-                .foregroundStyle(destructive ? Color.ink : Color.text)
+                .foregroundStyle(tint)
 
             Text(Typography.chrome(label))
                 .font(Typography.body)
-                .foregroundStyle(destructive ? Color.ink : Color.text)
+                .foregroundStyle(tint)
 
             Spacer()
 

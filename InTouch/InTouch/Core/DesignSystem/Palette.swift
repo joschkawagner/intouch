@@ -35,6 +35,35 @@ extension Color {
 
     /// Map water, links, secondary accent. Powder Blue.
     static let water = Color(hex: 0x94B2C4)
+
+    /// Irreversible actions — sign out, delete, remove. The red of a
+    /// cancellation overprint: hotter than document ink, deeper than a fresh
+    /// rubber stamp.
+    ///
+    /// **Why it had to exist.** `ink` was carrying destructive actions, and on
+    /// the Settings screens `ink` is ALSO the screen title and the on-state
+    /// toggle tint — so "Sign out" rendered in exactly the colour of the
+    /// heading above it and carried no warning at all. A warning colour that
+    /// is also the emphasis colour is not a warning.
+    ///
+    /// **Named for what it is, not where it is used** — the `uvShadow` lesson.
+    /// It is the alarm register, not the sign-out colour, so account deletion
+    /// and unblock-confirmations inherit it without renaming anything.
+    ///
+    /// **Not `stampRed`, deliberately.** That is security-printing ink (the
+    /// MRZ fluoresces in it) and belongs to the document's own vocabulary; a
+    /// UI warning borrowing it would overload one token with two meanings that
+    /// happen never to appear on the same screen — which is exactly how such
+    /// a collision goes unnoticed until it doesn't.
+    ///
+    /// Contrast on `paper` is ~5.2:1, clearing WCAG AA for body text, and it
+    /// is plainly distinguishable from both `ink` (13.6:1, near-black) and
+    /// `text`.
+    ///
+    /// ⚠️ **Colour must never be the only signal.** WCAG 1.4.1: when a
+    /// destructive control becomes real it needs `Button(role: .destructive)`
+    /// so the ROLE carries the meaning for anyone who cannot see the hue.
+    static let alarm = Color(hex: 0xB03A28)
 }
 
 // MARK: - Saturated stamp inks
