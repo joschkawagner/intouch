@@ -86,7 +86,7 @@ struct PassportBookView: View {
     private func coverCard(in safe: CGSize) -> some View {
         let size = PassportBookGeometry.fitted(ratio: pageRatio, in: safe)
         let ref = PassportMetrics.referenceSize
-        return PassportCoverView()
+        return PassportCoverView(user: MockData.currentUser)
             .frame(width: ref.width, height: ref.height)
             .scaleEffect(size.width / ref.width, anchor: .center)
             .frame(width: size.width, height: size.height)

@@ -16,12 +16,21 @@
 //  with the floating cover card; PassportBookView sizes and rounds the card and
 //  drops its shadow.
 //
+//  ⚠️ `user` HAS NO DEFAULT, AND MUST NOT BE GIVEN ONE. It used to default to
+//  `MockData.currentUser`, so `PassportCoverView()` compiled anywhere and
+//  silently struck the current holder's name — nothing at the call site showed
+//  a person was involved at all. Once another person's passport can be opened,
+//  that default is the difference between their book and a book with your name
+//  on the front, with no compiler error to catch it. An explicit parameter
+//  cannot be forgotten.
+//
 
 import SwiftUI
 
 struct PassportCoverView: View {
 
-    var user: UserProfile = MockData.currentUser
+    /// Whose book this is. NO DEFAULT, deliberately — see the file note above.
+    let user: UserProfile
 
     @Environment(\.passportRenderMode) private var mode
     private var isUV: Bool { mode.isUV }
@@ -48,7 +57,7 @@ struct PassportCoverView: View {
 }
 
 #Preview {
-    PassportCoverView()
+    PassportCoverView(user: MockData.currentUser)
         .frame(width: 232, height: 330)
         .clipShape(RoundedRectangle(cornerRadius: 8))
         .shadow(color: Color.text.opacity(0.32), radius: 12, y: 10)
