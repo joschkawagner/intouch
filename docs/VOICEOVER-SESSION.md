@@ -251,6 +251,20 @@ label comes off `38b3986`, and C1's chevron instance upgrades from *shipped on a
 argument* to **shipped, then verified**. Not a split — both boundaries agree, and agree on the
 same outcome.
 
+### 🔮 DEVICE PREDICTION, for the next time the phone is out
+
+Pinned before the microprint fix was observed on hardware, so it can be graded rather than
+confirmed. After `MicroprintBand` gained `.accessibilityHidden(true)`:
+
+**Re-run the Run A route — land on the disabled chevron, swipe LEFT once — and it should reach
+"member since" with ZERO INTOUCH stops in between.**
+
+Before the fix, that same swipe passed through **two** INTOUCH bands, which is what a single
+struct positioned twice per surface predicts. If one band still speaks, the primitive is not
+the only site and R5's "hide at the shared primitive" needs re-examining on this surface. If
+neither speaks but something else decorative does, the fix worked and the enumeration was
+incomplete — a different failure, and a cheaper one.
+
 ### T2 · Is the turn announced — once?
 
 Page between interior spreads, staying focused on "Next page". P2 established the value

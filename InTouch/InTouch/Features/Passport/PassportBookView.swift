@@ -282,11 +282,18 @@ struct PassportBookView: View {
             // and a control vanishing mid-sequence is a discontinuity, not
             // fidelity.
             //
-            // ⚠️ EFFECT UNVERIFIED — no instrument exists for this claim. The
-            // available snapshot walks the view hierarchy, not the
-            // assistive-technology tree (docs/DECISIONS.md 2026-07-26). Both
-            // the announcement and the focus behaviour need real VoiceOver, by
-            // hand. See docs/RULES.md § C1.
+            // ✅ VERIFIED ON HARDWARE — iPhone 13 mini, iOS 26.5.2, VoiceOver,
+            // 2026-07-28. BOTH boundaries pass, both on the strongest outcome:
+            // focus stays on the chevron as it becomes disabled. The forward
+            // boundary announced its own retention rather than leaving it to be
+            // inferred — "Nächste Seite. Spread neun von neun. Grau dargestellt,
+            // Taste" ("dimmed, button"), with focus still on the element. A
+            // backward swipe then reached colophon-only content, so a sequence
+            // demonstrably exists behind the landing point.
+            //
+            // The earlier note here claimed no instrument existed for this. One
+            // did — a real device — and the claim was really that none was to
+            // hand. See docs/VOICEOVER-SESSION.md § T1 and RULES.md § C1b.
             .disabled(!enabled)
     }
 

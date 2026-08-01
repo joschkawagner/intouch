@@ -54,6 +54,19 @@ struct DebugUVChip: View {
                 .background(Color.night)
                 .foregroundStyle(Color.paper)
         }
+        // Kept out of VoiceOver's traversal path. A dev affordance has no
+        // business in the sequence a VoiceOver user swipes through — and this
+        // one is worse than noise, because it CHANGES APP STATE: landing on it
+        // by accident and activating it contaminates a measurement silently
+        // instead of failing loudly. That voided a T1 run outright — the
+        // eighth activation hit the chip and toggled the lighting mode.
+        //
+        // AUTOMATION IS UNAFFECTED, and that is measured, not hoped: per
+        // RULES.md R3 the MCP snapshot lists actionable TARGETS, and
+        // `.accessibilityHidden` does not change actionability — so the chip
+        // stays tappable by the harness that drives the pixel gates while
+        // disappearing from assistive-technology traversal.
+        .accessibilityHidden(true)
     }
 }
 #endif

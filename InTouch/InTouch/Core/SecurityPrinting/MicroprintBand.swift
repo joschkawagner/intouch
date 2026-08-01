@@ -32,6 +32,19 @@ struct MicroprintBand: View {
             .foregroundStyle(color)
             .fixedSize()
             .lineLimit(1)
+            // Decorative printing, not content — hidden from VoiceOver for
+            // exactly the reason the MRZ bands are (RULES.md R5): a texture
+            // zone is not a reading zone. Heard aloud on hardware as
+            // "INTOUCH · INTOUCH · …", once per band, before this landed.
+            //
+            // HIDDEN HERE, AT THE PRIMITIVE, DELIBERATELY. This single view is
+            // positioned more than once per surface with caller-supplied
+            // rotation — IDCardPrinting:117 horizontal, :121 rotated −90,
+            // SecurityPrinting:163 likewise — so the two orientations a
+            // VoiceOver user hears are one struct placed twice, not two views.
+            // One modifier here covers every band in every orientation on both
+            // documents; per-call-site fixes would drift apart.
+            .accessibilityHidden(true)
     }
 }
 
