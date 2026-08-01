@@ -32,6 +32,35 @@ enum MockData {
     /// One pin per city on the map. Ordered; count is the "cities" number.
     static let cities: [PassportCity] = [zurich, berlin, london, lisbon, vienna, milan, oslo]
 
+    // MARK: - Cities friends have posted from
+    //
+    // ⚠️ DELIBERATELY NOT IN `cities` ABOVE. DO NOT APPEND THEM.
+    //
+    // `cities` means the places the CURRENT USER has photos — it is the holder's
+    // own passport, and it drives the map pins, the spread count, and both
+    // colophon numbers. A post's city is wherever its AUTHOR was standing. Nora
+    // posting from Verbier is Nora's photo; it does not put Verbier in your
+    // passport, add a pin to your map, or add a spread to your book.
+    //
+    // The two lists therefore overlap without being the same list: Zürich,
+    // London and Oslo appear in both because you have photos there too; Verbier,
+    // Zermatt, Hvar, New York and Dublin appear only here. Appending these five
+    // to `cities` would take the book from 9 spreads to 14 and the colophon from
+    // "7 cities · 29 photos" to "12 cities · 44 photos" — a product change, not a
+    // tidy-up.
+    //
+    // 🔶 INVENTED FIXTURES, NOT SOURCED — the same status as the five
+    // `UserProfile` fixtures authored in `d5b6ef8`. The names come from the feed
+    // fixtures that already existed; the country codes and coordinates were
+    // written to be plausible and are real city centres, but nothing here was
+    // taken from a data source and none of it is user content.
+
+    static let verbier = PassportCity(name: "Verbier",  country: "CH", latitude: 46.0961, longitude: 7.2286)
+    static let zermatt = PassportCity(name: "Zermatt",  country: "CH", latitude: 46.0207, longitude: 7.7491)
+    static let hvar    = PassportCity(name: "Hvar",     country: "HR", latitude: 43.1729, longitude: 16.4411)
+    static let newYork = PassportCity(name: "New York", country: "US", latitude: 40.7128, longitude: -74.0060)
+    static let dublin  = PassportCity(name: "Dublin",   country: "IE", latitude: 53.3498, longitude: -6.2603)
+
     /// One photo/moment per entry. Newest-first is a display concern — the
     /// calendar lens sorts by date, so the source order here doesn't matter.
     static let entries: [PassportEntry] = [
@@ -58,34 +87,34 @@ enum MockData {
 
     static let posts: [FeedPost] = [
         FeedPost(id: "post-ski", author: friendNora, caption: "Top lift, empty run, blue sky. No notes.",
-                 city: "Verbier", date: date(2026, 7, 21, hour: 14, minute: 20),
+                 city: verbier, date: date(2026, 7, 21, hour: 14, minute: 20),
                  photos: ["ski-1", "ski-2"]),
         FeedPost(id: "post-mountaineering", author: scannedPerson, caption: "On the ridge before the sun cleared it.",
-                 city: "Zermatt", date: date(2026, 7, 20, hour: 6, minute: 5),
+                 city: zermatt, date: date(2026, 7, 20, hour: 6, minute: 5),
                  photos: ["mountaineering-1", "mountaineering-2"]),
         FeedPost(id: "post-cooking", author: friendSam, caption: "First real meal I've cooked all week.",
-                 city: "Zürich", date: date(2026, 7, 19, hour: 20, minute: 40),
+                 city: zurich, date: date(2026, 7, 19, hour: 20, minute: 40),
                  photos: ["cooking"]),
         FeedPost(id: "post-sea", author: friendJuno, caption: "Colder than it looked. Went in anyway.",
-                 city: "Hvar", date: date(2026, 7, 18, hour: 16, minute: 12),
+                 city: hvar, date: date(2026, 7, 18, hour: 16, minute: 12),
                  photos: ["sea"]),
         FeedPost(id: "post-newyork", author: friendDrew, caption: "Two parks, one very long walk.",
-                 city: "New York", date: date(2026, 7, 16, hour: 19, minute: 30),
+                 city: newYork, date: date(2026, 7, 16, hour: 19, minute: 30),
                  photos: ["new-york-1", "new-york-2"]),
         FeedPost(id: "post-london", author: friendAda, caption: "Missed the last bus. In the rain. Again.",
-                 city: "London", date: date(2026, 7, 14, hour: 23, minute: 15),
+                 city: london, date: date(2026, 7, 14, hour: 23, minute: 15),
                  photos: ["london"]),
         FeedPost(id: "post-cycling", author: friendSam, caption: "73 km before breakfast. Ask me why.",
-                 city: "Zürich", date: date(2026, 7, 12, hour: 7, minute: 50),
+                 city: zurich, date: date(2026, 7, 12, hour: 7, minute: 50),
                  photos: ["cycling"]),
         FeedPost(id: "post-track", author: friendNora, caption: "Lane four. Didn't win. Didn't fall.",
-                 city: "Zürich", date: date(2026, 7, 10, hour: 18, minute: 0),
+                 city: zurich, date: date(2026, 7, 10, hour: 18, minute: 0),
                  photos: ["track"]),
         FeedPost(id: "post-stadium", author: scannedPerson, caption: "Three hours early for a seat this good.",
-                 city: "Dublin", date: date(2026, 7, 7, hour: 15, minute: 45),
+                 city: dublin, date: date(2026, 7, 7, hour: 15, minute: 45),
                  photos: ["stadium"]),
         FeedPost(id: "post-drew", author: friendDrew, caption: "New fit. Subzero field test passed.",
-                 city: "Oslo", date: date(2026, 7, 5, hour: 12, minute: 30),
+                 city: oslo, date: date(2026, 7, 5, hour: 12, minute: 30),
                  photos: ["drew-joiner"]),
     ]
 

@@ -29,7 +29,12 @@ struct FeedCardView: View {
                 // first name. That used to happen because the fixture *was* a
                 // first name; now that a post carries a whole person, the rule is
                 // stated rather than implied. Renders identically to before.
-                Text("\(post.author.shortName.uppercased())  ·  \(post.city.uppercased())  ·  \(Self.timestampFormatter.string(from: post.date).uppercased())")
+                //
+                // `city.name` for the same reason: the post now carries a whole
+                // `PassportCity` rather than a place name, and the byline wants
+                // the name off it. `PassportCity.id` IS its name, so this is the
+                // identifier, not a label derived from one.
+                Text("\(post.author.shortName.uppercased())  ·  \(post.city.name.uppercased())  ·  \(Self.timestampFormatter.string(from: post.date).uppercased())")
                     .font(Typography.timestamp)
                     .tracking(Typography.machineTracking)
                     .foregroundStyle(Color.muted)

@@ -29,7 +29,23 @@ struct FeedPost: Identifiable, Hashable {
     let author: UserProfile
 
     let caption: String
-    let city: String
+
+    /// Where it was taken — a place, not a place name.
+    ///
+    /// The other half of audit finding A7, and the same defect as `author` was:
+    /// a bare `String` meant the feed's "Zürich" and `MockData.zurich` were two
+    /// unrelated pieces of text about one city, so nothing could route from a
+    /// byline to a map pin. `PassportCity` already existed and already fit — its
+    /// `id` is its name and it is `Hashable`, which is what `FeedPost: Hashable`
+    /// needs — so this adopts that type rather than inventing a parallel one.
+    ///
+    /// **Holding a city is NOT a claim that it is one of yours.** `MockData.cities`
+    /// is the current user's own passport; a post's city is wherever the *author*
+    /// was standing. A friend posting from Verbier does not put Verbier in your
+    /// passport. See the fixture note in `MockData` — the two lists are separate
+    /// on purpose.
+    let city: PassportCity
+
     let date: Date
 
     /// Asset-catalogue image names, in display order. Always ≥ 1.
