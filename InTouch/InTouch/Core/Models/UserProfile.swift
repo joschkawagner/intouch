@@ -16,6 +16,23 @@ struct UserProfile: Identifiable, Hashable {
     let id: String
     let displayName: String
     let handle: String
+
+    /// The serial printed on this person's documents — the passport's `HOLDER
+    /// NO.`, the ID card's header, and the core of both MRZ bands.
+    ///
+    /// STORED, NEVER COMPUTED, and that is the decision rather than an
+    /// implementation detail. A serial is *issued and recorded*; it is not a
+    /// function of anything else about the holder. Deriving it — hashing `id`
+    /// into a four-digit range was the alternative considered — fails on its own
+    /// terms twice over: the range collides at around a hundred users, and the
+    /// number would silently change if an `id` ever did, which is the one thing
+    /// a document serial may never do. When Supabase lands this is a column, not
+    /// an expression.
+    ///
+    /// Formatted for printing by `PassportHolder`, which is also where the rule
+    /// that the printed serial and the MRZ core must agree is written down.
+    let passportNumber: Int
+
     let cityCount: Int
     let collage: Collage
 

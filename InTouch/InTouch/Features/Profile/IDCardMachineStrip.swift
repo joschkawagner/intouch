@@ -11,7 +11,7 @@
 //  vocabulary, different object.
 //
 //  The string is clipped rather than wrapped or shrunk: a machine band runs off
-//  its own edge, and `PassportHolder.mrz(name:)` pads up to 44 characters but
+//  its own edge, and `PassportHolder.mrz(for:)` pads up to 44 characters but
 //  never truncates, so a long name simply runs past the clip. That is correct
 //  behaviour for the artifact, not an overflow bug.
 //
@@ -39,7 +39,10 @@ import SwiftUI
 
 struct IDCardMachineStrip: View {
 
-    let name: String
+    /// The holder whose band this is. Takes the whole person rather than a
+    /// name, because the band encodes the name AND the serial, and the serial
+    /// now belongs to the holder rather than to a shared literal.
+    let user: UserProfile
     /// Strip width — the portrait plate's width at the card reference.
     var width: CGFloat = 180
     var height: CGFloat = 24
@@ -52,7 +55,7 @@ struct IDCardMachineStrip: View {
             Rectangle()
                 .fill(isUV ? Color.paper.opacity(0.03) : Color.text.opacity(0.04))
 
-            Text(PassportHolder.mrz(name: name))
+            Text(PassportHolder.mrz(for: user))
                 .font(Typography.passportCoord)
                 .tracking(Typography.mrzTracking)
                 .foregroundStyle(isUV ? Color.stampRed : Color.text.opacity(0.4))

@@ -53,7 +53,7 @@ struct PassportColophonPage: View {
                     stamp("\(photoCount)")
                 }
                 field(label: "holder no.", labelY: 206) {
-                    stamp(PassportHolder.formattedNumber)
+                    stamp(PassportHolder.formattedNumber(for: user))
                 }
             }
         }

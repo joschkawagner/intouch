@@ -56,7 +56,7 @@ struct PassportIdentityPage: View {
                 stamp(DocumentDate.monthYear(user.joinedDate)).referenceOrigin(x: 14, y: 180)
 
                 label("holder no.").referenceOrigin(x: 118, y: 164)
-                stamp(PassportHolder.formattedNumber).referenceOrigin(x: 118, y: 180)
+                stamp(PassportHolder.formattedNumber(for: user)).referenceOrigin(x: 118, y: 180)
 
                 // Bio.
                 label("bio").referenceOrigin(x: 14, y: 210)
@@ -120,7 +120,7 @@ struct PassportIdentityPage: View {
     private var mrzBand: some View {
         ZStack(alignment: .leading) {
             Rectangle().fill(isUV ? Color.paper.opacity(0.03) : Color.text.opacity(0.04))
-            Text(PassportHolder.mrz(name: user.displayName))
+            Text(PassportHolder.mrz(for: user))
                 .font(Typography.passportCoord)
                 .tracking(Typography.mrzTracking)
                 .foregroundStyle(isUV ? Color.stampRed : Color.text.opacity(0.4))

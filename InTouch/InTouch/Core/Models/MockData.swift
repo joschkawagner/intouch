@@ -209,6 +209,12 @@ enum MockData {
         id: "user-me",
         displayName: "Joschka Wagner",
         handle: "@joschka",
+        // 1924 is the number this document was issued under, carried across
+        // unchanged from when it was a shared literal in PassportHolder. It is
+        // not a special case for "me" — every holder now has the same stored
+        // field; this one just kept its value, which is why moving the number
+        // onto the profile changed no rendered string anywhere.
+        passportNumber: 1924,
         cityCount: cities.count,
         collage: currentUserCollage,
         joinedDate: date(2025, 9, 1),
@@ -231,34 +237,54 @@ enum MockData {
     // The collage is shared deliberately: no screen renders a feed author's
     // collage yet, so five invented collages would be five pieces of fiction
     // nobody can see. It is a placeholder, not a claim that they made the same one.
+    //
+    // 🔶 THE SIX PASSPORT NUMBERS BELOW ARE INVENTED FIXTURE DATA, NOT SOURCED —
+    // the five here plus `scannedPerson`'s further down. Same standing as the
+    // five UserProfile fixtures authored in `d5b6ef8` and the five PassportCity
+    // constants in `2e2593f`.
+    //
+    //   • WHAT THEY ARE: four-digit numbers written to look like issued serials,
+    //     distinct from each other and from 1924, taken from no data source, and
+    //     not user content. Sam's is deliberately under 1000 so that the `%04d`
+    //     zero-padding in PassportHolder is exercised by a fixture the first time
+    //     a friend's book renders, rather than by luck.
+    //   • WHAT THEY ARE NOT: issued. Nothing assigned these. There is no register
+    //     they came out of and no rule they satisfy — a real serial is allocated
+    //     at issue time, which is precisely why `passportNumber` is stored rather
+    //     than computed. These stand in for that allocation until one exists.
+    //
+    // They render NOWHERE today: a serial is printed only on the passport's
+    // identity page and colophon and on the ID card, the card is only ever the
+    // current user's, and other people's books do not exist yet. They change in
+    // one place.
 
     static let friendNora = UserProfile(
         id: "user-nora", displayName: "Nora Lindqvist", handle: "@nora",
-        cityCount: 6, collage: scannedPersonCollage,
+        passportNumber: 4471, cityCount: 6, collage: scannedPersonCollage,
         joinedDate: date(2025, 10, 4), bio: "Runs early. Skis earlier."
     )
 
     static let friendSam = UserProfile(
         id: "user-sam", displayName: "Sam Okafor", handle: "@sam",
-        cityCount: 3, collage: scannedPersonCollage,
+        passportNumber: 483, cityCount: 3, collage: scannedPersonCollage,
         joinedDate: date(2025, 12, 2), bio: "Cooks properly. Cycles unreasonably."
     )
 
     static let friendJuno = UserProfile(
         id: "user-juno", displayName: "Juno Bergström", handle: "@juno",
-        cityCount: 5, collage: scannedPersonCollage,
+        passportNumber: 6127, cityCount: 5, collage: scannedPersonCollage,
         joinedDate: date(2026, 1, 19), bio: "Swims in whatever's nearest."
     )
 
     static let friendDrew = UserProfile(
         id: "user-drew", displayName: "Drew Halloran", handle: "@drew",
-        cityCount: 8, collage: scannedPersonCollage,
+        passportNumber: 3396, cityCount: 8, collage: scannedPersonCollage,
         joinedDate: date(2025, 9, 26), bio: "Walks cities end to end."
     )
 
     static let friendAda = UserProfile(
         id: "user-ada", displayName: "Ada Whitfield", handle: "@ada",
-        cityCount: 4, collage: scannedPersonCollage,
+        passportNumber: 5842, cityCount: 4, collage: scannedPersonCollage,
         joinedDate: date(2026, 2, 8), bio: "London. Always missing the last bus."
     )
 
@@ -268,10 +294,16 @@ enum MockData {
     /// That is the point of A7: before this, the feed's "Emil" and this profile
     /// were unrelated strings, and the audit's exact complaint was that the feed
     /// and the passport shared no identifier. Now they share this one.
+    ///
+    /// 🔶 `passportNumber` is the sixth invented serial — see the block above the
+    /// feed friends for what that means. It is called out here too because this
+    /// profile is declared apart from the other five and a reader arriving at it
+    /// directly would otherwise see a bare number with no provenance.
     static let scannedPerson = UserProfile(
         id: "user-emil",
         displayName: "Emil Roth",
         handle: "@emil",
+        passportNumber: 7015,
         cityCount: 4,
         collage: scannedPersonCollage,
         joinedDate: date(2025, 11, 12),

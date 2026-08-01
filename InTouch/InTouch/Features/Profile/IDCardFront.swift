@@ -95,7 +95,7 @@ struct IDCardFront: View {
                 IDCardPortraitPlate(initials: user.initials)
                     .referenceOrigin(x: 0, y: 62)
 
-                IDCardMachineStrip(name: user.displayName)
+                IDCardMachineStrip(user: user)
                     .referenceOrigin(x: 0, y: 294)
 
                 fields
@@ -126,7 +126,7 @@ struct IDCardFront: View {
                 .frame(width: 200, alignment: .trailing)
                 .referenceOrigin(x: 317, y: 12)
 
-            Text(PassportHolder.formattedNumber)
+            Text(PassportHolder.formattedNumber(for: user))
                 .font(Typography.idCardSerial)
                 .foregroundStyle(isUV ? Color.uvFieldValue : Color.text)
                 .uvFieldLit(isUV)
@@ -171,7 +171,7 @@ struct IDCardFront: View {
             .referenceOrigin(x: colB, y: 184)
 
             // Zero-padded so it reads as a document field rather than a score —
-            // the same instinct as the %04d in PassportHolder.mrz.
+            // the same instinct as the %04d in PassportHolder.mrz(for:).
             IDCardField(label: "cities", width: colAWidth) {
                 IDCardValue(text: String(format: "%02d", user.cityCount))
             }
