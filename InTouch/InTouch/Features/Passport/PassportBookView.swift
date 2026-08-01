@@ -21,6 +21,16 @@ import SwiftUI
 
 struct PassportBookView: View {
 
+    /// Whose book this is — the name on the cover, the identity page and the
+    /// colophon. NO DEFAULT: see `PassportCoverView`'s header for what a
+    /// defaulted holder costs.
+    let holder: UserProfile
+
+    /// What is inside it. Also no default, for the same reason — a book that
+    /// falls back to my cities when handed someone else's holder is worse than
+    /// one that refuses to compile.
+    let contents: PassportContents
+
     @State private var orientation = DeviceOrientationModel()
     @State private var clock = PassportTimeOfDay()
     @State private var spreadIndex = 0
@@ -31,10 +41,6 @@ struct PassportBookView: View {
         #endif
         return clock.renderMode
     }
-
-    /// What is in the book. Still the current user's, but now read through one
-    /// seam instead of reaching into `MockData` from four places.
-    private let contents = PassportContents.currentUser
 
     private var cities: [PassportCity] { contents.cities }
 
@@ -90,7 +96,7 @@ struct PassportBookView: View {
     private func coverCard(in safe: CGSize) -> some View {
         let size = PassportBookGeometry.fitted(ratio: pageRatio, in: safe)
         let ref = PassportMetrics.referenceSize
-        return PassportCoverView(user: MockData.currentUser)
+        return PassportCoverView(user: holder)
             .frame(width: ref.width, height: ref.height)
             .scaleEffect(size.width / ref.width, anchor: .center)
             .frame(width: size.width, height: size.height)
@@ -137,7 +143,7 @@ struct PassportBookView: View {
     private func spreadView(_ index: Int) -> some View {
         if index == 0 {
             spread(
-                left: { PassportIdentityPage(user: MockData.currentUser) },
+                left: { PassportIdentityPage(user: holder) },
                 right: { PassportMapLens(cities: cities) }   // owns its own mode-aware ground
             )
         } else if index <= cities.count {
@@ -154,7 +160,7 @@ struct PassportBookView: View {
             spread(bordersCover: true,
                 left: {
                     PassportColophonPage(
-                        user: MockData.currentUser,
+                        user: holder,
                         cityCount: contents.cityCount,
                         photoCount: contents.totalPhotoCount
                     )
@@ -208,5 +214,5 @@ struct PassportBookView: View {
 }
 
 #Preview {
-    PassportBookView()
+    PassportBookView(holder: MockData.currentUser, contents: .currentUser)
 }
