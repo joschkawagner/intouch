@@ -46,14 +46,24 @@ UV inks). See docs/DECISIONS.md 2026-07-24/25 for the pass's decisions.
 | `muted` | `#A1AD92` | Dividers, inactive states, map land |
 | `live` | `#4A5335` * | Event live indicator, success states |
 | `water` | `#94B2C4` | Map water, links, secondary accent |
+| `alarm` | `#B03A28` † | Destructive actions — sign out, and account deletion / unblock when they exist |
 
 \* `night` and `live` are eyeballed from the source Pantone chips (2965 C and 19-0323 TCX
 Chive). Pull exact bridge values before print or App Store assets.
 
+† `alarm` is the one token **not** drawn from the source palette below. Added 2026-07-29
+(`46e3b4c`) because destructive rows rendered in `ink`, which on the Settings screens is also
+the screen title and the on-state toggle tint — a warning colour that is also the emphasis
+colour is not a warning. ~5.2:1 on `paper` (WCAG AA for body text) against `ink`'s 13.6:1, so
+the two separate by lightness as well as hue. Named for the register, not the site, so future
+destructive actions inherit it without a rename. **Not `stampRed`** — that is security-printing
+ink and belongs to the documents' vocabulary. ⚠️ **Colour is never the only signal** (WCAG
+1.4.1): a destructive control also needs `Button(role: .destructive)` once it is wired.
+
 Source palette: Red Inferno · Pastel Yellow · Reseda · Chive · Powder Blue · Pantone 2965 C
 · Cocoa · Coconut Milk.
 
-Rule: **photos carry the colour.** The interface stays in these eight tokens and never
+Rule: **photos carry the colour.** The interface stays in these nine tokens and never
 competes with the content.
 
 ## Typography
@@ -213,7 +223,7 @@ stood here — "a profile is not a contact card, it is a collage the person asse
   group's collage*.
 - **Loud content inside quiet order.** The collage is meant to be chaotic and personal; the app
   around it stays calm — framed on a paper page, chrome in Jost and ink. This is the same
-  rule the feed already follows ("photos carry the colour, the interface stays in the eight
+  rule the feed already follows ("photos carry the colour, the interface stays in the nine
   tokens"). The content's chaos sits inside the app's order, and the contrast is the point.
 - **Relative coordinates, always.** Every item stores its position as `0…1` fractions of the
   collage bounds and its size as a fraction of the collage width — never absolute points. A
