@@ -32,7 +32,11 @@ struct PassportBookView: View {
         return clock.renderMode
     }
 
-    private let cities = MockData.cities
+    /// What is in the book. Still the current user's, but now read through one
+    /// seam instead of reaching into `MockData` from four places.
+    private let contents = PassportContents.currentUser
+
+    private var cities: [PassportCity] { contents.cities }
 
     /// identity+map, one per city, then colophon + back cover.
     private var spreadCount: Int { cities.count + 2 }
@@ -139,8 +143,8 @@ struct PassportBookView: View {
         } else if index <= cities.count {
             let city = cities[index - 1]
             spread(
-                left: { PassportCityPage(city: city, date: latestDate(for: city)) },
-                right: { PassportCollageView(photoCount: PassportMockPhotos.count(for: city),
+                left: { PassportCityPage(city: city, date: contents.latestDate(for: city)) },
+                right: { PassportCollageView(photoCount: contents.photoCount(for: city),
                                              seed: city.name + "/collage") }
             )
         } else {
@@ -151,8 +155,8 @@ struct PassportBookView: View {
                 left: {
                     PassportColophonPage(
                         user: MockData.currentUser,
-                        cityCount: cities.count,
-                        photoCount: totalPhotoCount
+                        cityCount: contents.cityCount,
+                        photoCount: contents.totalPhotoCount
                     )
                 },
                 right: { PassportBackCoverView() }
@@ -201,18 +205,6 @@ struct PassportBookView: View {
         }
     }
 
-    // MARK: - Data
-
-    /// The most recent moment recorded in a city (its label date), if any.
-    private func latestDate(for city: PassportCity) -> Date? {
-        MockData.entries.filter { $0.city == city }.map(\.date).max()
-    }
-
-    /// Total photos across all cities — the honest count for the colophon,
-    /// consistent with the per-city collages (mocked until a photo model exists).
-    private var totalPhotoCount: Int {
-        cities.reduce(0) { $0 + PassportMockPhotos.count(for: $1) }
-    }
 }
 
 #Preview {
