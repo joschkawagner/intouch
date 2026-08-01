@@ -36,7 +36,11 @@ enum ScanResult: Hashable {
     var subtitle: String {
         switch self {
         case .person(let p): p.handle
-        case .event(let e): "\(e.venue) · \(e.city)"
+        // `city.name`: an event now carries a whole `PassportCity`, and the
+        // subtitle wants the name off it. `PassportCity.id` IS its name, so this
+        // is the identifier, not a label derived from one. `venue` stays a bare
+        // string — it is a room, not a place with coordinates.
+        case .event(let e): "\(e.venue) · \(e.city.name)"
         }
     }
 

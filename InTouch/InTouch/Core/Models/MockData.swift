@@ -32,15 +32,23 @@ enum MockData {
     /// One pin per city on the map. Ordered; count is the "cities" number.
     static let cities: [PassportCity] = [zurich, berlin, london, lisbon, vienna, milan, oslo]
 
-    // MARK: - Cities friends have posted from
+    // MARK: - Cities other people's content is in
     //
     // ⚠️ DELIBERATELY NOT IN `cities` ABOVE. DO NOT APPEND THEM.
     //
     // `cities` means the places the CURRENT USER has photos — it is the holder's
     // own passport, and it drives the map pins, the spread count, and both
-    // colophon numbers. A post's city is wherever its AUTHOR was standing. Nora
-    // posting from Verbier is Nora's photo; it does not put Verbier in your
-    // passport, add a pin to your map, or add a spread to your book.
+    // colophon numbers. Every other city in this file belongs to somebody else's
+    // content and must stay out of it:
+    //
+    //   • A POST's city is wherever its AUTHOR was standing. Nora posting from
+    //     Verbier is Nora's photo; it does not put Verbier in your passport, add
+    //     a pin to your map, or add a spread to your book.
+    //   • An EVENT's city is wherever the event is. Tapping in at a rooftop in
+    //     Zürich is not what puts Zürich in your passport — the photos you took
+    //     there are. `scannedEvent` therefore REFERENCES `zurich` above rather
+    //     than owning a copy of it, and referencing a city from `cities` is not
+    //     the same as adding one to it.
     //
     // The two lists therefore overlap without being the same list: Zürich,
     // London and Oslo appear in both because you have photos there too; Verbier,
@@ -275,7 +283,7 @@ enum MockData {
         id: "event-rooftop",
         name: "Rooftop Sessions",
         venue: "Kanzlei Rooftop",
-        city: "Zürich",
+        city: zurich,          // references the existing pin — no duplicate authored
         date: date(2026, 7, 15, hour: 22),
         collage: eventCollage
     )
