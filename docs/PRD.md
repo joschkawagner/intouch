@@ -155,16 +155,30 @@ The passport is a **leaf-through booklet**, not a grid of icons. Its unit is a *
 - No rarity tiers, points, or streaks in v1. The collection is enough.
 - The passport is the shareable artifact — export as an image.
 
-**Rebuild plan.** The passport is being rebuilt in four small phases, each committing
-separately, in strict order because each leans on the last:
+**Rebuild plan.** The passport was rebuilt in four small phases, each committing
+separately, in strict order because each leaned on the last. **All four are done.**
 
-1. **P1 — remove the old stamp system.** *(done)* The procedurally-drawn stamps didn't
-   read as real after three lab rounds and were scrapped (see DECISIONS.md).
-2. **P2 — Map (pins) + Calendar (city list) on mock data.** *(done)*
-3. **P3 — the clean light passport shell + its UV/blacklight night version.** The booklet
-   itself: cover, spread, page-turn (see DESIGN.md § The passport booklet, § Light not dark).
-4. **P4 — the Bauhaus city-collage pages that live inside the shell.** Depends on P3: the
-   collage pages need the shell to exist first before they have anywhere to live.
+> ⚠️ **These are PR1–PR4, not P1–P4, and the rename is the point.** They were
+> originally numbered P1–P4, which collided with the working plan's own P-series —
+> a different, longer list (P0, P3-3a, P7, P11 …) used throughout `DECISIONS.md`
+> and every commit message. The collision was not cosmetic: the plan's **P4** is
+> "another person's profile is their passport", which is *open*, while the P4 on
+> this list is the collage pages, which are *finished* — so a reader checking
+> whether "P4" was done got the opposite of the right answer depending on which
+> document they had open. This list is now prefixed `PR` (passport rebuild) and
+> owns no bare P-number. **When something here says "P4" with no prefix, it means
+> the plan's, not this list's.**
+
+1. **PR1 — remove the old stamp system.** *(done)* The procedurally-drawn stamps didn't
+   read as real after three lab rounds and were scrapped (see DECISIONS.md 2026-07-22).
+2. **PR2 — Map (pins) + Calendar (city list) on mock data.** *(done)*
+3. **PR3 — the clean light passport shell + its UV/blacklight night version.** *(done —
+   DECISIONS.md 2026-07-23)* The booklet itself: cover, spread, page-turn (see DESIGN.md
+   § The passport booklet, § Light not dark).
+4. **PR4 — the Bauhaus city-collage pages that live inside the shell.** *(done —
+   DECISIONS.md 2026-07-23/24; `PassportCollageView`, one N-cell template per city, no
+   empty cells)* Depended on PR3: the collage pages needed the shell to exist first
+   before they had anywhere to live.
 
 ### 4.5 Profile & settings
 **Your own profile *is* your ID card. Another person's profile *is* their passport.** Two
@@ -263,10 +277,11 @@ feed, RLS policies.
 recap card.
 
 **Phase 5 — passport.** Rebuilt in four small phases, each committing separately, in order
-(each depends on the last): **P1** remove the old stamp system *(done)* → **P2** Map (pins)
-+ Calendar (city list) on mock data *(done)* → **P3** the clean light passport shell + its
-UV/blacklight night version → **P4** the Bauhaus city-collage pages inside the shell (needs
-P3 first). Share export follows. See § 4.4.
+(each depends on the last): **PR1** remove the old stamp system *(done)* → **PR2** Map (pins)
++ Calendar (city list) on mock data *(done)* → **PR3** the clean light passport shell + its
+UV/blacklight night version *(done)* → **PR4** the Bauhaus city-collage pages inside the shell
+*(done)*. **All four are complete**; share export follows. See § 4.4 for the `PR` prefix and
+why these are not P1–P4.
 
 **Phase 6 — groups.** Should be a small extension of the feed primitive.
 
