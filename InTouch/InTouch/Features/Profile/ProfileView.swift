@@ -58,6 +58,11 @@ struct ProfileView: View {
 
     let profile: UserProfile
 
+    /// The holder's record, for the card's CITIES count. Threaded from the
+    /// presenting screen rather than looked up here, so that this view names
+    /// no fixture and the count has exactly one source.
+    let contents: PassportContents
+
     @Environment(\.dismiss) private var dismiss
     @State private var clock = PassportTimeOfDay()
 
@@ -82,7 +87,7 @@ struct ProfileView: View {
                 PassportRestingSurface()
                     .ignoresSafeArea()
 
-                IDCardView(user: profile)
+                IDCardView(user: profile, contents: contents)
             }
             .environment(\.passportRenderMode, mode)
             .toolbar(.hidden, for: .navigationBar)
@@ -119,5 +124,5 @@ struct ProfileView: View {
 }
 
 #Preview {
-    ProfileView(profile: MockData.currentUser)
+    ProfileView(profile: MockData.currentUser, contents: .currentUser)
 }

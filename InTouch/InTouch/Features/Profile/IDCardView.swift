@@ -46,6 +46,13 @@ struct IDCardView: View {
 
     let user: UserProfile
 
+    /// The holder's record, passed through to the face for its CITIES count.
+    /// A pass-through parameter rather than a lookup inside the face, for the
+    /// same reason `PassportBookView` takes `holder` and `contents` instead of
+    /// reaching for `MockData`: a value resolved implicitly is correct until
+    /// something renders it where the implicit answer is wrong.
+    let contents: PassportContents
+
     /// Only iPhone gets the fixed turn — see the header.
     private var turnsSideways: Bool {
         UIDevice.current.userInterfaceIdiom == .phone
@@ -59,7 +66,7 @@ struct IDCardView: View {
             let available = (turnsSideways ? geo.size.width : geo.size.height) - 48
             let scale = available / ref.height
 
-            IDCardFront(user: user)
+            IDCardFront(user: user, contents: contents)
                 .frame(width: ref.width, height: ref.height)
                 .scaleEffect(scale, anchor: .center)
                 .frame(width: ref.width * scale, height: ref.height * scale)

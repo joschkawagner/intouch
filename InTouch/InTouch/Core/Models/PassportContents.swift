@@ -20,9 +20,18 @@
 //  here does not fix that — it puts it somewhere a real photo model can replace
 //  it in one place instead of two.
 //
-//  Lives in `Features/Passport/` because only the passport reads it today. Per
-//  CLAUDE.md it moves to `Core/` the moment a second feature does — which is
-//  likely when a scan result needs to hand a book to someone.
+//  MOVED TO `Core/Models/` BECAUSE THE SECOND CONSUMER ARRIVED. This file used
+//  to say it lived in `Features/Passport/` because only the passport read it,
+//  and that per CLAUDE.md it moves to `Core/` the moment a second feature does.
+//  That moment is the ID card: `UserProfile.cityCount` was a stored duplicate of
+//  `cityCount` below, and the card now reads THIS count instead of its own copy.
+//  The prediction was right about the rule and wrong about the occasion — it
+//  guessed a scan result handing over a book; what actually forced it was
+//  deleting a second source of truth.
+//
+//  This satisfies "extract when the second consumer EXISTS, not when it is
+//  forecast" (DECISIONS.md 2026-07-25) rather than violating it: the card is
+//  reading it today, in this commit, not predicted to later.
 //
 
 import Foundation

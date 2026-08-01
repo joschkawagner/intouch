@@ -64,6 +64,15 @@ struct IDCardFront: View {
 
     let user: UserProfile
 
+    /// The holder's record. The card carries exactly one fact off it — the
+    /// CITIES count — and takes the whole record rather than a pre-extracted
+    /// `Int` on purpose: an extracted count is a value that can be computed
+    /// somewhere else and passed in wrong, which is precisely the defect this
+    /// replaced (`UserProfile.cityCount`, a stored duplicate that agreed with
+    /// the real thing only because one fixture line happened to write it).
+    /// Passing the record means there is nowhere for a second answer to live.
+    let contents: PassportContents
+
     @Environment(\.passportRenderMode) private var mode
     private var isUV: Bool { mode.isUV }
 
@@ -172,8 +181,12 @@ struct IDCardFront: View {
 
             // Zero-padded so it reads as a document field rather than a score —
             // the same instinct as the %04d in PassportHolder.mrz(for:).
+            //
+            // DERIVED FROM THE RECORD, never stored on the person: this is a
+            // count of the cities in `contents`, so the card and the passport's
+            // colophon cannot disagree about how many places you have been.
             IDCardField(label: "cities", width: colAWidth) {
-                IDCardValue(text: String(format: "%02d", user.cityCount))
+                IDCardValue(text: String(format: "%02d", contents.cityCount))
             }
             .referenceOrigin(x: colA, y: 231)
 

@@ -4,10 +4,25 @@
 //
 //  A person, as shown on a profile.
 //
-//  There is deliberately NO friend count here. A number attached to a human being
-//  is comparable between people, which makes it a scoreboard — the mechanic
-//  docs/PRD.md § 4.1 rejects. Counts belong to places and occasions, so `cityCount`
-//  stays and nothing counts people. See DECISIONS.md 2026-07-25.
+//  THERE IS DELIBERATELY NO COUNT OF ANY KIND ON THIS TYPE, and that is two
+//  separate rules that happen to land in the same place.
+//
+//  No friend count, and no slot that could grow one: a number attached to a
+//  human being is comparable between people, which makes it a scoreboard — the
+//  mechanic docs/PRD.md § 4.1 rejects. Counts belong to places and occasions.
+//  The surviving legitimate count in this app is CITIES, because it counts
+//  places; it lives on `PassportContents`, where the places themselves are.
+//
+//  And no city count either, for a different reason: `cityCount` used to be
+//  stored here, duplicating `PassportContents.cityCount`. The two agreed only
+//  because one fixture line wrote `cities.count` into it, and nothing enforced
+//  that. A count of a person's cities is a fact about their record, not a
+//  property of their profile row — in Postgres it is an aggregate over their
+//  photos, exactly the kind of denormalised column that goes stale. So it is
+//  derived at the one place that holds the cities.
+//
+//  See DECISIONS.md 2026-07-25 (the scoreboard rule) and 2026-08-02 (the
+//  duplicate).
 //
 
 import Foundation
@@ -33,7 +48,6 @@ struct UserProfile: Identifiable, Hashable {
     /// that the printed serial and the MRZ core must agree is written down.
     let passportNumber: Int
 
-    let cityCount: Int
     let collage: Collage
 
     /// When this person joined — shown on the passport's identity page.

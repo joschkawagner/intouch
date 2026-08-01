@@ -215,7 +215,6 @@ enum MockData {
         // field; this one just kept its value, which is why moving the number
         // onto the profile changed no rendered string anywhere.
         passportNumber: 1924,
-        cityCount: cities.count,
         collage: currentUserCollage,
         joinedDate: date(2025, 9, 1),
         bio: "Zürich. Better uphill than down."
@@ -260,31 +259,31 @@ enum MockData {
 
     static let friendNora = UserProfile(
         id: "user-nora", displayName: "Nora Lindqvist", handle: "@nora",
-        passportNumber: 4471, cityCount: 6, collage: scannedPersonCollage,
+        passportNumber: 4471, collage: scannedPersonCollage,
         joinedDate: date(2025, 10, 4), bio: "Runs early. Skis earlier."
     )
 
     static let friendSam = UserProfile(
         id: "user-sam", displayName: "Sam Okafor", handle: "@sam",
-        passportNumber: 483, cityCount: 3, collage: scannedPersonCollage,
+        passportNumber: 483, collage: scannedPersonCollage,
         joinedDate: date(2025, 12, 2), bio: "Cooks properly. Cycles unreasonably."
     )
 
     static let friendJuno = UserProfile(
         id: "user-juno", displayName: "Juno Bergström", handle: "@juno",
-        passportNumber: 6127, cityCount: 5, collage: scannedPersonCollage,
+        passportNumber: 6127, collage: scannedPersonCollage,
         joinedDate: date(2026, 1, 19), bio: "Swims in whatever's nearest."
     )
 
     static let friendDrew = UserProfile(
         id: "user-drew", displayName: "Drew Halloran", handle: "@drew",
-        passportNumber: 3396, cityCount: 8, collage: scannedPersonCollage,
+        passportNumber: 3396, collage: scannedPersonCollage,
         joinedDate: date(2025, 9, 26), bio: "Walks cities end to end."
     )
 
     static let friendAda = UserProfile(
         id: "user-ada", displayName: "Ada Whitfield", handle: "@ada",
-        passportNumber: 5842, cityCount: 4, collage: scannedPersonCollage,
+        passportNumber: 5842, collage: scannedPersonCollage,
         joinedDate: date(2026, 2, 8), bio: "London. Always missing the last bus."
     )
 
@@ -304,7 +303,6 @@ enum MockData {
         displayName: "Emil Roth",
         handle: "@emil",
         passportNumber: 7015,
-        cityCount: 4,
         collage: scannedPersonCollage,
         joinedDate: date(2025, 11, 12),
         bio: "Berlin, mostly. 2 a.m., usually."

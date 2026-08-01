@@ -66,7 +66,12 @@ struct MastheadView: View {
         // toolbar X is the ONLY way out. That is why it is gated on being present
         // and tappable in the accessibility tree, not merely visible.
         .fullScreenCover(isPresented: $showingProfile) {
-            ProfileView(profile: MockData.currentUser)
+            // The record travels with the person: the card's CITIES field is a
+            // count of the holder's cities, and `PassportContents` is where they
+            // live. Deliberately NOT a bare `Int` computed here — that would put
+            // a second answer to "how many cities" at the presentation layer,
+            // which is the exact shape of the stored `cityCount` this replaced.
+            ProfileView(profile: MockData.currentUser, contents: .currentUser)
         }
     }
 }
