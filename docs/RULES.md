@@ -91,6 +91,19 @@ still cannot tell you what a mismatch means.
 is deliberately paged to. Tap count, cadence, and settle time — the same detail the first two
 steps already get.
 
+**⏸ STILL OPEN as of 2026-08-02**, said out loud so nobody reads the sentence above as
+something that quietly happened. The colophon has not been deliberately paged to since this
+was written.
+
+**And P4 changed what closing it means: THE TAP COUNT IS NOT A CONSTANT, it is a formula.**
+`spreadCount = cities.count + 2`, so the colophon sits at `cities.count + 1` and the walk from
+spread 2 to the colophon is **`cities.count − 1` taps** — seven for the current user's
+nine-spread book, which is where the *"same seven taps"* in the record comes from, and **two**
+for a two-city holder, **one** for a one-city holder. Every route ever written as "Spread 9 of
+9" is a current-user route wearing a number. So the cadence written into `BASELINES.md` has to
+be *"tap forward until the colophon, N = cities.count − 1"*, not a count — and any route
+pinned against another holder's book needs its own N.
+
 ### Instance 5 — a session was scoped against an instrument nobody checked existed (2026-07-26)
 
 The VoiceOver session was scripted in full — five tests, instruments matched per test, pass
@@ -101,6 +114,60 @@ moment. **Whether the instrument exists is part of scoping, not part of setup.**
 care a plan invests downstream of an unchecked assumption, the more authoritative the plan
 looks while being unrunnable — this script was at its most polished the moment it was
 impossible.
+
+### Instance 7 — Dynamic Type, and THE FIRST ONE FOUND BY RUNNING THE ENUMERATION (2026-08-02)
+
+Every instance above was found by accident. This one was found by taking the list at the top of
+this rule and going through it, which is what the rule has asked for since it was written.
+Recording that is half the point: the method works, and nobody had used it.
+
+**Dynamic Type is live on all four passport baselines, and `Typography.swift` says it is not.**
+The section heading reads *"Passport booklet (fixed sizes — baked into the scaled page)"* and
+the note says *"deliberately no Dynamic Type"* — then names its own exception in the last line:
+*"City names reuse `masthead`; dates/holder-no reuse `timestamp`."* The seven `passport*` tokens
+genuinely are fixed. **The reused ones are not**: `masthead`, `timestamp` and `body` all carry
+`relativeTo:`, and they land on the city page, all four colophon values, both chevrons, the
+identity spread, the map page — **and the `DebugUV` chip, which is in frame on every passport
+baseline while not existing in a Release build at all.**
+
+**The sharpest part is not that the comment is wrong, it is what it is wrong about.**
+`PassportPage` lays out at 232×330 and `scaleEffect`s the result, so text that grows with the
+user's setting grows *inside* the fixed reference — precisely the "burst the reference layout"
+the note warns against, live on three tokens it never checked.
+
+**A comment asserting a precondition is not a check of it.** That is the transferable form: the
+reason nobody ran the enumeration here is that something in the code said it did not apply, and
+a claim in a comment reads exactly like a result until you go looking.
+
+### Instance 8 — the confirmation is a CONTROL, not an instrument. This one SHARPENS the rule (2026-08-02)
+
+**Instances 1–7 are about state nobody asked about. This is about state that WAS asked about,
+answered by a human, and still wrong** — which is why it belongs here as a sharpening rather
+than as an eighth example.
+
+**The mitigation R1 prescribes is the thing that failed.** `BASELINES.md` requires the agent to
+stop, ask the operator to rotate the simulator, and wait for confirmation — precisely because
+orientation is invisible in a portrait-locked framebuffer. On 2026-08-02 that step was followed
+to the letter. The operator confirmed landscape. **The device was in portrait**, and a friend's
+book came up showing a closed cover — which looked exactly like the hypothesis under test
+confirming itself.
+
+**It was not evidence, and the reason it was not is worth keeping:** two explanations predicted
+the identical observation — "the device is portrait" and "the seed always fails on first read" —
+the framebuffer is portrait-locked so the capture carried no signal, and **the book was the very
+instrument under test**. A null run reads as a finding whenever the instrument and the subject
+are the same object.
+
+**How it was settled — with a SECOND, INDEPENDENT instrument:** the Passport tab also showed a
+closed cover with all five tab targets, which by this project's own established reading means
+portrait; then rotating with the book on screen swung it open, proving the observer live. So the
+device had been portrait and the run had measured nothing. Discarded, not interpreted.
+
+**THE CHECK: a confirmation lowers the odds of running in the wrong state. It does not
+establish the state.** Before treating a confirmed precondition as measured, ask what
+*instrument* would show it, and whether that instrument is independent of what you are testing.
+If the only witness is the thing under test, you have a control, not a measurement — and a
+procedure that cannot tell those apart will eventually bank a null run as a result.
 
 ---
 
@@ -203,6 +270,16 @@ It proves nothing until someone establishes that Settings *rotates*: if it doesn
 capture is portrait in both orientations and the "check" always passes. Untested to date;
 one deliberate rotation with Settings open settles it.
 
+**⏸ STILL UNTESTED as of 2026-08-02**, stated so the sentence above is not mistaken for
+something done. It is queued into the next operator trip to Settings alongside reading the
+device text size (instance 7's unknown) — one trip, two answers, because both are questions
+only a human standing at the simulator can answer and neither is worth a trip on its own.
+
+**And instance 8 is this corollary's harder case.** Here the worry is a check that always
+passes. There, the check *did* run, *was* answered, and was still wrong — so validating a check
+means asking not only "can this ever fail?" but "is its witness independent of the thing it
+witnesses?"
+
 ---
 
 ## R5 · Decorative printing is an accessibility element by default — hide it at the primitive
@@ -304,5 +381,12 @@ settle it.
   "dimmed" at the last spread; if the alternative was wrong they lose their place mid-book.
   **When two guesses are both unverifiable, ship the one that fails boringly.**
 
-**What still applies:** the pixel gate is a separate question from the effect. Both instances
-above were gate-checked even though their effects were not observable.
+**What still applies:** whether a change moves pixels is a separate question from whether its
+effect is observable. Both instances above were pixel-checked even though their effects were
+not.
+
+> **Wording note, 2026-08-02.** This line used to say *"the pixel gate"*, which has been wrong
+> since `2badb6e` demoted nets from gates to spot-checks on 2026-07-29 — nothing is gated now,
+> and `docs/BASELINES.md` carries the operative framing. Corrected rather than deleted, because
+> the point it makes is still true and is easy to lose: **a C1 change can be invisible to a
+> human and still move a frame, so "nobody will see this" is not a reason to skip the check.**
