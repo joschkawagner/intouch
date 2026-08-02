@@ -13,12 +13,13 @@
 //  supplied. This is that seam. It is still only ever built for the current
 //  user; supplying anyone else is a later step.
 //
-//  ⚠️ THE PHOTO COUNTS ARE STILL THE GLOBAL MOCK. `photoCount(for:)` delegates
-//  to `PassportMockPhotos`, which switches on `city.name` with a `default: 3`.
-//  That is a per-CITY oracle, not a per-HOLDER one, so two holders who have both
-//  been to Oslo would each be credited with its 8 photos. Routing it through
-//  here does not fix that — it puts it somewhere a real photo model can replace
-//  it in one place instead of two.
+//  ✅ THE PHOTO COUNTS ARE NOW PER-HOLDER. They used to delegate to a global
+//  `PassportMockPhotos.count(for:)` that switched on `city.name` — a per-CITY
+//  oracle standing in for a per-HOLDER fact, so two holders who had both been to
+//  Oslo would each have been credited with its 8 photos. `f6a5df3` flagged that
+//  and said routing it through here did not fix it. This is the fix: the counts
+//  are a stored field on the record, so they belong to the holder the way the
+//  cities and entries already did.
 //
 //  MOVED TO `Core/Models/` BECAUSE THE SECOND CONSUMER ARRIVED. This file used
 //  to say it lived in `Features/Passport/` because only the passport read it,
@@ -44,10 +45,36 @@ struct PassportContents {
     /// Every recorded moment, across all of `cities`.
     let entries: [PassportEntry]
 
-    /// The current user's own book — the only holder that exists so far.
+    /// How many photos this holder has in each city, keyed by `PassportCity.name`
+    /// (which IS `PassportCity.id`).
+    ///
+    /// ⚠️ A DICTIONARY, READ BY KEY LOOKUP ONLY AND NEVER ITERATED — and that
+    /// restriction is load-bearing, not tidiness. Swift reseeds its hasher every
+    /// process launch, so `Dictionary`/`Set` iteration order differs across
+    /// launches; "some rendering input is constant WITHIN a process and different
+    /// ACROSS processes" is the exact signature of the card-variance
+    /// investigation, and hash-order iteration was its named candidate mechanism
+    /// (DECISIONS.md 2026-07-26). Both `b38dc21` and `4a3c65b` checked and
+    /// recorded that NOTHING IN THIS APP RENDERS IN HASH ORDER. This field is the
+    /// first thing that could break that, so `totalPhotoCount` below sums over
+    /// the `cities` ARRAY and looks each count up by key. Never `.values`,
+    /// never `.keys`, never a bare `for` over this.
+    let photoCounts: [String: Int]
+
+    /// The current user's own book.
+    ///
+    /// The only HAND-AUTHORED record, and the asymmetry is worth naming: every
+    /// other holder's record is derived from their posts, which the current user
+    /// does not have — `MockData.posts` is the friends feed, and you do not
+    /// appear in your own. So this one cannot be derived the same way, and the
+    /// two constructions answer the same question by two different routes. That
+    /// is the shape that produced the `cityCount` defect (`4a3c65b`), kept here
+    /// deliberately rather than papered over, because inventing posts for the
+    /// current user to make the rule uniform would be inventing content.
     static let currentUser = PassportContents(
         cities: MockData.cities,
-        entries: MockData.entries
+        entries: MockData.entries,
+        photoCounts: PassportMockPhotos.currentUser
     )
 
     /// The number the colophon prints.
@@ -59,12 +86,31 @@ struct PassportContents {
     }
 
     /// How many photos a city's collage composes.
+    ///
+    /// ⚠️ ZERO, NOT THREE, for a city this holder has no count for — and that is
+    /// the one behaviour the per-holder change altered. The old global answered
+    /// `default: 3`, which was a per-city oracle guessing on behalf of a holder
+    /// it knew nothing about. A holder with no photos recorded in a place has no
+    /// photos there; zero is the truthful answer and three was a placeholder
+    /// wearing one.
+    ///
+    /// UNREACHABLE FOR EVERY HOLDER THAT EXISTS, which is why it changed nothing.
+    /// Both call sites pass a member of `cities` — `PassportBookView.spreadView`
+    /// passes `cities[index - 1]`, and `totalPhotoCount` folds over `cities` —
+    /// so the fallback fires only if a city is in `cities` and missing from
+    /// `photoCounts`. `currentUser` supplies all seven; a derived record builds
+    /// both lists from the same posts in one pass. Nothing constructs a mismatch.
     func photoCount(for city: PassportCity) -> Int {
-        PassportMockPhotos.count(for: city)
+        photoCounts[city.name] ?? 0
     }
 
     /// Total photos across all cities — the honest count for the colophon,
     /// consistent with the per-city collages (mocked until a photo model exists).
+    ///
+    /// Folds over the `cities` ARRAY, looking each count up by key. NOT over
+    /// `photoCounts` — see the warning on that field; a `.values.reduce` here
+    /// would give the same sum today and would still be wrong, because it makes
+    /// the app's output depend on a hash-ordered walk for the first time.
     var totalPhotoCount: Int {
         cities.reduce(0) { $0 + photoCount(for: $1) }
     }
