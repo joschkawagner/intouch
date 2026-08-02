@@ -121,6 +121,13 @@ struct ProfileView: View {
                     IDCardView(user: profile, contents: contents)
                 } else {
                     // No resting surface here — the book brings its own.
+                    //
+                    // The holder passed here must not be the current user: a
+                    // record derived for someone with no posts is EMPTY, and an
+                    // empty book renders as a plausible passport belonging to
+                    // someone who has been nowhere. Guarded where such a record
+                    // is manufactured — see the assert in
+                    // `PassportContents.derived(for:)`.
                     PassportBookView(holder: profile, contents: contents)
                 }
             }

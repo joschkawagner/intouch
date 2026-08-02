@@ -114,6 +114,25 @@ struct PassportContents {
     /// two-city holders is cheaper than hashing and, more to the point, keeps
     /// every ordered structure here an Array (see `photoCounts`).
     static func derived(for user: UserProfile) -> PassportContents {
+        // ⚠️ NEVER THE CURRENT USER, AND THE FAILURE IS SILENT WITHOUT THIS.
+        // You do not appear in your own friends feed — `MockData.posts` has no
+        // post authored by `currentUser`, which the header above states as the
+        // reason this record cannot be derived the way everyone else's is. So
+        // this loop matches nothing for you and returns an EMPTY record: zero
+        // cities, `spreadCount == 2`, an empty map and a colophon reading
+        // "0 cities · 0 photos". A perfectly plausible passport belonging to
+        // someone who has been nowhere, rendered with no error and nothing on
+        // screen to say it is wrong. Your real record is the hand-authored
+        // `currentUser` above.
+        //
+        // Guarded HERE rather than at the one route that exists today, because
+        // this is where the empty record is MANUFACTURED — one check covers
+        // every future caller, which is R5's instruction (hide at the shared
+        // primitive, not the call site) applied to a precondition instead of an
+        // accessibility modifier.
+        assert(user.id != MockData.currentUser.id,
+               "PassportContents.derived is for OTHER people — the current user has no posts to derive from, so this returns an empty book. Use PassportContents.currentUser.")
+
         var cities: [PassportCity] = []
         var entries: [PassportEntry] = []
         var counts: [String: Int] = [:]
