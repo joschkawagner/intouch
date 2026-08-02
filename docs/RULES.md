@@ -139,6 +139,23 @@ the note warns against, live on three tokens it never checked.
 reason nobody ran the enumeration here is that something in the code said it did not apply, and
 a claim in a comment reads exactly like a result until you go looking.
 
+**⚠️ THE SETTING WAS THEN READ, 2026-08-02, AND IT IS NOT THE DEFAULT.** *Larger Accessibility
+Sizes* is **ON** and the slider sits at the **3rd notch of the extended accessibility range** —
+so this simulator has been running well above the default content size category the whole time.
+
+**Two consequences, and both are worse than the version where it was merely unrecorded.**
+(1) **Every value in `BASELINES.md` was cut at a non-default text size that no record names**,
+and reproducing any of them depends on a setting invisible in the capture and changeable in two
+taps. (2) The hoped-for cheap exit is **dead**: the reasoning was that at the default category
+`relativeTo:` scales by 1.0, so making the tokens fixed would be metrically identical and
+render-inert. That holds only at the default, and this machine is not at the default — **so the
+Dynamic Type fix moves four baselines by design, one of which is the parked `col-uv`.**
+
+**DO NOT CHANGE THE TEXT SIZE AS A CLEANUP.** It is its own decision: changing it invalidates
+every existing baseline against anything captured before it, silently, with nothing in a frame
+to show why. Recorded here rather than in `BASELINES.md` deliberately — this is a fact about the
+*instrument*, and writing it beside the hashes would imply the hashes had been re-cut under it.
+
 ### Instance 8 — the confirmation is a CONTROL, not an instrument. This one SHARPENS the rule (2026-08-02)
 
 **Instances 1–7 are about state nobody asked about. This is about state that WAS asked about,
@@ -270,10 +287,12 @@ It proves nothing until someone establishes that Settings *rotates*: if it doesn
 capture is portrait in both orientations and the "check" always passes. Untested to date;
 one deliberate rotation with Settings open settles it.
 
-**⏸ STILL UNTESTED as of 2026-08-02**, stated so the sentence above is not mistaken for
-something done. It is queued into the next operator trip to Settings alongside reading the
-device text size (instance 7's unknown) — one trip, two answers, because both are questions
-only a human standing at the simulator can answer and neither is worth a trip on its own.
+**✅ TESTED AND CLOSED AS A REJECTION, 2026-08-02.** With the simulator in `.landscapeLeft`,
+**iOS Settings displayed PORTRAIT.** Settings does not rotate. So the capture is portrait in
+both orientations and the "check" always passes — exactly the failure this corollary predicted,
+now measured rather than suspected. **Never adopt a Settings screenshot as an orientation
+check.** The book remains the only orientation instrument this project has, and instance 8
+below is what that costs when the book is also the subject.
 
 **And instance 8 is this corollary's harder case.** Here the worry is a check that always
 passes. There, the check *did* run, *was* answered, and was still wrong — so validating a check
