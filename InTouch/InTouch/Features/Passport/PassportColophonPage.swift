@@ -91,8 +91,31 @@ struct PassportColophonPage: View {
 
 }
 
-#Preview {
-    PassportColophonPage(user: MockData.currentUser, cityCount: 7, photoCount: 29)
+/// ⚠️ THE COUNTS ARE READ FROM THE RECORD, NOT TYPED IN. This preview used to
+/// pass the literals `7` and `29` — correct on the day they were written and a
+/// second source of truth for the same two numbers, which is precisely the shape
+/// `4a3c65b` deleted from `UserProfile.cityCount` and `d5b6ef8` refused for
+/// `shortName`. A preview is where such a literal survives longest, because
+/// nothing compiles against it being right.
+#Preview("Me — 7 cities · 29 photos") {
+    PassportColophonPage(user: MockData.currentUser,
+                         cityCount: PassportContents.currentUser.cityCount,
+                         photoCount: PassportContents.currentUser.totalPhotoCount)
+        .frame(width: 232, height: 330)
+        .padding()
+        .background(Color.muted)
+}
+
+/// A friend's colophon — the single page on which a whole derived record is
+/// legible: her cities, her photos, her serial, her join month.
+///
+/// The numbers here are the ones the derivation produces from Nora's two posts
+/// (2 cities, 3 photos), NOT the ones the old per-city oracle would have given
+/// her (6). Nothing in the running app renders this until the CTA is wired.
+#Preview("Nora — a derived record") {
+    PassportColophonPage(user: MockData.friendNora,
+                         cityCount: PassportContents.nora.cityCount,
+                         photoCount: PassportContents.nora.totalPhotoCount)
         .frame(width: 232, height: 330)
         .padding()
         .background(Color.muted)

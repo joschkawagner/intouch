@@ -213,6 +213,22 @@ struct PassportBookView: View {
 
 }
 
-#Preview {
+#Preview("My book") {
     PassportBookView(holder: MockData.currentUser, contents: .currentUser)
+}
+
+/// The only place another holder's book can be seen before the CTA is wired.
+///
+/// Nothing in the running app reaches this — `PassportView` is the tab and the
+/// tab is always mine (see the note at the top of `PassportView`), and the scan
+/// result's Connect button is still inert. So a preview is the whole of step 5's
+/// visibility, and it is worth having: it renders Nora's name on the cover from
+/// her `UserProfile` and her cities from her derived record, which is the holder
+/// threading proved end to end rather than argued from call sites.
+///
+/// In a preview the phone never rotates, so this shows the CLOSED COVER — the
+/// book opens on physical landscape (`DeviceOrientationModel`). Her pages are
+/// reachable from the colophon preview in `PassportColophonPage`.
+#Preview("Nora's book") {
+    PassportBookView(holder: MockData.friendNora, contents: .nora)
 }
