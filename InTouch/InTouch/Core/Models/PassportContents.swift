@@ -77,6 +77,78 @@ struct PassportContents {
         photoCounts: PassportMockPhotos.currentUser
     )
 
+    // MARK: - Other people's records — DERIVED, never authored
+
+    /// One holder's record, built entirely from the posts they made.
+    ///
+    /// ⚠️ ZERO INVENTION, AND THAT IS THE WHOLE DESIGN. Nothing here is written
+    /// to look plausible: every city, every date and every photo count is read
+    /// off a `FeedPost` that already existed. No city anyone did not post from,
+    /// no entry date, no count. Contrast the three fixture sets this project has
+    /// had to ⚠️-block precisely because they WERE invented — the five profiles
+    /// in `d5b6ef8`, the five cities in `2e2593f`, the six serials in `b38dc21`.
+    /// This one needs no such block, because there is nothing in it that came
+    /// from nowhere.
+    ///
+    /// THE LICENCE IS WRITTEN IN `FeedPost.city`: "a post's city is wherever the
+    /// *author* was standing." A post is photos in a place, and PRD § 4.4 defines
+    /// a passport city as "a place you have photos" — so an author's posts are
+    /// evidence about the author's own record in the one direction that holds.
+    /// The same comment forbids the other direction, and nothing here does it:
+    /// a friend's city never enters `MockData.cities`.
+    ///
+    /// BOOK ORDER FALLS OUT, IT IS NOT CHOSEN. `MockData.posts` is newest-first,
+    /// so taking cities in first-appearance order puts each holder's most
+    /// recently-posted city first. That happens to be the rule the plan's
+    /// separate P5 will apply to everyone — this is not that change, and the
+    /// current user's order stays hand-authored.
+    ///
+    /// ⚠️ ACCEPTED AND RECORDED, NOT ABSORBED: the derived counts are only ever
+    /// 1 or 2, so friends' collages exercise only the 1-cell and 2-cell
+    /// templates. `CollageTemplate`'s 3, 4, 5 and 6+ will never render for
+    /// anyone but the current user, whose counts were authored specifically to
+    /// cover all six. That coverage loss is the price of inventing nothing, it
+    /// was weighed, and it is the accepted cost rather than an oversight.
+    ///
+    /// No `Set` anywhere — dedup is `contains` on the growing Array, which for
+    /// two-city holders is cheaper than hashing and, more to the point, keeps
+    /// every ordered structure here an Array (see `photoCounts`).
+    static func derived(for user: UserProfile) -> PassportContents {
+        var cities: [PassportCity] = []
+        var entries: [PassportEntry] = []
+        var counts: [String: Int] = [:]
+
+        for post in MockData.posts where post.author.id == user.id {
+            if !cities.contains(post.city) { cities.append(post.city) }
+            entries.append(PassportEntry(id: "entry-\(post.id)",
+                                         city: post.city,
+                                         date: post.date))
+            counts[post.city.name, default: 0] += post.photos.count
+        }
+
+        return PassportContents(cities: cities, entries: entries, photoCounts: counts)
+    }
+
+    /// The five feed friends and the scanned person, all six of them.
+    ///
+    /// Done for all six rather than for `scannedPerson` alone — the plan's step 5
+    /// named only the scanned person, but that was written before `d5b6ef8`
+    /// authored the other five profiles the same afternoon. Six now, once,
+    /// instead of one now and five later.
+    ///
+    /// ⚠️ NOTHING READS THESE YET. A friend's book has no route to it until the
+    /// CTA is wired (step 7): `PassportBookView` has two call sites, both the
+    /// current user's, and `ScanResultView`'s button is still `Button(action: {})`.
+    /// These are the record, not a screen.
+    static let nora = derived(for: MockData.friendNora)
+    static let sam  = derived(for: MockData.friendSam)
+    static let juno = derived(for: MockData.friendJuno)
+    static let drew = derived(for: MockData.friendDrew)
+    static let ada  = derived(for: MockData.friendAda)
+    static let emil = derived(for: MockData.scannedPerson)
+
+    // MARK: - What the pages read
+
     /// The number the colophon prints.
     var cityCount: Int { cities.count }
 
