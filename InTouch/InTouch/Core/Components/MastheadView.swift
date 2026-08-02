@@ -71,7 +71,10 @@ struct MastheadView: View {
             // live. Deliberately NOT a bare `Int` computed here — that would put
             // a second answer to "how many cities" at the presentation layer,
             // which is the exact shape of the stored `cityCount` this replaced.
-            ProfileView(profile: MockData.currentUser, contents: .currentUser)
+            // `isOwnProfile: true` — this avatar is the masthead's, and the
+            // masthead is only ever mine. Passed explicitly rather than let the
+            // view compare identities: see ProfileView's header.
+            ProfileView(profile: MockData.currentUser, contents: .currentUser, isOwnProfile: true)
         }
     }
 }
