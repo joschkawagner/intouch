@@ -49,13 +49,30 @@ enum MockData {
     //     there are. `scannedEvent` therefore REFERENCES `zurich` above rather
     //     than owning a copy of it, and referencing a city from `cities` is not
     //     the same as adding one to it.
+    //   • ANOTHER HOLDER'S OWN RECORD — the third consumer, and the one that
+    //     sounds like a contradiction until you read `cities` correctly. Verbier
+    //     really is one of Nora's passport cities: she posted from there, so she
+    //     has photos there, so it is a page in HER book
+    //     (`PassportContents.nora`). That takes nothing away from this block,
+    //     because `cities` is not "every city in the app" — it is MINE. A city
+    //     belonging to somebody's record is exactly why it must stay out of the
+    //     one list that means my record. Their records are DERIVED from their
+    //     posts and hold their own `[PassportCity]`; none of them mutates this.
     //
-    // The two lists therefore overlap without being the same list: Zürich,
-    // London and Oslo appear in both because you have photos there too; Verbier,
+    // The lists therefore overlap without being the same list: Zürich, London
+    // and Oslo appear in both because you have photos there too; Verbier,
     // Zermatt, Hvar, New York and Dublin appear only here. Appending these five
     // to `cities` would take the book from 9 spreads to 14 and the colophon from
-    // "7 cities · 29 photos" to "12 cities · 44 photos" — a product change, not a
-    // tidy-up.
+    // "7 cities · 29 photos" to "12 cities · 29 photos" — five pages with an
+    // empty collage each. A product change, not a tidy-up.
+    //
+    // ⚠️ THAT SECOND NUMBER USED TO READ 44, AND IT WENT STALE THE MOMENT PHOTO
+    // COUNTS BECAME PER-HOLDER. Under the old global oracle each unlisted city
+    // fell through to `default: 3`, so five appended cities added 15 photos.
+    // The current user's table now holds exactly seven entries and an unlisted
+    // city answers 0, so appending them would add cities and no photos at all.
+    // Corrected here rather than left: a comment that quotes a number is a
+    // second source of truth for it, and this one had already drifted once.
     //
     // 🔶 INVENTED FIXTURES, NOT SOURCED — the same status as the five
     // `UserProfile` fixtures authored in `d5b6ef8`. The names come from the feed
